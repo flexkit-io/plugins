@@ -1,0 +1,30 @@
+name: Bump vendor pins
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 9 * * 1'
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Vendor pinned upstream
+        run: |
+          upstream_sha=$(pnpm exec tsx scripts/check-upstream.ts)
+          pnpm vendor "$upstream_sha"
+          pnpm validate
+          pnpm test
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          branch: bot/vendor-pins
+          title: Update pinned Google plugins
+          commit-message: Update pinned Google plugins
+          body: Review upstream pins, endpoints, scopes, skills, and licenses before merging. No automatic merge.

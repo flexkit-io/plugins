@@ -1,0 +1,54 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "slack",
+  "version": "1.0.0",
+  "description": "Deliver automation updates to Slack channels.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/slack",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "slack",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Slack",
+      "logo": "./assets/logo.svg",
+      "category": "communication",
+      "supportedScopes": [
+        "project"
+      ],
+      "requiredInputs": [
+        {
+          "key": "channels",
+          "type": "channel-multi-select",
+          "requiredWhen": "delivery-enabled",
+          "optionsSource": "connection.channels",
+          "target": "toolConfigs.channels"
+        }
+      ],
+      "capabilities": {
+        "agentTools": false,
+        "automationDelivery": true
+      },
+      "auth": {
+        "type": "oauth2",
+        "provider": "slack",
+        "credentialGroup": "slack",
+        "requiredScopes": [
+          "chat:write",
+          "channels:read",
+          "groups:read"
+        ]
+      },
+      "delivery": {
+        "adapter": "slack",
+        "channelPicker": true
+      }
+    }
+  }
+}

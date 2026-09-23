@@ -1,0 +1,53 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "google-calendar",
+  "version": "1.0.0",
+  "description": "Read calendars, events, and availability.",
+  "author": {
+    "name": "Cursor"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/third_party/google-calendar",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "google-calendar",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Google Calendar",
+      "logo": "./assets/logo.svg",
+      "category": "productivity",
+      "supportedScopes": [
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "oauth2",
+        "provider": "google",
+        "credentialGroup": "google-workspace",
+        "requiredScopes": [
+          "openid",
+          "email",
+          "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
+          "https://www.googleapis.com/auth/calendar.events.freebusy",
+          "https://www.googleapis.com/auth/calendar.events.readonly"
+        ],
+        "mcpServers": [
+          "google-calendar"
+        ]
+      },
+      "availability": "preview",
+      "upstream": {
+        "repository": "https://github.com/cursor/plugins",
+        "path": "third_party/google-calendar",
+        "sha": "eeac6430db35981ddcd3a18228273ecee473a903"
+      }
+    }
+  }
+}

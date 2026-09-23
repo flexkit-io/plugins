@@ -1,0 +1,23 @@
+{
+  "name": "@flexkit/plugin-catalog",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "validate": "tsx scripts/validate.ts",
+    "test": "tsx --test tests/*.test.ts",
+    "vendor": "tsx scripts/vendor.ts",
+    "check-upstream": "tsx scripts/check-upstream.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "ajv": "8.20.0",
+    "yaml": "2.8.1",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3",
+    "@types/node": "22.18.6"
+  }
+}

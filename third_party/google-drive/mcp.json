@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "google-drive": {
+      "type": "streamable-http",
+      "url": "https://drivemcp.googleapis.com/mcp/v1"
+    }
+  },
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"
+}

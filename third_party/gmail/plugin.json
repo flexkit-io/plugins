@@ -1,0 +1,52 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "gmail",
+  "version": "1.0.0",
+  "description": "Search email and create drafts with Gmail.",
+  "author": {
+    "name": "Cursor"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/third_party/gmail",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "gmail",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Gmail",
+      "logo": "./assets/logo.svg",
+      "category": "productivity",
+      "supportedScopes": [
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "oauth2",
+        "provider": "google",
+        "credentialGroup": "google-workspace",
+        "requiredScopes": [
+          "openid",
+          "email",
+          "https://www.googleapis.com/auth/gmail.readonly",
+          "https://www.googleapis.com/auth/gmail.compose"
+        ],
+        "mcpServers": [
+          "gmail"
+        ]
+      },
+      "availability": "preview",
+      "upstream": {
+        "repository": "https://github.com/cursor/plugins",
+        "path": "third_party/gmail",
+        "sha": "eeac6430db35981ddcd3a18228273ecee473a903"
+      }
+    }
+  }
+}

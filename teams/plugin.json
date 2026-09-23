@@ -1,0 +1,56 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "teams",
+  "version": "1.0.0",
+  "description": "Deliver automation updates to Microsoft Teams channels.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/teams",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "teams",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Microsoft Teams",
+      "logo": "./assets/logo.svg",
+      "category": "communication",
+      "supportedScopes": [
+        "project"
+      ],
+      "requiredInputs": [
+        {
+          "key": "channels",
+          "type": "channel-multi-select",
+          "requiredWhen": "delivery-enabled",
+          "optionsSource": "connection.channels",
+          "target": "toolConfigs.channels"
+        }
+      ],
+      "capabilities": {
+        "agentTools": false,
+        "automationDelivery": true
+      },
+      "auth": {
+        "type": "oauth2",
+        "provider": "teams",
+        "credentialGroup": "teams",
+        "requiredScopes": [
+          "offline_access",
+          "User.Read",
+          "Team.ReadBasic.All",
+          "Channel.ReadBasic.All",
+          "ChannelMessage.Send"
+        ]
+      },
+      "delivery": {
+        "adapter": "teams",
+        "channelPicker": true
+      }
+    }
+  }
+}

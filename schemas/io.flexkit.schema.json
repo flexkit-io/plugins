@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "logo": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "minLength": 1
+    },
+    "supportedScopes": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "project",
+          "personal"
+        ]
+      }
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "oauth2",
+            "mcp-oauth",
+            "none"
+          ]
+        },
+        "provider": {
+          "type": "string",
+          "enum": [
+            "google",
+            "slack",
+            "teams",
+            "notion"
+          ]
+        },
+        "credentialGroup": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requiredScopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mcpServers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "type",
+        "provider",
+        "credentialGroup",
+        "requiredScopes"
+      ],
+      "additionalProperties": false
+    },
+    "capabilities": {
+      "type": "object",
+      "properties": {
+        "agentTools": {
+          "type": "boolean"
+        },
+        "automationDelivery": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "agentTools",
+        "automationDelivery"
+      ],
+      "additionalProperties": false
+    },
+    "delivery": {
+      "type": "object",
+      "properties": {
+        "adapter": {
+          "type": "string",
+          "enum": [
+            "slack",
+            "teams"
+          ]
+        },
+        "channelPicker": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "adapter",
+        "channelPicker"
+      ],
+      "additionalProperties": false
+    },
+    "availability": {
+      "type": "string",
+      "const": "preview"
+    },
+    "upstream": {
+      "type": "object",
+      "properties": {
+        "repository": {
+          "type": "string",
+          "format": "uri"
+        },
+        "path": {
+          "type": "string"
+        },
+        "sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        }
+      },
+      "required": [
+        "repository",
+        "path",
+        "sha"
+      ],
+      "additionalProperties": false
+    },
+    "requiredInputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "const": "channel-multi-select"
+          },
+          "requiredWhen": {
+            "type": "string",
+            "const": "delivery-enabled"
+          },
+          "optionsSource": {
+            "type": "string",
+            "const": "connection.channels"
+          },
+          "target": {
+            "type": "string",
+            "const": "toolConfigs.channels"
+          }
+        },
+        "required": [
+          "key",
+          "type",
+          "requiredWhen",
+          "optionsSource",
+          "target"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "displayName",
+    "category",
+    "supportedScopes",
+    "auth",
+    "capabilities",
+    "requiredInputs"
+  ],
+  "additionalProperties": false
+}

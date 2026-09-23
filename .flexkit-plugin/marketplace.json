@@ -1,0 +1,35 @@
+{
+  "name": "flexkit",
+  "plugins": [
+    {
+      "name": "slack",
+      "source": "./slack",
+      "description": "Deliver automation updates to Slack channels."
+    },
+    {
+      "name": "teams",
+      "source": "./teams",
+      "description": "Deliver automation updates to Microsoft Teams channels."
+    },
+    {
+      "name": "gmail",
+      "source": "./third_party/gmail",
+      "description": "Search email and create drafts with Gmail."
+    },
+    {
+      "name": "google-drive",
+      "source": "./third_party/google-drive",
+      "description": "Search, read, and create files with Google Drive."
+    },
+    {
+      "name": "google-calendar",
+      "source": "./third_party/google-calendar",
+      "description": "Read calendars, events, and availability."
+    },
+    {
+      "name": "notion",
+      "source": "./notion",
+      "description": "Search and work with your Notion workspace."
+    }
+  ]
+}
