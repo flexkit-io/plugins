@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile, unlink } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
-import { containedPath } from './validate';
+import { containedPath } from './validate.ts';
 
 const sha = process.argv[2];
 
