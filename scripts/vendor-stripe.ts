@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile, unlink } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
-import { containedPath } from './validate.ts';
+import { containedPath, isPublishedSkill, stripSkillToolGrants, upstreamSkillSnapshot, validateSkill } from './validate.ts';
 
 const sha = process.argv[2];
 const repository = 'https://github.com/stripe/ai';
@@ -26,6 +26,38 @@ interface McpConfig {
 
 function isEnoent(error: unknown): boolean {
   return Boolean(error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT');
+}
+
+async function unlinkIfPresent(path: string): Promise<void> {
+  try {
+    await unlink(path);
+  } catch (error) {
+    if (!isEnoent(error)) {
+      throw error;
+    }
+  }
+}
+
+async function publishVendoredSkill(packageRoot: string, file: string, content: string): Promise<void> {
+  const published = stripSkillToolGrants(content);
+  const directory = /^skills\/([^/]+)\/SKILL\.md$/.exec(file)?.[1];
+
+  if (!directory) {
+    throw new Error(`Invalid skill path: ${file}`);
+  }
+
+  validateSkill(published, directory);
+  await writeFile(resolve(packageRoot, file), published);
+  const snapshot = containedPath(packageRoot, upstreamSkillSnapshot(file));
+
+  if (published === content) {
+    await unlinkIfPresent(snapshot);
+
+    return;
+  }
+
+  await mkdir(dirname(snapshot), { recursive: true });
+  await writeFile(snapshot, content);
 }
 
 function flexkitManifest(upstream: string, pin: string): string {
@@ -148,6 +180,11 @@ for (const entry of selected) {
     continue;
   }
 
+  if (isPublishedSkill(file)) {
+    await publishVendoredSkill(root, file, content);
+    continue;
+  }
+
   await writeFile(resolve(root, file), content);
 }
 
@@ -165,13 +202,19 @@ files.LICENSE = createHash('sha256').update(license).digest('hex');
 await writeFile(resolve(root, 'LICENSE'), license);
 
 for (const file of Object.keys(previousFiles)) {
-  if (!(file in files)) {
-    await unlink(containedPath(root, file));
+  if (file in files) {
+    continue;
+  }
+
+  await unlink(containedPath(root, file));
+
+  if (isPublishedSkill(file)) {
+    await unlinkIfPresent(containedPath(root, upstreamSkillSnapshot(file)));
   }
 }
 
 await mkdir(resolve(root, 'io.flexkit'), { recursive: true });
 await writeFile(
   resolve(root, 'io.flexkit/upstream.lock.json'),
-  `${JSON.stringify({ repository, sha, path: upstreamPath, files, transformVersion: 1 }, null, 2)}\n`
+  `${JSON.stringify({ repository, sha, path: upstreamPath, files, transformVersion: 2 }, null, 2)}\n`
 );
