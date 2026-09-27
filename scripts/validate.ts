@@ -16,6 +16,82 @@ export function containedPath(root: string, path: string): string {
   return full;
 }
 
+export function isPublishedSkill(path: string): boolean {
+  return /^skills\/[^/]+\/SKILL\.md$/.test(path);
+}
+
+export function upstreamSkillSnapshot(path: string): string {
+  return `io.flexkit/upstream/${path}.upstream`;
+}
+
+export function stripSkillToolGrants(text: string): string {
+  const match = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text);
+
+  if (!match) {
+    return text;
+  }
+
+  const document = parseDocument(match[1], { uniqueKeys: true });
+
+  if (document.errors.length || !document.has('allowed-tools')) {
+    return text;
+  }
+
+  document.delete('allowed-tools');
+  const newline = text.includes('\r\n') ? '\r\n' : '\n';
+  const frontmatter = document.toString().replace(/\r?\n$/, '').replace(/\n/g, newline);
+  const body = text.slice(match[0].length);
+
+  return `---${newline}${frontmatter}${newline}---${body}`;
+}
+
+function pinnedUpstreamPath(repository: string, path: string): string {
+  if (path === 'mcp.json') {
+    return 'io.flexkit/upstream-mcp.json';
+  }
+
+  if (repository === 'https://github.com/stripe/ai' && path === 'plugin.json') {
+    return 'io.flexkit/upstream-plugin.json';
+  }
+
+  return path;
+}
+
+function isEnoent(error: unknown): boolean {
+  return Boolean(error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT');
+}
+
+async function readIfPresent(path: string): Promise<Buffer | undefined> {
+  try {
+    return await readFile(path);
+  } catch (error) {
+    if (!isEnoent(error)) {
+      throw error;
+    }
+  }
+
+  return undefined;
+}
+
+async function pinnedFileBytes(packageRoot: string, repository: string, path: string): Promise<Buffer> {
+  const snapshotPath = repository === 'https://github.com/stripe/ai' && isPublishedSkill(path)
+    ? upstreamSkillSnapshot(path)
+    : '';
+  const snapshot = snapshotPath ? await readIfPresent(containedPath(packageRoot, snapshotPath)) : undefined;
+
+  if (!snapshot) {
+    return readFile(containedPath(packageRoot, pinnedUpstreamPath(repository, path)));
+  }
+
+  const published = await readFile(containedPath(packageRoot, path), 'utf8');
+
+  if (published !== stripSkillToolGrants(snapshot.toString('utf8'))) {
+    throw new Error(`Vendored skill transform drifted: ${path}`);
+  }
+
+  return snapshot;
+}
+
 export function validateSkill(text: string, directory: string): void {
   const match = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(text);
 
@@ -27,6 +103,10 @@ export function validateSkill(text: string, directory: string): void {
 
   if (document.errors.length) {
     throw new Error('Invalid skill YAML');
+  }
+
+  if (document.has('allowed-tools')) {
+    throw new Error('Skill cannot auto-approve host tools');
   }
 
   const fields: unknown = document.toJS();
@@ -130,15 +210,21 @@ export async function validateCatalog(root: string): Promise<number> {
 
     if (item.source.startsWith('./third_party/')) {
       const lock = await json(resolve(packageRoot, 'io.flexkit/upstream.lock.json')) as { sha: string; repository: string; files: { [path: string]: string } };
-      const provenance = ext as { upstream?: { sha?: string } };
+      const provenance = ext as { upstream?: { sha?: string; repository?: string } };
 
-      if (!/^[a-f0-9]{40}$/.test(lock.sha) || provenance.upstream?.sha !== lock.sha || lock.repository !== 'https://github.com/cursor/plugins') {
+      const allowedUpstreams = new Set(['https://github.com/cursor/plugins', 'https://github.com/stripe/ai']);
+
+      if (
+        !/^[a-f0-9]{40}$/.test(lock.sha) ||
+        provenance.upstream?.sha !== lock.sha ||
+        provenance.upstream?.repository !== lock.repository ||
+        !allowedUpstreams.has(lock.repository)
+      ) {
         throw new Error('Invalid upstream pin');
       }
 
       for (const [path, expected] of Object.entries(lock.files)) {
-        const original = path === 'mcp.json' ? 'io.flexkit/upstream-mcp.json' : path;
-        const bytes = await readFile(containedPath(packageRoot, original));
+        const bytes = await pinnedFileBytes(packageRoot, lock.repository, path);
 
         if (createHash('sha256').update(bytes).digest('hex') !== expected) {
           throw new Error(`Vendored file changed outside the pin updater: ${path}`);

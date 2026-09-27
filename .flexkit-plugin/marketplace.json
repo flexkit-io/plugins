@@ -30,6 +30,11 @@
       "name": "notion",
       "source": "./notion",
       "description": "Search and work with your Notion workspace."
+    },
+    {
+      "name": "stripe",
+      "source": "./third_party/stripe",
+      "description": "Build Stripe integrations with current guidance and live account data."
     }
   ]
 }

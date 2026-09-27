@@ -1,0 +1,53 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "stripe",
+  "version": "0.5.1",
+  "description": "Stripe agent plugin with skills for Stripe integrations including best practices, API and SDK upgrade guidance, and a remote MCP server configuration.",
+  "author": {
+    "name": "Stripe",
+    "url": "https://stripe.com"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/third_party/stripe",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "stripe",
+    "payments",
+    "webhooks",
+    "api",
+    "security",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Stripe",
+      "logo": "./assets/logo.svg",
+      "category": "payments",
+      "supportedScopes": [
+        "project",
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "mcp-oauth",
+        "provider": "stripe",
+        "credentialGroup": "stripe",
+        "requiredScopes": [],
+        "mcpServers": [
+          "stripe"
+        ]
+      },
+      "availability": "preview",
+      "upstream": {
+        "repository": "https://github.com/stripe/ai",
+        "path": "providers/agent-plugins/plugin",
+        "sha": "79ccee2edc0edc5b57491eef1c4ce96269e850a7"
+      }
+    }
+  }
+}
