@@ -46,7 +46,8 @@
             "google",
             "slack",
             "teams",
-            "notion"
+            "notion",
+            "stripe"
           ]
         },
         "credentialGroup": {

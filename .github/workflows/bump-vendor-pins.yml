@@ -20,11 +20,13 @@ jobs:
         run: |
           upstream_sha=$(pnpm exec tsx scripts/check-upstream.ts)
           pnpm vendor "$upstream_sha"
+          stripe_sha=$(pnpm exec tsx scripts/check-upstream.ts stripe)
+          pnpm vendor:stripe "$stripe_sha"
           pnpm validate
           pnpm test
       - uses: peter-evans/create-pull-request@v7
         with:
           branch: bot/vendor-pins
-          title: Update pinned Google plugins
-          commit-message: Update pinned Google plugins
+          title: Update pinned upstream plugins
+          commit-message: Update pinned upstream plugins
           body: Review upstream pins, endpoints, scopes, skills, and licenses before merging. No automatic merge.

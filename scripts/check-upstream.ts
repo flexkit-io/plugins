@@ -1,4 +1,10 @@
-const response = await fetch('https://api.github.com/repos/cursor/plugins/commits/main', {
+const repo = process.argv[2] === 'stripe' ? 'stripe/ai' : 'cursor/plugins';
+
+if (process.argv[2] && process.argv[2] !== 'stripe') {
+  throw new Error('Usage: pnpm check-upstream [stripe]');
+}
+
+const response = await fetch(`https://api.github.com/repos/${repo}/commits/main`, {
   headers: { Accept: 'application/vnd.github+json' }, signal: AbortSignal.timeout(30_000),
 });
 

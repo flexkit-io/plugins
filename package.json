@@ -10,6 +10,7 @@
     "validate": "tsx scripts/validate.ts",
     "test": "tsx --test tests/*.test.ts",
     "vendor": "tsx scripts/vendor.ts",
+    "vendor:stripe": "tsx scripts/vendor-stripe.ts",
     "check-upstream": "tsx scripts/check-upstream.ts",
     "typecheck": "tsc --noEmit"
   },
