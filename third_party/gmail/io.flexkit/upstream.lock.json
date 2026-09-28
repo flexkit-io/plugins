@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/cursor/plugins",
-  "sha": "eeac6430db35981ddcd3a18228273ecee473a903",
+  "sha": "adf3218ca2f5b9971eedc07a76bef22df7701539",
   "path": "third_party/gmail",
   "files": {
     ".cursor-plugin/plugin.json": "3a0ab9ccac80f73d196c3476ac1498801dcf5ff628157a3d40cdc6ec5dbf0dc9",

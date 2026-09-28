@@ -1,10 +1,10 @@
 {
   "repository": "https://github.com/stripe/ai",
-  "sha": "79ccee2edc0edc5b57491eef1c4ce96269e850a7",
+  "sha": "f23b5bad7a5b20d403bb11cf425044b85ee7c716",
   "path": "providers/agent-plugins/plugin",
   "files": {
     "mcp.json": "a4d3f1f697864bb87220711a7557a7a8dded590bb822e854705f576ba7116c63",
-    "plugin.json": "658e411514ebbb5862ff3cd9c8ee7e69907ef7d6ea4198c73a0d3e3907693e27",
+    "plugin.json": "a32cc32d7d9c36bdea6ce29b7ef04f1b861a205ac273328791c7469b004d190b",
     "skills/connect-recommend/SKILL.md": "6c240a3ea8075da1817f3020b8f289267af47f32e6cd2fe72215e6143ec6939c",
     "skills/connect-recommend/references/account-types.md": "d85dc0ab4bfad042ee0b8d338acbd69144af1e4235e93040a9e1eba3ad577f12",
     "skills/connect-recommend/references/charge-patterns.md": "31910b618e09e95bc75e9fc85283ed432fb16c2ee6cacf7c391fce9e6b870106",
@@ -40,7 +40,7 @@
     "skills/stripe-docs/SKILL.md": "af38e784edcdb2f1b273825705c749c1fb3a2614a25875d0705abde02eaa603f",
     "skills/stripe-pay/SKILL.md": "2a085814fdb5f8a47805a67b17cc2aa807d30ea823dd034fdb9acd55914b3d3c",
     "skills/stripe-projects/SKILL.md": "117493ae055248ff1ffc62bfb1b7ad597d54837d3cccac503b205f0191f28e0a",
-    "skills/upgrade-stripe/SKILL.md": "98f569fb32723668c0107fdfdccaf0a63db8d01b87431d757349baf870e349c6",
+    "skills/upgrade-stripe/SKILL.md": "3a4cf79f0de34b25406a00b47f080d41f243d118d9e603f8364f342ee7092788",
     "LICENSE": "04460ff88cf26c5801e062b9b2847bfebd3f08c1432f97dc0124edfbbb6d671b"
   },
   "transformVersion": 2
