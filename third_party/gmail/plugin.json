@@ -30,7 +30,7 @@
       "auth": {
         "type": "oauth2",
         "provider": "google",
-        "credentialGroup": "google-workspace",
+        "credentialGroup": "gmail",
         "requiredScopes": [
           "openid",
           "email",
