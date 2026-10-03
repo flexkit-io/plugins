@@ -18,8 +18,6 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - name: Vendor pinned upstream
         run: |
-          upstream_sha=$(pnpm exec tsx scripts/check-upstream.ts)
-          pnpm vendor "$upstream_sha"
           stripe_sha=$(pnpm exec tsx scripts/check-upstream.ts stripe)
           pnpm vendor:stripe "$stripe_sha"
           pnpm validate
