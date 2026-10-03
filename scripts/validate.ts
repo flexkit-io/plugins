@@ -212,7 +212,7 @@ export async function validateCatalog(root: string): Promise<number> {
       const lock = await json(resolve(packageRoot, 'io.flexkit/upstream.lock.json')) as { sha: string; repository: string; files: { [path: string]: string } };
       const provenance = ext as { upstream?: { sha?: string; repository?: string } };
 
-      const allowedUpstreams = new Set(['https://github.com/cursor/plugins', 'https://github.com/stripe/ai']);
+      const allowedUpstreams = new Set(['https://github.com/stripe/ai']);
 
       if (
         !/^[a-f0-9]{40}$/.test(lock.sha) ||

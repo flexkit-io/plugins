@@ -13,17 +13,17 @@
     },
     {
       "name": "gmail",
-      "source": "./third_party/gmail",
+      "source": "./gmail",
       "description": "Search email and create drafts with Gmail."
     },
     {
       "name": "google-drive",
-      "source": "./third_party/google-drive",
+      "source": "./google-drive",
       "description": "Search, read, and create files with Google Drive."
     },
     {
       "name": "google-calendar",
-      "source": "./third_party/google-calendar",
+      "source": "./google-calendar",
       "description": "Read calendars, events, and availability."
     },
     {

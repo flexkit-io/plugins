@@ -1,0 +1,47 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "google-drive",
+  "version": "1.1.0",
+  "description": "Search, read, and create files with Google Drive.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/google-drive",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "google-drive",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Google Drive",
+      "logo": "./assets/logo.svg",
+      "category": "productivity",
+      "supportedScopes": [
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "oauth2",
+        "provider": "google",
+        "credentialGroup": "google-drive",
+        "requiredScopes": [
+          "openid",
+          "email",
+          "https://www.googleapis.com/auth/drive.readonly",
+          "https://www.googleapis.com/auth/drive.file"
+        ],
+        "mcpServers": [
+          "google-drive"
+        ]
+      },
+      "availability": "preview"
+    }
+  }
+}

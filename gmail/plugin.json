@@ -1,22 +1,22 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-  "name": "google-drive",
-  "version": "1.0.0",
-  "description": "Search, read, and create files with Google Drive.",
+  "name": "gmail",
+  "version": "1.1.0",
+  "description": "Search email and create drafts with Gmail.",
   "author": {
-    "name": "Cursor"
+    "name": "Flexkit"
   },
-  "homepage": "https://github.com/flexkit-io/plugins/tree/main/third_party/google-drive",
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/gmail",
   "repository": "https://github.com/flexkit-io/plugins",
   "license": "MIT",
   "keywords": [
-    "google-drive",
+    "gmail",
     "flexkit"
   ],
   "extensions": {
     "io.flexkit": {
       "schemaVersion": 1,
-      "displayName": "Google Drive",
+      "displayName": "Gmail",
       "logo": "./assets/logo.svg",
       "category": "productivity",
       "supportedScopes": [
@@ -30,23 +30,18 @@
       "auth": {
         "type": "oauth2",
         "provider": "google",
-        "credentialGroup": "google-drive",
+        "credentialGroup": "gmail",
         "requiredScopes": [
           "openid",
           "email",
-          "https://www.googleapis.com/auth/drive.readonly",
-          "https://www.googleapis.com/auth/drive.file"
+          "https://www.googleapis.com/auth/gmail.readonly",
+          "https://www.googleapis.com/auth/gmail.compose"
         ],
         "mcpServers": [
-          "google-drive"
+          "gmail"
         ]
       },
-      "availability": "preview",
-      "upstream": {
-        "repository": "https://github.com/cursor/plugins",
-        "path": "third_party/google-drive",
-        "sha": "eeac6430db35981ddcd3a18228273ecee473a903"
-      }
+      "availability": "preview"
     }
   }
 }
