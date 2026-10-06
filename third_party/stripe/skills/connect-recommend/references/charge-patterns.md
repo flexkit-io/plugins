@@ -20,7 +20,7 @@ Connect offers three ways to create charges involving connected accounts. The ch
 
 ### Direct Charges
 
-> **Controller Property Compatibility:** Works with most controller configurations, but NOT all. BLOCKED combinations for direct charges include: `fees_collector: 'stripe' + losses_collector: 'application'` (full or none dashboard), and `express/stripe/application`. Express dashboard now also supports two public-preview direct-charge combinations for self-serve SaaS platforms: `express/stripe/stripe` (SES) and `express/application/stripe` (PES), in addition to the standard `express/application/application`. This is the **only** charge type that works with `losses_collector: 'stripe'`. If the platform wants Stripe to own losses, direct charges are the only option — with `dashboard: "full"` or, for self-serve SaaS platforms, `dashboard: "express"` (SES/PES, public preview).
+> **Controller Property Compatibility:** Works with most controller configurations, but NOT all. BLOCKED combinations for direct charges include: `fees_collector: 'stripe' + losses_collector: 'application'` (full or none dashboard), and `express/stripe/application`. Express dashboard now also supports two public-preview direct-charge combinations for self-serve SaaS platforms: `express/stripe/stripe` (Stripe-managed pricing) and `express/application/stripe` (platform-managed pricing), in addition to the standard `express/application/application`. This is the **only** charge type that works with `losses_collector: 'stripe'`. If the platform wants Stripe to own losses, direct charges are the only option — with `dashboard: "full"` or, for self-serve SaaS platforms, `dashboard: "express"` (Stripe-managed pricing or platform-managed pricing, public preview).
 
 #### How it works
 
@@ -180,7 +180,7 @@ const refund = await stripe.refunds.create({
 - When the platform handles disputes
 - **NOT for hold-and-release or delivery-gated payouts** — funds transfer automatically to the connected account upon payment success. Use separate charges and transfers for delivery-gated payouts or any scenario requiring the platform to hold funds before releasing.
 
-#### Destination Charges with `on_behalf_of`
+#### Destination Charges with on_behalf_of
 
 > **Not covered by this guide.** `on_behalf_of` is an advanced variant that changes the merchant of record to the connected account while the charge lives on the platform. It has narrow use cases and significant complexity.
 > 
