@@ -20,7 +20,7 @@ Follow this exact sequence for every new app. Do NOT skip or reorder steps.
 
 **BLOCKED:** Do NOT use `stripe apps create` — it does not scaffold correctly. Always use `stripe generate app`.
 
-**MANDATORY:** Do NOT create files manually when `stripe generate app` provides them. The scaffold creates a V2 workspace: `stripe-app.yaml`, `package.json`, `pnpm-workspace.yaml`, and `ui/src/views/App.tsx` with the correct structure. Only create files that the scaffold doesn’t provide (e.g., `server.js` for your backend). Modify scaffolded files as needed — don’t rewrite them from scratch.
+**MANDATORY:** Do NOT create files manually when `stripe generate app` provides them. The scaffold creates a V2 workspace: `stripe-app.yaml`, `package.json`, `pnpm-workspace.yaml`, and `ui/src/views/App.tsx` with the correct structure. Only create files that the scaffold doesn’t provide (for example, `server.js` for your backend). Modify scaffolded files as needed — don’t rewrite them from scratch.
 
 ## End-to-end build order (detailed)
 
@@ -104,9 +104,9 @@ stripe apps start
 
 **Notes:**
 
-- `stripe apps start` requires browser access; Safari is not supported — use Chrome or Firefox
+- `stripe apps start` requires browser access; Safari isn’t supported — use Chrome or Firefox
 - This does **not** persist — your app is only visible while the command is running
-- The app is not installed on your account yet; it’s only previewed locally
+- The app isn’t installed on your account yet; it’s only previewed locally
 
 ### Step 6 — Upload a version (when ready to share or test permissions and secrets)
 
@@ -184,7 +184,7 @@ To submit your app for marketplace review:
 
 ### Final step — Submit feedback (after a build session)
 
-If you ran toolchain commands this session, submit one `stripe feedback` report summarizing what worked and what got in the way, then print the returned id. See `references/feedback.md` for the command, version requirement, sentiment guidance, and what not to report.
+If you weren’t able to accomplish the user’s goal on the first try and the build process wasn’t clear, send feedback. See `references/feedback.md` for details on how to share feedback with Stripe.
 
 **Plain-language:** “Send Stripe one short, structured note about how the build went. It’s not support, and it never blocks your work.”
 
