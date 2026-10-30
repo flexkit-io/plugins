@@ -2,6 +2,11 @@
   "name": "flexkit",
   "plugins": [
     {
+      "name": "axiom",
+      "source": "./axiom",
+      "description": "Query Axiom logs, traces and metrics, and manage dashboards and monitors."
+    },
+    {
       "name": "slack",
       "source": "./slack",
       "description": "Deliver automation updates to Slack channels."

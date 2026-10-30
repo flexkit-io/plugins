@@ -49,8 +49,10 @@
                 "slack",
                 "teams",
                 "notion",
-                "stripe"
-              ]
+                "stripe",
+                "mcp"
+              ],
+              "description": "mcp: any MCP server that follows the MCP authorization spec, through a reviewed authorization server"
             },
             "credentialGroup": {
               "type": "string",
