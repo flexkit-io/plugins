@@ -19,6 +19,7 @@
     "io.flexkit": {
       "schemaVersion": 1,
       "displayName": "Axiom",
+      "logo": "./assets/logo.svg",
       "category": "observability",
       "supportedScopes": [
         "project",
