@@ -1,0 +1,48 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "axiom",
+  "version": "1.0.0",
+  "description": "Query Axiom logs, traces and metrics with APL, and manage dashboards and monitors.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/axiom",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "axiom",
+    "observability",
+    "logs",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Axiom",
+      "logo": "./assets/logo.svg",
+      "category": "observability",
+      "supportedScopes": [
+        "project",
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "mcp-oauth",
+        "provider": "mcp",
+        "credentialGroup": "axiom",
+        "requiredScopes": [
+          "openid",
+          "email",
+          "offline_access"
+        ],
+        "mcpServers": [
+          "axiom"
+        ]
+      }
+    }
+  }
+}
