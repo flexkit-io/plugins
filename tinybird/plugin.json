@@ -1,0 +1,47 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "tinybird",
+  "version": "1.0.0",
+  "description": "Query your Tinybird workspace: endpoints, data sources and SQL.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/tinybird",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "tinybird",
+    "analytics",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Tinybird",
+      "logo": "./assets/logo.svg",
+      "category": "analytics",
+      "supportedScopes": [
+        "project",
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "api-token",
+        "credentialGroup": "tinybird",
+        "mcpServers": [
+          "tinybird"
+        ],
+        "token": {
+          "label": "Tinybird token",
+          "helpUrl": "https://www.tinybird.co/docs/forward/administration/tokens",
+          "placeholder": "p.eyJ1Ijo\u2026",
+          "pattern": "^p\\.[A-Za-z0-9_.-]{20,}$"
+        }
+      }
+    }
+  }
+}

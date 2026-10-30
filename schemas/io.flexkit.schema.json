@@ -30,50 +30,114 @@
       }
     },
     "auth": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": [
-            "oauth2",
-            "mcp-oauth",
-            "none"
-          ]
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "oauth2",
+                "mcp-oauth",
+                "none"
+              ]
+            },
+            "provider": {
+              "type": "string",
+              "enum": [
+                "google",
+                "slack",
+                "teams",
+                "notion",
+                "stripe"
+              ]
+            },
+            "credentialGroup": {
+              "type": "string",
+              "minLength": 1
+            },
+            "requiredScopes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "mcpServers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "type",
+            "provider",
+            "credentialGroup",
+            "requiredScopes"
+          ],
+          "additionalProperties": false
         },
-        "provider": {
-          "type": "string",
-          "enum": [
-            "google",
-            "slack",
-            "teams",
-            "notion",
-            "stripe"
-          ]
-        },
-        "credentialGroup": {
-          "type": "string",
-          "minLength": 1
-        },
-        "requiredScopes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "mcpServers": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        {
+          "type": "object",
+          "description": "A token the user pastes once into Studio's connect form. The platform stores it encrypted and sends it only to the plugin's reviewed MCP endpoint; the agent never sees it.",
+          "properties": {
+            "type": {
+              "const": "api-token"
+            },
+            "credentialGroup": {
+              "type": "string",
+              "minLength": 1
+            },
+            "mcpServers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "token": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80,
+                  "description": "What the provider calls it, e.g. \"Tinybird token\"."
+                },
+                "helpUrl": {
+                  "type": "string",
+                  "format": "uri",
+                  "pattern": "^https://",
+                  "description": "Where to create one, and which permissions to give it."
+                },
+                "placeholder": {
+                  "type": "string",
+                  "maxLength": 120
+                },
+                "pattern": {
+                  "type": "string",
+                  "maxLength": 200,
+                  "description": "Regular expression (Unicode mode) a valid token matches. Studio also uses it to stop a token from being pasted into chat."
+                },
+                "header": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9-]{1,64}$",
+                  "description": "Header the token is sent in. Default: Authorization: Bearer <token>."
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "credentialGroup",
+            "token"
+          ],
+          "additionalProperties": false
         }
-      },
-      "required": [
-        "type",
-        "provider",
-        "credentialGroup",
-        "requiredScopes"
-      ],
-      "additionalProperties": false
+      ]
     },
     "capabilities": {
       "type": "object",
