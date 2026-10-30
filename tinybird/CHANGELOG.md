@@ -2,4 +2,4 @@
 
 ## 1.0.0
 
-Initial Flexkit plugin.
+Initial Flexkit plugin, with the `tinybird-analytics` skill.

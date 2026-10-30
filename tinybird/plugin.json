@@ -18,6 +18,7 @@
     "io.flexkit": {
       "schemaVersion": 1,
       "displayName": "Tinybird",
+      "logo": "./assets/logo.svg",
       "category": "analytics",
       "supportedScopes": [
         "project",

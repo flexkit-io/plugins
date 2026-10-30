@@ -8,4 +8,6 @@ Connect through Flexkit Studio → AI → Marketplace and paste a Tinybird token
 - The agent gets exactly the access the token has. Create a token with read access to the data sources and pipes the agent should query (see [Tinybird tokens](https://www.tinybird.co/docs/forward/administration/tokens)); an admin token also exposes the workspace's other tools.
 - Replace the token with Reconnect, or remove it with Disconnect. A token Tinybird rejects marks the connection as needing a reconnect.
 
+The `tinybird-analytics` skill teaches the agent to prefer published endpoints, read the schema before writing SQL, keep queries time-bounded and cheap, and report the time range and source with every answer.
+
 Credentials are stored by the platform, never in this repository.
