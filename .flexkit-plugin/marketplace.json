@@ -35,6 +35,11 @@
       "name": "stripe",
       "source": "./third_party/stripe",
       "description": "Build Stripe integrations with current guidance and live account data."
+    },
+    {
+      "name": "tinybird",
+      "source": "./tinybird",
+      "description": "Query Tinybird endpoints, data sources and SQL."
     }
   ]
 }
