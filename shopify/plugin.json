@@ -1,0 +1,45 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "shopify",
+  "version": "1.0.0",
+  "description": "Work with a Shopify store through the Admin GraphQL API: orders, fulfillment, refunds, products, variants, inventory, collections, customers, discounts, metafields and bulk exports.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/shopify",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "shopify",
+    "ecommerce",
+    "orders",
+    "products",
+    "customers",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Shopify",
+      "logo": "./assets/logo.svg",
+      "category": "ecommerce",
+      "supportedScopes": [
+        "project",
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "credentials",
+        "provider": "shopify",
+        "credentialGroup": "shopify",
+        "mcpServers": [
+          "shopify"
+        ]
+      }
+    }
+  }
+}

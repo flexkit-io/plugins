@@ -45,6 +45,11 @@
       "name": "tinybird",
       "source": "./tinybird",
       "description": "Query Tinybird endpoints, data sources and SQL."
+    },
+    {
+      "name": "shopify",
+      "source": "./shopify",
+      "description": "Work with a Shopify store: orders, fulfillment, products, inventory, customers and more through the Admin API."
     }
   ]
 }

@@ -81,6 +81,37 @@
         },
         {
           "type": "object",
+          "description": "Credentials the user creates in the provider's own admin and enters into Studio's connect form (the fields are defined per provider by the platform). The platform verifies them with the provider, stores them encrypted, renews short-lived tokens itself and sends the provider token only to the Flexkit-hosted MCP server of the plugin; the agent never sees them.",
+          "properties": {
+            "type": {
+              "const": "credentials"
+            },
+            "provider": {
+              "type": "string",
+              "enum": [
+                "shopify"
+              ]
+            },
+            "credentialGroup": {
+              "type": "string",
+              "minLength": 1
+            },
+            "mcpServers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "type",
+            "provider",
+            "credentialGroup"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
           "description": "A token the user pastes once into Studio's connect form. The platform stores it encrypted and sends it only to the plugin's reviewed MCP endpoint; the agent never sees it.",
           "properties": {
             "type": {
