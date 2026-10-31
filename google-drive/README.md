@@ -4,7 +4,7 @@ Search, read, and create files with Google Drive.
 
 Connects agents to [Google Drive](https://drive.google.com) through Google's remote [Model Context Protocol](https://modelcontextprotocol.io/) server at `https://drivemcp.googleapis.com/mcp/v1`. Requires an eligible Google Developer Preview account.
 
-Connect through Flexkit Studio → AI → Marketplace. Auth is OAuth 2.0 against Google; credentials are stored by the platform, never in this repository.
+Connect through Flexkit Studio → AI → Plugins. Auth is OAuth 2.0 against Google; credentials are stored by the platform, never in this repository.
 
 ## Docs
 

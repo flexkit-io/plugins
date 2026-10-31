@@ -51,8 +51,8 @@ For every order, product or customer of a large store, run the query as a bulk o
 
 ## Errors and access
 
-- "Access denied for … field" or an "ACCESS_DENIED" error: the connected app lacks that access scope (`read_customers`, `write_orders`, `read_all_orders` for orders older than 60 days…). Tell the user which scope is missing; they add it to the app in the Shopify Dev Dashboard, release a new version, approve it on the store, and reconnect Shopify in AI → Marketplace.
-- "Reconnect Shopify": the token was rejected. Ask the user to reconnect from the connect card or AI → Marketplace; never ask them to paste credentials into the chat.
+- "Access denied for … field" or an "ACCESS_DENIED" error: the connected app lacks that access scope (`read_customers`, `write_orders`, `read_all_orders` for orders older than 60 days…). Tell the user which scope is missing; they add it to the app in the Shopify Dev Dashboard, release a new version, approve it on the store, and reconnect Shopify in AI → Plugins.
+- "Reconnect Shopify": the token was rejected. Ask the user to reconnect from the connect card or AI → Plugins; never ask them to paste credentials into the chat.
 - Shopify may redact customer data (`REDACTED`) for apps without protected customer data access; say so instead of guessing.
 
 ## Reporting

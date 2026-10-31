@@ -6,7 +6,7 @@ The plugin's MCP server is hosted by Flexkit at `https://flexkit.io/api/mcp/shop
 
 ## Connecting
 
-Connect through Flexkit Studio → AI → Marketplace. Shopify has no OAuth flow for a store's own tooling, so the plugin takes credentials of an app you create for your store:
+Connect through Flexkit Studio → AI → Plugins. Shopify has no OAuth flow for a store's own tooling, so the plugin takes credentials of an app you create for your store:
 
 - **Dev Dashboard app (recommended).** In the [Shopify Dev Dashboard](https://dev.shopify.com/dashboard/), create an app, select the Admin API access scopes the agent should have (for example `read_orders`, `read_products`, `read_customers`; add `write_*` scopes only if the agent should change store data), release a version and install it on your store. Enter the store's myshopify.com domain and the app's Client ID and Client secret from its Settings page. Flexkit exchanges them for an access token through Shopify's [client credentials grant](https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens/client-credentials-grant) and renews it every 24 hours. The store and the app must belong to the same Shopify organization.
 - **Legacy custom app.** For a custom app created in the Shopify admin before 2026, enter the store domain and the app's Admin API access token (`shpat_…`).

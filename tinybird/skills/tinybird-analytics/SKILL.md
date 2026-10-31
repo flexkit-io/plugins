@@ -42,6 +42,6 @@ Queries are for reading. Do not try to create, change or delete data sources, pi
 ## When a call fails
 
 - **Unknown endpoint, table or column:** list again and correct the name; do not retry the same call.
-- **Access denied (403) or a missing endpoint the user expects:** the token does not cover that resource. Say which resource, and suggest giving the token access in Tinybird and replacing it with Reconnect in AI → Marketplace.
+- **Access denied (403) or a missing endpoint the user expects:** the token does not cover that resource. Say which resource, and suggest giving the token access in Tinybird and replacing it with Reconnect in AI → Plugins.
 - **Reconnect needed:** the token was revoked or expired. Ask the user to reconnect Tinybird; never ask them to paste a token into the chat.
 - **Timeout or memory limit:** narrow the time range, filter on the sorting key, or aggregate to a coarser bucket, then try again once.
