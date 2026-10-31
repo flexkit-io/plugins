@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "shopify",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Work with a Shopify store through the Admin GraphQL API: orders, fulfillment, refunds, products, variants, inventory, collections, customers, discounts, metafields and bulk exports.",
   "author": {
     "name": "Flexkit"

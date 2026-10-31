@@ -1,6 +1,6 @@
 # Flexkit Plugins
 
-MIT-licensed, reviewed catalog of Agent Plugins 1.0.0 packages. Install and connect in Flexkit Studio → AI → Marketplace. Google providers require eligible Developer Preview accounts. Slack and Teams currently provide automation delivery, not MCP messaging tools. Stripe is a pinned copy of the official agent plugin, including its skills and the remote MCP server. Shopify connects with credentials of an app the merchant creates for the store and uses an MCP server hosted by Flexkit.
+MIT-licensed, reviewed catalog of Agent Plugins 1.0.0 packages. Install and connect in Flexkit Studio → AI → Plugins. Google providers require eligible Developer Preview accounts. Slack and Teams currently provide automation delivery, not MCP messaging tools. Stripe is a pinned copy of the official agent plugin, including its skills and the remote MCP server. Shopify connects with credentials of an app the merchant creates for the store and uses an MCP server hosted by Flexkit.
 
 ## Development
 
