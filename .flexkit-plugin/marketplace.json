@@ -42,6 +42,11 @@
       "description": "Read, create, and update spreadsheets with Google Sheets."
     },
     {
+      "name": "google-slides",
+      "source": "./google-slides",
+      "description": "Read, create, and edit presentations with Google Slides."
+    },
+    {
       "name": "notion",
       "source": "./notion",
       "description": "Search and work with your Notion workspace."
