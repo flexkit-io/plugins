@@ -32,6 +32,16 @@
       "description": "Read calendars, events, and availability."
     },
     {
+      "name": "google-docs",
+      "source": "./google-docs",
+      "description": "Read, create, and edit documents with Google Docs."
+    },
+    {
+      "name": "google-sheets",
+      "source": "./google-sheets",
+      "description": "Read, create, and update spreadsheets with Google Sheets."
+    },
+    {
       "name": "notion",
       "source": "./notion",
       "description": "Search and work with your Notion workspace."
