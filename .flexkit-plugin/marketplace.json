@@ -52,6 +52,11 @@
       "description": "Read spaces and messages, send messages, and manage read state and notification settings in Google Chat."
     },
     {
+      "name": "google-search-console",
+      "source": "./google-search-console",
+      "description": "Query search performance, URL indexing and sitemaps with Google Search Console."
+    },
+    {
       "name": "notion",
       "source": "./notion",
       "description": "Search and work with your Notion workspace."
