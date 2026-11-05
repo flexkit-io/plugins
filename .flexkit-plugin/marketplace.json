@@ -47,6 +47,11 @@
       "description": "Read, create, and edit presentations with Google Slides."
     },
     {
+      "name": "google-chat",
+      "source": "./google-chat",
+      "description": "Read spaces and messages, and send messages with Google Chat."
+    },
+    {
       "name": "notion",
       "source": "./notion",
       "description": "Search and work with your Notion workspace."

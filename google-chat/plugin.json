@@ -1,0 +1,51 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "google-chat",
+  "version": "1.0.0",
+  "description": "Read spaces and messages, and send messages with Google Chat.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/google-chat",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "google-chat",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Google Chat",
+      "logo": "./assets/logo.svg",
+      "category": "communication",
+      "supportedScopes": [
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "oauth2",
+        "provider": "google",
+        "credentialGroup": "google-chat",
+        "requiredScopes": [
+          "openid",
+          "email",
+          "https://www.googleapis.com/auth/chat.spaces.readonly",
+          "https://www.googleapis.com/auth/chat.memberships.readonly",
+          "https://www.googleapis.com/auth/chat.messages.readonly",
+          "https://www.googleapis.com/auth/chat.messages.create",
+          "https://www.googleapis.com/auth/chat.users.readstate",
+          "https://www.googleapis.com/auth/chat.users.spacesettings"
+        ],
+        "mcpServers": [
+          "google-chat"
+        ]
+      },
+      "availability": "preview"
+    }
+  }
+}
