@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import { containedPath, stripSkillToolGrants, validateCatalog, validateSkill } from '../scripts/validate.ts';
 
 test('all vendored and first-party plugins conform', async () => {
-  assert.equal(await validateCatalog(resolve(import.meta.dirname, '..')), 12);
+  assert.equal(await validateCatalog(resolve(import.meta.dirname, '..')), 13);
 });
 test('package containment rejects traversal and root aliases', () => {
   assert.throws(() => containedPath('/catalog/slack', '../gmail/plugin.json'));

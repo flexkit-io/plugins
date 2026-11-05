@@ -1,0 +1,49 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "google-slides",
+  "version": "1.0.0",
+  "description": "Read and create presentations with Google Slides.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/google-slides",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "google-slides",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Google Slides",
+      "logo": "./assets/logo.svg",
+      "category": "productivity",
+      "supportedScopes": [
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "oauth2",
+        "provider": "google",
+        "credentialGroup": "google-slides",
+        "requiredScopes": [
+          "openid",
+          "email",
+          "https://www.googleapis.com/auth/drive.readonly",
+          "https://www.googleapis.com/auth/drive.file",
+          "https://www.googleapis.com/auth/presentations.readonly",
+          "https://www.googleapis.com/auth/presentations"
+        ],
+        "mcpServers": [
+          "google-slides"
+        ]
+      },
+      "availability": "preview"
+    }
+  }
+}
