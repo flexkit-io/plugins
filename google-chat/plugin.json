@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "google-chat",
   "version": "1.0.0",
-  "description": "Read spaces and messages, and send messages with Google Chat.",
+  "description": "Read spaces and messages, send messages, and manage read state and notification settings in Google Chat.",
   "author": {
     "name": "Flexkit"
   },

@@ -49,7 +49,7 @@
     {
       "name": "google-chat",
       "source": "./google-chat",
-      "description": "Read spaces and messages, and send messages with Google Chat."
+      "description": "Read spaces and messages, send messages, and manage read state and notification settings in Google Chat."
     },
     {
       "name": "notion",
