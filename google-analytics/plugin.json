@@ -1,0 +1,35 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "google-analytics",
+  "version": "1.0.0",
+  "description": "Report on traffic, engagement, key events and revenue with Google Analytics 4.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/google-analytics",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": ["google-analytics", "ga4", "flexkit"],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Google Analytics",
+      "logo": "./assets/logo.svg",
+      "category": "analytics",
+      "supportedScopes": ["personal"],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "oauth2",
+        "provider": "google",
+        "credentialGroup": "google-analytics",
+        "requiredScopes": ["openid", "email", "https://www.googleapis.com/auth/analytics.readonly"],
+        "mcpServers": ["google-analytics"]
+      },
+      "availability": "preview"
+    }
+  }
+}
