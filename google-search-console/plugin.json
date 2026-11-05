@@ -1,0 +1,46 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "google-search-console",
+  "version": "1.0.0",
+  "description": "Query search performance, URL indexing and sitemaps with Google Search Console.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/google-search-console",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "google-search-console",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Google Search Console",
+      "logo": "./assets/logo.svg",
+      "category": "analytics",
+      "supportedScopes": [
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "oauth2",
+        "provider": "google",
+        "credentialGroup": "google-search-console",
+        "requiredScopes": [
+          "openid",
+          "email",
+          "https://www.googleapis.com/auth/webmasters.readonly"
+        ],
+        "mcpServers": [
+          "google-search-console"
+        ]
+      },
+      "availability": "preview"
+    }
+  }
+}
