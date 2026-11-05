@@ -1,6 +1,6 @@
 # Google Slides
 
-Read and create presentations with Google Slides.
+Read, create, and edit presentations with Google Slides.
 
 Connects agents to [Google Slides](https://docs.google.com/presentation) through Google's remote [Model Context Protocol](https://modelcontextprotocol.io/) server at `https://slidesmcp.googleapis.com/mcp/v1`. Requires an eligible Google Developer Preview account.
 

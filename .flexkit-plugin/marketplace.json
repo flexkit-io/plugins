@@ -44,7 +44,7 @@
     {
       "name": "google-slides",
       "source": "./google-slides",
-      "description": "Read and create presentations with Google Slides."
+      "description": "Read, create, and edit presentations with Google Slides."
     },
     {
       "name": "notion",

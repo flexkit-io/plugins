@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "google-slides",
   "version": "1.0.0",
-  "description": "Read and create presentations with Google Slides.",
+  "description": "Read, create, and edit presentations with Google Slides.",
   "author": {
     "name": "Flexkit"
   },
