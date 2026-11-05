@@ -14,5 +14,5 @@ Tools:
 
 Connect through Flexkit Studio → AI → Plugins. Auth is OAuth 2.0 against Google; credentials are stored by the platform, never in this repository. The agent sees only the properties the connected account was granted in Google Analytics.
 
-Logo is the official Google Analytics product icon on a padded white tile:
+Logo is the official Google Analytics product icon on a white tile, based on:
 https://www.gstatic.com/analytics-suite/header/suite/v2/ic_analytics.svg
