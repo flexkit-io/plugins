@@ -57,6 +57,11 @@
       "description": "Query search performance, URL indexing and sitemaps with Google Search Console."
     },
     {
+      "name": "google-analytics",
+      "source": "./google-analytics",
+      "description": "Report on traffic, engagement, key events and revenue with Google Analytics 4."
+    },
+    {
       "name": "notion",
       "source": "./notion",
       "description": "Search and work with your Notion workspace."
