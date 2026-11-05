@@ -1,0 +1,49 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "google-sheets",
+  "version": "1.0.0",
+  "description": "Read, create, and update spreadsheets with Google Sheets.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/google-sheets",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "google-sheets",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Google Sheets",
+      "logo": "./assets/logo.svg",
+      "category": "productivity",
+      "supportedScopes": [
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "oauth2",
+        "provider": "google",
+        "credentialGroup": "google-sheets",
+        "requiredScopes": [
+          "openid",
+          "email",
+          "https://www.googleapis.com/auth/drive.readonly",
+          "https://www.googleapis.com/auth/drive.file",
+          "https://www.googleapis.com/auth/spreadsheets.readonly",
+          "https://www.googleapis.com/auth/spreadsheets"
+        ],
+        "mcpServers": [
+          "google-sheets"
+        ]
+      },
+      "availability": "preview"
+    }
+  }
+}

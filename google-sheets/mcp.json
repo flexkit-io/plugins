@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "google-sheets": {
+      "type": "streamable-http",
+      "url": "https://sheetsmcp.googleapis.com/mcp/v1"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "google-docs",
+  "version": "1.0.0",
+  "description": "Read, create, and edit documents with Google Docs.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/google-docs",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "google-docs",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Google Docs",
+      "logo": "./assets/logo.svg",
+      "category": "productivity",
+      "supportedScopes": [
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "oauth2",
+        "provider": "google",
+        "credentialGroup": "google-docs",
+        "requiredScopes": [
+          "openid",
+          "email",
+          "https://www.googleapis.com/auth/drive.readonly",
+          "https://www.googleapis.com/auth/drive.file",
+          "https://www.googleapis.com/auth/documents.readonly",
+          "https://www.googleapis.com/auth/documents"
+        ],
+        "mcpServers": [
+          "google-docs"
+        ]
+      },
+      "availability": "preview"
+    }
+  }
+}
