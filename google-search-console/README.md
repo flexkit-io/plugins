@@ -11,7 +11,7 @@ Tools:
 - `inspect_url`: index status, canonical, crawl, mobile usability and rich results for one URL.
 - `list_sitemaps` and `get_sitemap`: submitted sitemaps and their health.
 
-Connect through Flexkit Studio → AI → Plugins. Auth is OAuth 2.0 against Google; credentials are stored by the platform, never in this repository. The agent sees only the properties the connected account was granted in Search Console.
+Auth is OAuth 2.0 against Google. The agent sees only the properties the connected account was granted in Search Console.
 
 Logo is the official Google Search Console product icon on a white tile, based on:
 https://www.gstatic.com/images/branding/productlogos/search_console/v1/192px.svg

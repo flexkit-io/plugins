@@ -4,7 +4,7 @@ Read, create, and edit presentations with Google Slides.
 
 Connects agents to [Google Slides](https://docs.google.com/presentation) through Google's remote [Model Context Protocol](https://modelcontextprotocol.io/) server at `https://slidesmcp.googleapis.com/mcp/v1`. Requires an eligible Google Developer Preview account.
 
-Connect through Flexkit Studio → AI → Plugins. Auth is OAuth 2.0 against Google; credentials are stored by the platform, never in this repository.
+Auth is OAuth 2.0 against Google.
 
 ## Docs
 
