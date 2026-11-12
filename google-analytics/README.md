@@ -12,7 +12,7 @@ Tools:
 - `get_metadata`: the dimensions and metrics a property offers, including its custom definitions.
 - `check_compatibility`: which dimensions and metrics can be combined in one report.
 
-Connect through Flexkit Studio → AI → Plugins. Auth is OAuth 2.0 against Google; credentials are stored by the platform, never in this repository. The agent sees only the properties the connected account was granted in Google Analytics.
+Auth is OAuth 2.0 against Google. The agent sees only the properties the connected account was granted in Google Analytics.
 
 Logo is the official Google Analytics product icon on a white tile, based on:
 https://www.gstatic.com/analytics-suite/header/suite/v2/ic_analytics.svg
