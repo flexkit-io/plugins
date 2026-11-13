@@ -17,16 +17,6 @@
       "description": "Deliver automation updates to Microsoft Teams channels."
     },
     {
-      "name": "gmail",
-      "source": "./gmail",
-      "description": "Search email and create drafts with Gmail."
-    },
-    {
-      "name": "google-drive",
-      "source": "./google-drive",
-      "description": "Search, read, and create files with Google Drive."
-    },
-    {
       "name": "google-calendar",
       "source": "./google-calendar",
       "description": "Read calendars, events, and availability."
@@ -45,11 +35,6 @@
       "name": "google-slides",
       "source": "./google-slides",
       "description": "Read, create, and edit presentations with Google Slides."
-    },
-    {
-      "name": "google-chat",
-      "source": "./google-chat",
-      "description": "Read spaces and messages, send messages, and manage read state and notification settings in Google Chat."
     },
     {
       "name": "google-search-console",
