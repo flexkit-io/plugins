@@ -4,7 +4,7 @@
   "path": "providers/agent-plugins/plugin",
   "files": {
     "TESTING.md": "1c91ba81812f3657211579d1f5d364a8c3e32182ea460790b9999ec3f4a9092f",
-    "assets/parallelogram.png": "f98e97c1a3b532b10778ac7720d245dc00f20dcf1c37288ea6725981dd74a02f",
+    "assets/parallelogram.png": "143bc5c6f601b797738de95a35f363bbe8ef214922872c6b242c3ea652eaa5d9",
     "fixtures/test-data.json": "7fd8aad8f9c34af55c1a63fb6f9c7ba90be1d40eb233b848133b459268574ca9",
     "mcp.json": "d7a9ad17a4f71c3a167185643e997720118a57edf3146364bf4ffc1c43684dce",
     "plugin.json": "021c6c1cdf9360effdab85646a2c3f5971488682f0ccee0c5af6ba7bb5f77949",

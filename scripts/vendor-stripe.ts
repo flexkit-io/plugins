@@ -148,8 +148,10 @@ for (const entry of selected) {
     throw new Error(`Upstream returned ${String(response.status)} for ${file}`);
   }
 
-  const content = await response.text();
-  files[file] = createHash('sha256').update(content).digest('hex');
+  // Hash and write the raw bytes: decoding as text corrupts binary files such as PNG assets.
+  const bytes = Buffer.from(await response.arrayBuffer());
+  const content = bytes.toString('utf8');
+  files[file] = createHash('sha256').update(bytes).digest('hex');
   await mkdir(dirname(resolve(root, file)), { recursive: true });
 
   if (file === 'plugin.json') {
@@ -185,7 +187,7 @@ for (const entry of selected) {
     continue;
   }
 
-  await writeFile(resolve(root, file), content);
+  await writeFile(resolve(root, file), bytes);
 }
 
 const licenseResponse = await fetch(`https://raw.githubusercontent.com/stripe/ai/${sha}/LICENSE`, {
@@ -197,7 +199,7 @@ if (!licenseResponse.ok) {
   throw new Error('Unable to read the Stripe license');
 }
 
-const license = await licenseResponse.text();
+const license = Buffer.from(await licenseResponse.arrayBuffer());
 files.LICENSE = createHash('sha256').update(license).digest('hex');
 await writeFile(resolve(root, 'LICENSE'), license);
 
