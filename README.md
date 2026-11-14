@@ -6,4 +6,4 @@ MIT-licensed, reviewed catalog of Agent Plugins 1.0.0 packages. Install and conn
 
 Use Node 22 and pnpm 10.33.0. Run `pnpm install --frozen-lockfile`, `pnpm validate`, `pnpm typecheck`, and `pnpm test`.
 
-Vendor copies are pinned to a full upstream commit, never loaded live. Portable schemas are unmodified copies from agent-plugins.org; provenance is in `schemas/SOURCE.json`. Vendor MIT notices remain in each package. Flexkit metadata is under `extensions["io.flexkit"]`.
+Vendor copies are pinned to a full upstream commit, never loaded live. `third_party/approved.json` records, for each vendored plugin, the upstream repository and the MCP hosts a maintainer approved; validation fails if a pin update brings in another upstream, a non-https or unapproved MCP host, or a local (stdio) server. The pin updater never writes that file, so approving a new host is a reviewed, hand-made change. Portable schemas are unmodified copies from agent-plugins.org; provenance is in `schemas/SOURCE.json`. Vendor MIT notices remain in each package. Flexkit metadata is under `extensions["io.flexkit"]`.

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { resolve } from 'node:path';
-import { containedPath, stripSkillToolGrants, validateCatalog, validateSkill } from '../scripts/validate.ts';
+import { checkThirdPartyApproval, containedPath, stripSkillToolGrants, validateCatalog, validateSkill } from '../scripts/validate.ts';
 
 test('all vendored and first-party plugins conform', async () => {
   assert.equal(await validateCatalog(resolve(import.meta.dirname, '..')), 14);
@@ -27,4 +27,31 @@ test('skill publication strips host tool grants without changing the body', () =
   assert.equal(published.endsWith('\n\nRun stripe directory search.\n'), true);
   const plain = '---\nname: update\ndescription: Write an update.\n---\nContent\n';
   assert.equal(stripSkillToolGrants(plain), plain);
+});
+test('vendored plugins need an approved upstream and approved MCP hosts', () => {
+  const approval = { upstream: 'https://github.com/stripe/ai', mcpHosts: ['mcp.stripe.com'] };
+  const repository = 'https://github.com/stripe/ai';
+  const config = (url: string) => [{ file: 'mcp.json', config: { mcpServers: { stripe: { type: 'streamable-http', url } } } }];
+
+  checkThirdPartyApproval('stripe', approval, repository, config('https://mcp.stripe.com'));
+  checkThirdPartyApproval('stripe', approval, repository, []);
+  assert.throws(() => checkThirdPartyApproval('stripe', undefined, repository, []), /approved\.json/);
+  assert.throws(() => checkThirdPartyApproval('stripe', { upstream: repository }, repository, []), /approved\.json/);
+  assert.throws(() => checkThirdPartyApproval('stripe', approval, 'https://github.com/someone/fork', []), /not the approved/);
+
+  for (const url of [
+    'https://mcp.evil.example',
+    'http://mcp.stripe.com',
+    'https://mcp.stripe.com.evil.example',
+    'https://mcp.stripe.com@evil.example',
+    'https://user@mcp.stripe.com',
+    'https://mcp.stripe.com:8443',
+    'not a url',
+  ]) {
+    assert.throws(() => checkThirdPartyApproval('stripe', approval, repository, config(url)), /approved host/, url);
+  }
+
+  const stdio = [{ file: 'io.flexkit/upstream-mcp.json', config: { mcpServers: { local: { type: 'stdio', command: 'node' } } } }];
+  assert.throws(() => checkThirdPartyApproval('stripe', approval, repository, stdio), /approved host/);
+  assert.throws(() => checkThirdPartyApproval('stripe', approval, repository, [{ file: 'mcp.json', config: {} }]), /no mcpServers/);
 });

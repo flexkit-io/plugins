@@ -45,6 +45,70 @@ export function stripSkillToolGrants(text: string): string {
   return `---${newline}${frontmatter}${newline}---${body}`;
 }
 
+/** What a maintainer approved for a vendored plugin, kept in third_party/approved.json, which the pin updater never writes. */
+export interface ThirdPartyApproval {
+  upstream: string;
+  mcpHosts: string[];
+}
+
+function isApproval(value: unknown): value is ThirdPartyApproval {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+
+  const { upstream, mcpHosts } = value as { upstream?: unknown; mcpHosts?: unknown };
+
+  return (
+    typeof upstream === 'string' &&
+    upstream.startsWith('https://github.com/') &&
+    Array.isArray(mcpHosts) &&
+    mcpHosts.every((host) => typeof host === 'string' && host.length > 0 && host === host.toLowerCase())
+  );
+}
+
+/**
+ * Fails unless a vendored plugin comes from its approved upstream and every MCP server it declares, in the
+ * published config and in the upstream snapshot, is an https URL on an approved host. A local (stdio) server
+ * would run upstream code on the user's machine, so it is never accepted from a vendored plugin.
+ */
+export function checkThirdPartyApproval(
+  name: string,
+  approval: unknown,
+  repository: string,
+  mcpConfigs: Array<{ file: string; config: unknown }>
+): void {
+  if (!isApproval(approval)) {
+    throw new Error(`${name}: missing or invalid entry in third_party/approved.json`);
+  }
+
+  if (repository !== approval.upstream) {
+    throw new Error(`${name}: upstream ${repository} is not the approved ${approval.upstream}`);
+  }
+
+  for (const { file, config } of mcpConfigs) {
+    const servers = (config as { mcpServers?: unknown } | null)?.mcpServers;
+
+    if (!servers || typeof servers !== 'object') {
+      throw new Error(`${name}: ${file} has no mcpServers`);
+    }
+
+    for (const [server, definition] of Object.entries(servers)) {
+      const raw = (definition as { url?: unknown } | null)?.url;
+      let url: URL | undefined;
+
+      try {
+        url = typeof raw === 'string' ? new URL(raw) : undefined;
+      } catch {
+        url = undefined;
+      }
+
+      if (!url || url.protocol !== 'https:' || url.username || url.password || !approval.mcpHosts.includes(url.host)) {
+        throw new Error(`${name}: MCP server "${server}" in ${file} is not an https URL on an approved host`);
+      }
+    }
+  }
+}
+
 function pinnedUpstreamPath(repository: string, path: string): string {
   if (path === 'mcp.json') {
     return 'io.flexkit/upstream-mcp.json';
@@ -162,6 +226,7 @@ export async function validateCatalog(root: string): Promise<number> {
   const index = await json(resolve(root, '.flexkit-plugin/marketplace.json')) as {
     name: string; plugins: Array<{ name: string; source: string; description: string }>;
   };
+  const approvals = await json(resolve(root, 'third_party/approved.json')) as { [name: string]: unknown };
   const seen = new Set<string>();
 
   if (index.name !== 'flexkit' || !Array.isArray(index.plugins)) {
@@ -212,16 +277,21 @@ export async function validateCatalog(root: string): Promise<number> {
       const lock = await json(resolve(packageRoot, 'io.flexkit/upstream.lock.json')) as { sha: string; repository: string; files: { [path: string]: string } };
       const provenance = ext as { upstream?: { sha?: string; repository?: string } };
 
-      const allowedUpstreams = new Set(['https://github.com/stripe/ai']);
-
       if (
         !/^[a-f0-9]{40}$/.test(lock.sha) ||
         provenance.upstream?.sha !== lock.sha ||
-        provenance.upstream?.repository !== lock.repository ||
-        !allowedUpstreams.has(lock.repository)
+        provenance.upstream?.repository !== lock.repository
       ) {
         throw new Error('Invalid upstream pin');
       }
+
+      const mcpFiles = ['mcp.json', 'io.flexkit/upstream-mcp.json'].filter((file) => files.includes(file));
+      checkThirdPartyApproval(
+        item.name,
+        Object.hasOwn(approvals, item.name) ? approvals[item.name] : undefined,
+        lock.repository,
+        await Promise.all(mcpFiles.map(async (file) => ({ file, config: await json(resolve(packageRoot, file)) })))
+      );
 
       for (const [path, expected] of Object.entries(lock.files)) {
         const bytes = await pinnedFileBytes(packageRoot, lock.repository, path);
