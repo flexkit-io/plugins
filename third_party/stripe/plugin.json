@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "stripe",
-  "version": "8.0.22",
+  "version": "8.0.27",
   "description": "Stripe agent plugin with skills for Stripe integrations including best practices, API and SDK upgrade guidance, and a remote MCP server configuration.",
   "author": {
     "name": "Stripe",
@@ -47,7 +47,7 @@
       "upstream": {
         "repository": "https://github.com/stripe/ai",
         "path": "providers/agent-plugins/plugin",
-        "sha": "43d4af6847eebf4987576e074d7052d750e8750d"
+        "sha": "74f7f39b1d7f3b56e49218a43b0dc87a268c03c7"
       }
     }
   }
