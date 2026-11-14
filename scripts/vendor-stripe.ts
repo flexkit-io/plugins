@@ -60,6 +60,15 @@ async function publishVendoredSkill(packageRoot: string, file: string, content: 
   await writeFile(snapshot, content);
 }
 
+/** Decodes a text file without changing a byte: invalid UTF-8 is rejected and a BOM is kept, so the lock hash still matches. */
+function decodeText(bytes: Buffer, file: string): string {
+  try {
+    return new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes);
+  } catch {
+    throw new Error(`Upstream file is not valid UTF-8: ${file}`);
+  }
+}
+
 function flexkitManifest(upstream: string, pin: string): string {
   const manifest = JSON.parse(upstream) as StripeManifest;
 
@@ -106,7 +115,7 @@ if (!treeResponse.ok) {
 
 const tree = (await treeResponse.json()) as {
   truncated: boolean;
-  tree: Array<{ path: string; type: string; mode: string; size?: number }>;
+  tree: Array<{ path: string; type: string; mode: string; sha: string; size?: number }>;
 };
 
 if (tree.truncated || !Array.isArray(tree.tree)) {
@@ -148,11 +157,19 @@ for (const entry of selected) {
     throw new Error(`Upstream returned ${String(response.status)} for ${file}`);
   }
 
-  const content = await response.text();
-  files[file] = createHash('sha256').update(content).digest('hex');
+  // Hash and write the raw bytes: decoding as text corrupts binary files such as PNG assets.
+  const bytes = Buffer.from(await response.arrayBuffer());
+
+  // Check the download against the tree's git blob id, independently of the lock hash written below.
+  if (createHash('sha1').update(`blob ${String(bytes.length)}\0`).update(bytes).digest('hex') !== entry.sha) {
+    throw new Error(`Upstream bytes do not match the pinned tree for ${file}`);
+  }
+
+  files[file] = createHash('sha256').update(bytes).digest('hex');
   await mkdir(dirname(resolve(root, file)), { recursive: true });
 
   if (file === 'plugin.json') {
+    const content = decodeText(bytes, file);
     await mkdir(resolve(root, 'io.flexkit'), { recursive: true });
     await writeFile(resolve(root, 'io.flexkit/upstream-plugin.json'), content);
     await writeFile(resolve(root, file), flexkitManifest(content, sha));
@@ -160,6 +177,7 @@ for (const entry of selected) {
   }
 
   if (file === 'mcp.json') {
+    const content = decodeText(bytes, file);
     const mcp = JSON.parse(content) as McpConfig;
     let adapted = content;
 
@@ -181,11 +199,11 @@ for (const entry of selected) {
   }
 
   if (isPublishedSkill(file)) {
-    await publishVendoredSkill(root, file, content);
+    await publishVendoredSkill(root, file, decodeText(bytes, file));
     continue;
   }
 
-  await writeFile(resolve(root, file), content);
+  await writeFile(resolve(root, file), bytes);
 }
 
 const licenseResponse = await fetch(`https://raw.githubusercontent.com/stripe/ai/${sha}/LICENSE`, {
@@ -197,7 +215,7 @@ if (!licenseResponse.ok) {
   throw new Error('Unable to read the Stripe license');
 }
 
-const license = await licenseResponse.text();
+const license = Buffer.from(await licenseResponse.arrayBuffer());
 files.LICENSE = createHash('sha256').update(license).digest('hex');
 await writeFile(resolve(root, 'LICENSE'), license);
 
