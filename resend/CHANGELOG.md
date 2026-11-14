@@ -6,7 +6,7 @@ The `resend-email` skill sends from the address the user names without listing d
 
 ## 1.0.2
 
-Request the `full_access` scope again: Resend's MCP tools require it.
+Request the `full_access` scope again: every Resend tool except sending email requires it.
 
 ## 1.0.1
 
