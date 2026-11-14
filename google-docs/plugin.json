@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "google-docs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Read, create, and edit documents with Google Docs.",
   "author": {
     "name": "Flexkit"
@@ -34,7 +34,6 @@
         "requiredScopes": [
           "openid",
           "email",
-          "https://www.googleapis.com/auth/drive.readonly",
           "https://www.googleapis.com/auth/drive.file",
           "https://www.googleapis.com/auth/documents.readonly",
           "https://www.googleapis.com/auth/documents"

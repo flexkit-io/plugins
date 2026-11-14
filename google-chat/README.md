@@ -6,7 +6,7 @@ Connects agents to [Google Chat](https://chat.google.com) through Google's remot
 
 Google requires a Chat app configured in the Google Cloud project that owns the OAuth client (Google Chat API → Configuration) before the server accepts calls; see the setup guide below.
 
-Connect through Flexkit Studio → AI → Plugins. Auth is OAuth 2.0 against Google; credentials are stored by the platform, never in this repository.
+Auth is OAuth 2.0 against Google.
 
 ## Docs
 

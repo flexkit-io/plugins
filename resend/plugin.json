@@ -1,0 +1,45 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "resend",
+  "version": "1.0.3",
+  "description": "Send and track email with Resend, and manage contacts, broadcasts, templates and domains.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/resend",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "resend",
+    "email",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Resend",
+      "logo": "./assets/logo.svg",
+      "category": "communication",
+      "supportedScopes": [
+        "project",
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "mcp-oauth",
+        "provider": "mcp",
+        "credentialGroup": "resend",
+        "requiredScopes": [
+          "full_access"
+        ],
+        "mcpServers": [
+          "resend"
+        ]
+      }
+    }
+  }
+}

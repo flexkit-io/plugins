@@ -1,6 +1,6 @@
 # Flexkit Plugins
 
-MIT-licensed, reviewed catalog of Agent Plugins 1.0.0 packages. Install and connect in Flexkit Studio → AI → Plugins. Google Workspace plugins require eligible Developer Preview accounts; Google Search Console and Google Analytics do not, and use MCP servers hosted by Flexkit. Slack and Teams currently provide automation delivery, not MCP messaging tools. Stripe is a pinned copy of the official agent plugin, including its skills and the remote MCP server. Shopify connects with credentials of an app the merchant creates for the store and uses an MCP server hosted by Flexkit.
+MIT-licensed, reviewed catalog of Agent Plugins 1.0.0 packages. Install and connect in Flexkit Studio → AI → Plugins. Google Calendar, Docs, Sheets and Slides use Google's Workspace MCP servers, which are in Developer Preview; Google Search Console and Google Analytics use MCP servers hosted by Flexkit. The Gmail, Google Drive and Google Chat packages stay in this repository but are not listed in the catalog, because they need restricted Google scopes. Slack and Teams currently provide automation delivery, not MCP messaging tools. Stripe is a pinned copy of the official agent plugin, including its skills and the remote MCP server. Shopify connects with credentials of an app the merchant creates for the store and uses an MCP server hosted by Flexkit.
 
 ## Development
 
