@@ -65,6 +65,11 @@
       "name": "shopify",
       "source": "./shopify",
       "description": "Work with a Shopify store: orders, fulfillment, products, inventory, customers and more through the Admin API."
+    },
+    {
+      "name": "resend",
+      "source": "./resend",
+      "description": "Send and track email with Resend, and manage contacts, broadcasts, templates and domains."
     }
   ]
 }
