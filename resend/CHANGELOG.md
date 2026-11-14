@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+Request the `full_access` scope again: Resend's MCP tools require it.
+
 ## 1.0.1
 
 Connect without requesting a scope, as other MCP clients do, so Resend grants its default access.
