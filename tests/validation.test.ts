@@ -51,7 +51,25 @@ test('vendored plugins need an approved upstream and approved MCP hosts', () => 
     assert.throws(() => checkThirdPartyApproval('stripe', approval, repository, config(url)), /approved host/, url);
   }
 
-  const stdio = [{ file: 'io.flexkit/upstream-mcp.json', config: { mcpServers: { local: { type: 'stdio', command: 'node' } } } }];
-  assert.throws(() => checkThirdPartyApproval('stripe', approval, repository, stdio), /approved host/);
+  const servers = (server: object) => [{ file: 'io.flexkit/upstream-mcp.json', config: { mcpServers: { x: server } } }];
+  for (const server of [
+    { type: 'stdio', command: 'node' },
+    { type: 'stdio', command: 'node', args: ['evil.js'], url: 'https://mcp.stripe.com' },
+    { command: 'node', url: 'https://mcp.stripe.com' },
+    { url: 'https://mcp.stripe.com' },
+  ]) {
+    assert.throws(() => checkThirdPartyApproval('stripe', approval, repository, servers(server)), /not a remote server/);
+  }
+  checkThirdPartyApproval('stripe', approval, repository, servers({ type: 'http', url: 'https://mcp.stripe.com' }));
+
+  for (const bad of [
+    { upstream: 'https://github.com/stripe/ai/', mcpHosts: ['mcp.stripe.com'] },
+    { upstream: 'https://github.com/stripe/ai/../evil', mcpHosts: ['mcp.stripe.com'] },
+    { upstream: repository, mcpHosts: ['mcp.stripe.com.'] },
+    { upstream: repository, mcpHosts: ['MCP.stripe.com'] },
+    { upstream: repository, mcpHosts: ['https://mcp.stripe.com'] },
+  ]) {
+    assert.throws(() => checkThirdPartyApproval('stripe', bad, repository, []), /approved\.json/);
+  }
   assert.throws(() => checkThirdPartyApproval('stripe', approval, repository, [{ file: 'mcp.json', config: {} }]), /no mcpServers/);
 });

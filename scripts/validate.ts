@@ -51,6 +51,8 @@ export interface ThirdPartyApproval {
   mcpHosts: string[];
 }
 
+const remoteServerTypes = new Set(['http', 'streamable-http', 'sse']);
+
 function isApproval(value: unknown): value is ThirdPartyApproval {
   if (!value || typeof value !== 'object') {
     return false;
@@ -60,16 +62,17 @@ function isApproval(value: unknown): value is ThirdPartyApproval {
 
   return (
     typeof upstream === 'string' &&
-    upstream.startsWith('https://github.com/') &&
+    /^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(upstream) &&
+    !upstream.includes('/..') &&
     Array.isArray(mcpHosts) &&
-    mcpHosts.every((host) => typeof host === 'string' && host.length > 0 && host === host.toLowerCase())
+    mcpHosts.every((host) => typeof host === 'string' && /^[a-z0-9-]+(?:\.[a-z0-9-]+)+(?::\d{1,5})?$/.test(host))
   );
 }
 
 /**
- * Fails unless a vendored plugin comes from its approved upstream and every MCP server it declares, in the
- * published config and in the upstream snapshot, is an https URL on an approved host. A local (stdio) server
- * would run upstream code on the user's machine, so it is never accepted from a vendored plugin.
+ * Fails unless a vendored plugin comes from its approved upstream and every MCP server it declares, in any
+ * package file with `mcpServers`, is a remote server at an https URL on an approved host. A local (stdio)
+ * server would run upstream code on the user's machine, so it is never accepted from a vendored plugin.
  */
 export function checkThirdPartyApproval(
   name: string,
@@ -93,7 +96,13 @@ export function checkThirdPartyApproval(
     }
 
     for (const [server, definition] of Object.entries(servers)) {
-      const raw = (definition as { url?: unknown } | null)?.url;
+      const fields = (definition && typeof definition === 'object' ? definition : {}) as { [key: string]: unknown };
+
+      if (!remoteServerTypes.has(fields.type as string) || ['command', 'args', 'env', 'cwd'].some((key) => key in fields)) {
+        throw new Error(`${name}: MCP server "${server}" in ${file} is not a remote server`);
+      }
+
+      const raw = fields.url;
       let url: URL | undefined;
 
       try {
@@ -226,7 +235,13 @@ export async function validateCatalog(root: string): Promise<number> {
   const index = await json(resolve(root, '.flexkit-plugin/marketplace.json')) as {
     name: string; plugins: Array<{ name: string; source: string; description: string }>;
   };
-  const approvals = await json(resolve(root, 'third_party/approved.json')) as { [name: string]: unknown };
+  const approvals = await json(resolve(root, 'third_party/approved.json'));
+
+  if (!approvals || typeof approvals !== 'object' || Array.isArray(approvals)) {
+    throw new Error('third_party/approved.json must be an object keyed by plugin name');
+  }
+
+  const vendored = new Set<string>();
   const seen = new Set<string>();
 
   if (index.name !== 'flexkit' || !Array.isArray(index.plugins)) {
@@ -273,10 +288,12 @@ export async function validateCatalog(root: string): Promise<number> {
       }
     }
 
-    if (item.source.startsWith('./third_party/')) {
-      const lock = await json(resolve(packageRoot, 'io.flexkit/upstream.lock.json')) as { sha: string; repository: string; files: { [path: string]: string } };
-      const provenance = ext as { upstream?: { sha?: string; repository?: string } };
+    const provenance = ext as { upstream?: { sha?: string; repository?: string } };
 
+    // Vendored by location or by provenance, so a vendored copy listed elsewhere still needs an approval.
+    if (item.source.startsWith('./third_party/') || provenance.upstream !== undefined) {
+      vendored.add(item.name);
+      const lock = await json(resolve(packageRoot, 'io.flexkit/upstream.lock.json')) as { sha: string; repository: string; files: { [path: string]: string } };
       if (
         !/^[a-f0-9]{40}$/.test(lock.sha) ||
         provenance.upstream?.sha !== lock.sha ||
@@ -285,12 +302,22 @@ export async function validateCatalog(root: string): Promise<number> {
         throw new Error('Invalid upstream pin');
       }
 
-      const mcpFiles = ['mcp.json', 'io.flexkit/upstream-mcp.json'].filter((file) => files.includes(file));
+      // Every JSON file that declares MCP servers, wherever upstream put it (mcp.json, .mcp.json, plugin.json…).
+      const mcpConfigs: Array<{ file: string; config: unknown }> = [];
+
+      for (const file of files.filter((path) => path.endsWith('.json'))) {
+        const config = await json(resolve(packageRoot, file));
+
+        if (config && typeof config === 'object' && 'mcpServers' in config) {
+          mcpConfigs.push({ file, config });
+        }
+      }
+
       checkThirdPartyApproval(
         item.name,
-        Object.hasOwn(approvals, item.name) ? approvals[item.name] : undefined,
+        Object.hasOwn(approvals, item.name) ? (approvals as { [name: string]: unknown })[item.name] : undefined,
         lock.repository,
-        await Promise.all(mcpFiles.map(async (file) => ({ file, config: await json(resolve(packageRoot, file)) })))
+        mcpConfigs
       );
 
       for (const [path, expected] of Object.entries(lock.files)) {
@@ -309,6 +336,12 @@ export async function validateCatalog(root: string): Promise<number> {
     if (files.includes('mcp.json') && !validateMcp(await json(resolve(packageRoot, 'mcp.json')))) {
       throw new Error(`${item.name}: ${ajv.errorsText(validateMcp.errors)}`);
     }
+  }
+
+  const stale = Object.keys(approvals).filter((name) => !vendored.has(name));
+
+  if (stale.length) {
+    throw new Error(`third_party/approved.json lists plugins that are not vendored: ${stale.join(', ')}`);
   }
 
   const sources = await json(resolve(root, 'schemas/SOURCE.json')) as { [name: string]: { sha256: string } };
