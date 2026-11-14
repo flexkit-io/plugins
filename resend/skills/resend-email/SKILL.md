@@ -5,11 +5,11 @@ description: Send, schedule and track email through a connected Resend team, rea
 
 # Working with Resend
 
-The Resend tools act on the Resend team the user approved, with full access. You never see their credential. Email you send leaves under the user's domain and cannot be recalled, so be deliberate.
+The Resend tools act on the Resend team the user approved. You never see their credential. When connecting, the user chooses **Full access** or **Sending access**; with Sending access only sending email works, and every other tool fails with a message that the connection's access does not allow the request. Then send what you can, tell the user that action needs Full access (Disconnect, then connect Resend again and choose Full access), and do not retry it. Email you send leaves under the user's domain and cannot be recalled, so be deliberate.
 
 ## Before sending anything
 
-1. **Sender:** `from` must be an address on a domain the team has verified. Call `list-domains` and use a domain whose status is `verified`; never invent a sender domain. If none is verified, say so and stop (or offer `create-domain`, which returns the DNS records the user must add, then `verify-domain`). Use the address the user asked for, otherwise ask which one to send from.
+1. **Sender:** `from` must be an address on a domain the team has verified. When the user names the sender ("from hello@example.com"), send from it directly; do not look up domains first. Only when they did not, ask which address to send from, or call `list-domains` to offer addresses on a domain whose status is `verified`; never invent a sender domain. If a send fails because the domain is not verified, say so (and offer `create-domain`, which returns the DNS records the user must add, then `verify-domain`, if the connection has Full access).
 2. **Recipients and content:** restate who receives the message (to, cc, bcc), the subject and a short summary of the body before the first send in a conversation, unless the user already gave all three exactly. Never add recipients the user did not name.
 3. **One message vs. many:** `send-email` for a single message (up to 50 recipients, all of whom see each other in `to`), `send-batch-emails` for up to 100 individually addressed messages. For a newsletter or announcement to a list, use a **broadcast** to a segment instead (see below), so unsubscribes and topics are honoured.
 4. **Format:** pass both `html` and `text` when you write HTML. Keep HTML email-safe: inline styles, tables for layout, no scripts or external CSS. `send-email` takes the content itself; it cannot send a stored template. To reuse a template's wording, read it with `get-template` and send its HTML with the values filled in.
