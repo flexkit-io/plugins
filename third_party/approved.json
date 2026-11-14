@@ -1,0 +1,6 @@
+{
+  "stripe": {
+    "upstream": "https://github.com/stripe/ai",
+    "mcpHosts": ["mcp.stripe.com"]
+  }
+}
