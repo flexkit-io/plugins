@@ -50,6 +50,11 @@
       "name": "resend",
       "source": "./resend",
       "description": "Send and track email with Resend, and manage contacts, broadcasts, templates and domains."
+    },
+    {
+      "name": "linear",
+      "source": "./linear",
+      "description": "Find, create and update Linear issues, projects and comments."
     }
   ]
 }

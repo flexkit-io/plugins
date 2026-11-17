@@ -1,0 +1,49 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "linear",
+  "version": "1.0.0",
+  "description": "Find, create and update Linear issues, projects and comments.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/linear",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "linear",
+    "issues",
+    "project-management",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Linear",
+      "logo": "./assets/logo.svg",
+      "category": "productivity",
+      "supportedScopes": [
+        "project",
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "mcp-oauth",
+        "provider": "mcp",
+        "credentialGroup": "linear",
+        "requiredScopes": [
+          "read",
+          "write",
+          "openid",
+          "email"
+        ],
+        "mcpServers": [
+          "linear"
+        ]
+      }
+    }
+  }
+}
