@@ -118,12 +118,13 @@ export function checkThirdPartyApproval(
   }
 }
 
-function pinnedUpstreamPath(repository: string, path: string): string {
+/** Where a vendored package keeps the upstream bytes of a file the pin updater adapts. */
+function pinnedUpstreamPath(path: string): string {
   if (path === 'mcp.json') {
     return 'io.flexkit/upstream-mcp.json';
   }
 
-  if (repository === 'https://github.com/stripe/ai' && path === 'plugin.json') {
+  if (path === 'plugin.json') {
     return 'io.flexkit/upstream-plugin.json';
   }
 
@@ -146,14 +147,12 @@ async function readIfPresent(path: string): Promise<Buffer | undefined> {
   return undefined;
 }
 
-async function pinnedFileBytes(packageRoot: string, repository: string, path: string): Promise<Buffer> {
-  const snapshotPath = repository === 'https://github.com/stripe/ai' && isPublishedSkill(path)
-    ? upstreamSkillSnapshot(path)
-    : '';
+async function pinnedFileBytes(packageRoot: string, path: string): Promise<Buffer> {
+  const snapshotPath = isPublishedSkill(path) ? upstreamSkillSnapshot(path) : '';
   const snapshot = snapshotPath ? await readIfPresent(containedPath(packageRoot, snapshotPath)) : undefined;
 
   if (!snapshot) {
-    return readFile(containedPath(packageRoot, pinnedUpstreamPath(repository, path)));
+    return readFile(containedPath(packageRoot, pinnedUpstreamPath(path)));
   }
 
   const published = await readFile(containedPath(packageRoot, path), 'utf8');
@@ -321,7 +320,7 @@ export async function validateCatalog(root: string): Promise<number> {
       );
 
       for (const [path, expected] of Object.entries(lock.files)) {
-        const bytes = await pinnedFileBytes(packageRoot, lock.repository, path);
+        const bytes = await pinnedFileBytes(packageRoot, path);
 
         if (createHash('sha256').update(bytes).digest('hex') !== expected) {
           throw new Error(`Vendored file changed outside the pin updater: ${path}`);

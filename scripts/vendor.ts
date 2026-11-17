@@ -3,16 +3,113 @@ import { mkdir, readFile, writeFile, unlink } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { containedPath, isPublishedSkill, stripSkillToolGrants, upstreamSkillSnapshot, validateSkill } from './validate.ts';
 
-const sha = process.argv[2];
-const repository = 'https://github.com/stripe/ai';
-const upstreamPath = 'providers/agent-plugins/plugin';
-const localPath = 'third_party/stripe';
-
-if (!sha || !/^[a-f0-9]{40}$/.test(sha)) {
-  throw new Error('Usage: pnpm vendor:stripe <full-upstream-sha>');
+/** A vendored upstream plugin: where it comes from, which files are taken, and the Flexkit metadata added to its manifest. */
+interface Upstream {
+  /** GitHub `owner/repo`. */
+  repo: string;
+  /** Package directory in the upstream repository; '' is the repository root. */
+  upstreamPath: string;
+  localPath: string;
+  /** Which upstream files (relative to `upstreamPath`) are vendored. The repository LICENSE is always added. */
+  include: (file: string) => boolean;
+  extension: (repository: string, upstreamPath: string, sha: string) => { [key: string]: unknown };
 }
 
-interface StripeManifest {
+/**
+ * Atlassian skills that work on their own in Flexkit. The others need the
+ * `teamwork-graph-context` skill (longer than Flexkit admits), a bundled
+ * script, or a local code workspace.
+ */
+const atlassianSkills = [
+  'capture-tasks-from-meeting-notes',
+  'jira-sprint-dashboard',
+  'search-company-knowledge',
+  'spec-to-backlog',
+  'triage-issue',
+];
+
+const upstreams: { [name: string]: Upstream } = {
+  stripe: {
+    repo: 'stripe/ai',
+    upstreamPath: 'providers/agent-plugins/plugin',
+    localPath: 'third_party/stripe',
+    include: () => true,
+    extension: (repository, path, sha) => ({
+      schemaVersion: 1,
+      displayName: 'Stripe',
+      logo: './assets/logo.svg',
+      category: 'payments',
+      supportedScopes: ['project', 'personal'],
+      requiredInputs: [],
+      capabilities: { agentTools: true, automationDelivery: false },
+      auth: {
+        type: 'mcp-oauth',
+        provider: 'stripe',
+        credentialGroup: 'stripe',
+        requiredScopes: [],
+        mcpServers: ['stripe'],
+      },
+      availability: 'preview',
+      upstream: { repository, path, sha },
+    }),
+  },
+  atlassian: {
+    repo: 'atlassian/atlassian-mcp-server',
+    upstreamPath: '',
+    localPath: 'third_party/atlassian',
+    include: (file) =>
+      file === 'plugin.json' ||
+      file === 'mcp.json' ||
+      file === 'assets/logo.svg' ||
+      atlassianSkills.some((skill) => file.startsWith(`skills/${skill}/`)),
+    extension: (repository, path, sha) => ({
+      schemaVersion: 1,
+      displayName: 'Atlassian',
+      logo: './assets/logo.svg',
+      category: 'productivity',
+      supportedScopes: ['project', 'personal'],
+      requiredInputs: [],
+      capabilities: { agentTools: true, automationDelivery: false },
+      auth: {
+        type: 'mcp-oauth',
+        provider: 'mcp',
+        credentialGroup: 'atlassian',
+        // Jira, Confluence and Rovo search, with offline_access for a refresh token. Deleting,
+        // project management and the other Atlassian products stay out until they are needed.
+        requiredScopes: [
+          'read:me',
+          'read:account',
+          'offline_access',
+          'read:jira:agent-interface',
+          'write:jira:agent-interface',
+          'search:jira:agent-interface',
+          'read:confluence:agent-interface',
+          'write:confluence:agent-interface',
+          'search:confluence:agent-interface',
+          'search:rovo:agent-interface',
+        ],
+        mcpServers: ['atlassian'],
+      },
+      availability: 'preview',
+      upstream: { repository, path, sha },
+    }),
+  },
+};
+
+const [name, sha] = process.argv.slice(2);
+const upstream = name === undefined ? undefined : upstreams[name];
+
+if (!name || !upstream || !sha || !/^[a-f0-9]{40}$/.test(sha)) {
+  throw new Error(`Usage: pnpm vendor <${Object.keys(upstreams).join('|')}> <full-upstream-sha>`);
+}
+
+const { repo, upstreamPath, localPath } = upstream;
+const repository = `https://github.com/${repo}`;
+const rawBase = `https://raw.githubusercontent.com/${repo}/${sha}`;
+const packageBase = upstreamPath ? `${rawBase}/${upstreamPath}` : rawBase;
+const prefix = upstreamPath ? `${upstreamPath}/` : '';
+
+interface UpstreamManifest {
   homepage?: string;
   repository?: string;
   keywords?: string[];
@@ -69,48 +166,29 @@ function decodeText(bytes: Buffer, file: string): string {
   }
 }
 
-function flexkitManifest(upstream: string, pin: string): string {
-  const manifest = JSON.parse(upstream) as StripeManifest;
+function flexkitManifest(content: string, pin: string, plugin: Upstream): string {
+  const manifest = JSON.parse(content) as UpstreamManifest;
 
   if (manifest.keywords !== undefined && !Array.isArray(manifest.keywords)) {
     throw new Error('Upstream manifest keywords changed');
   }
 
-  manifest.homepage = 'https://github.com/flexkit-io/plugins/tree/main/third_party/stripe';
+  manifest.homepage = `https://github.com/flexkit-io/plugins/tree/main/${plugin.localPath}`;
   manifest.repository = 'https://github.com/flexkit-io/plugins';
   manifest.keywords = [...new Set([...(manifest.keywords ?? []), 'flexkit'])];
-  manifest.extensions = {
-    'io.flexkit': {
-      schemaVersion: 1,
-      displayName: 'Stripe',
-      logo: './assets/logo.svg',
-      category: 'payments',
-      supportedScopes: ['project', 'personal'],
-      requiredInputs: [],
-      capabilities: { agentTools: true, automationDelivery: false },
-      auth: {
-        type: 'mcp-oauth',
-        provider: 'stripe',
-        credentialGroup: 'stripe',
-        requiredScopes: [],
-        mcpServers: ['stripe'],
-      },
-      availability: 'preview',
-      upstream: { repository, path: upstreamPath, sha: pin },
-    },
-  };
+  manifest.extensions = { 'io.flexkit': plugin.extension(repository, upstreamPath, pin) };
 
   return `${JSON.stringify(manifest, null, 2)}\n`;
 }
 
 const root = resolve(import.meta.dirname, '..', localPath);
-const treeResponse = await fetch(`https://api.github.com/repos/stripe/ai/git/trees/${sha}?recursive=1`, {
+const treeResponse = await fetch(`https://api.github.com/repos/${repo}/git/trees/${sha}?recursive=1`, {
   redirect: 'error',
   signal: AbortSignal.timeout(30_000),
 });
 
 if (!treeResponse.ok) {
-  throw new Error('Unable to read pinned Stripe tree');
+  throw new Error(`Unable to read the pinned ${name} tree`);
 }
 
 const tree = (await treeResponse.json()) as {
@@ -119,10 +197,15 @@ const tree = (await treeResponse.json()) as {
 };
 
 if (tree.truncated || !Array.isArray(tree.tree)) {
-  throw new Error('Incomplete Stripe tree');
+  throw new Error(`Incomplete ${name} tree`);
 }
 
-const selected = tree.tree.filter((entry) => entry.path.startsWith(`${upstreamPath}/`) && entry.type !== 'tree');
+const selected = tree.tree.filter((entry) => {
+  const file = entry.path.slice(prefix.length);
+
+  // The repository LICENSE is fetched separately below, even when the package is the repository root.
+  return entry.path.startsWith(prefix) && entry.type !== 'tree' && file !== 'LICENSE' && upstream.include(file);
+});
 
 if (
   selected.length > 300 ||
@@ -146,9 +229,9 @@ try {
 }
 
 for (const entry of selected) {
-  const file = entry.path.slice(upstreamPath.length + 1);
+  const file = entry.path.slice(prefix.length);
   containedPath(root, file);
-  const response = await fetch(`https://raw.githubusercontent.com/stripe/ai/${sha}/${upstreamPath}/${file}`, {
+  const response = await fetch(`${packageBase}/${file}`, {
     redirect: 'error',
     signal: AbortSignal.timeout(30_000),
   });
@@ -172,7 +255,7 @@ for (const entry of selected) {
     const content = decodeText(bytes, file);
     await mkdir(resolve(root, 'io.flexkit'), { recursive: true });
     await writeFile(resolve(root, 'io.flexkit/upstream-plugin.json'), content);
-    await writeFile(resolve(root, file), flexkitManifest(content, sha));
+    await writeFile(resolve(root, file), flexkitManifest(content, sha, upstream));
     continue;
   }
 
@@ -206,13 +289,13 @@ for (const entry of selected) {
   await writeFile(resolve(root, file), bytes);
 }
 
-const licenseResponse = await fetch(`https://raw.githubusercontent.com/stripe/ai/${sha}/LICENSE`, {
+const licenseResponse = await fetch(`${rawBase}/LICENSE`, {
   redirect: 'error',
   signal: AbortSignal.timeout(30_000),
 });
 
 if (!licenseResponse.ok) {
-  throw new Error('Unable to read the Stripe license');
+  throw new Error(`Unable to read the ${name} license`);
 }
 
 const license = Buffer.from(await licenseResponse.arrayBuffer());

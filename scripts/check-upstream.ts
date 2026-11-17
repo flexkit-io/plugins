@@ -1,8 +1,17 @@
-if (process.argv[2] !== 'stripe') {
-  throw new Error('Usage: pnpm check-upstream stripe');
+/** The upstream repository of each vendored plugin; prints the latest commit of its default branch. */
+const repositories: { [name: string]: string } = {
+  stripe: 'stripe/ai',
+  atlassian: 'atlassian/atlassian-mcp-server',
+};
+
+const name = process.argv[2];
+const repo = name === undefined ? undefined : repositories[name];
+
+if (!repo) {
+  throw new Error(`Usage: pnpm check-upstream <${Object.keys(repositories).join('|')}>`);
 }
 
-const response = await fetch('https://api.github.com/repos/stripe/ai/commits/main', {
+const response = await fetch(`https://api.github.com/repos/${repo}/commits/HEAD`, {
   headers: { Accept: 'application/vnd.github+json' }, signal: AbortSignal.timeout(30_000),
 });
 

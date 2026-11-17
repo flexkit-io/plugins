@@ -20,6 +20,8 @@ jobs:
         run: |
           stripe_sha=$(pnpm exec tsx scripts/check-upstream.ts stripe)
           pnpm vendor:stripe "$stripe_sha"
+          atlassian_sha=$(pnpm exec tsx scripts/check-upstream.ts atlassian)
+          pnpm vendor:atlassian "$atlassian_sha"
           pnpm validate
           pnpm test
       - uses: peter-evans/create-pull-request@v7
