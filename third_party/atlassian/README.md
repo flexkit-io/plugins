@@ -3,12 +3,12 @@
 Pinned copy of Atlassian's agent plugin. It connects agents to Jira and Confluence through the Atlassian MCP server at `https://mcp.atlassian.com/v2/mcp`, and installs five of Atlassian's skills:
 
 - `capture-tasks-from-meeting-notes` turns action items in meeting notes into Jira tasks.
-- `jira-sprint-dashboard` summarizes a sprint, board or filter.
+- `jira-sprint-dashboard` summarizes a sprint, board or filter as a dashboard. Its Cursor Canvas renderer applies only in Cursor; in Flexkit it answers with a report or Markdown.
 - `search-company-knowledge` finds and explains answers across Confluence and Jira.
 - `spec-to-backlog` turns a Confluence spec into epics and tickets.
 - `triage-issue` checks a bug report for duplicates before filing it.
 
-The other upstream skills are not included. They depend on a skill that is longer than Flexkit accepts, on a bundled script, or on a local code workspace.
+The other upstream skills are not included. They depend on a skill that is longer than Flexkit accepts, on a bundled script, or on a local code workspace. Connections are labelled with the plugin name, because Atlassian's MCP authorization server returns no identity token.
 
 ## Connecting
 
