@@ -3,7 +3,6 @@
   "sha": "352a02b05189e2a958a973867cc6eca365cb8fc3",
   "path": "",
   "files": {
-    "assets/logo.svg": "0ab515fcad8b2a4104871a672211ac7bc9bcec0236808918fb29b0f322fcf4f5",
     "mcp.json": "81486e806112b827802ffc08030e6cce7fa0345b5e805b923d6c59ca33175c17",
     "plugin.json": "b4698e323de0b05a6eb5c0f3d5963ecadc903298d92f1e0b7dfbdbce1539b626",
     "skills/capture-tasks-from-meeting-notes/SKILL.md": "10603589f81d61908094f573cc6218308b95f6d7ce14498c3cf208ceee7435c1",

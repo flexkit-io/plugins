@@ -57,10 +57,10 @@ const upstreams: { [name: string]: Upstream } = {
     repo: 'atlassian/atlassian-mcp-server',
     upstreamPath: '',
     localPath: 'third_party/atlassian',
+    // The logo (assets/logo.svg) is Flexkit's own catalog tile, not the upstream file.
     include: (file) =>
       file === 'plugin.json' ||
       file === 'mcp.json' ||
-      file === 'assets/logo.svg' ||
       atlassianSkills.some((skill) => file.startsWith(`skills/${skill}/`)),
     extension: (repository, path, sha) => ({
       schemaVersion: 1,
