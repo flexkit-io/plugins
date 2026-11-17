@@ -5,8 +5,8 @@ Find, create and update issues, projects, cycles, documents and comments in a Li
 When you connect Linear:
 
 - Flexkit connects with OAuth through Linear's authorization server (`https://mcp.linear.app`) and calls only `https://mcp.linear.app/mcp`. The agent never sees the credential.
-- Flexkit asks for read and write access, plus your email so Studio can label the connection. The agent acts as you, with your Linear permissions, and what it creates or changes appears under your name.
-- Each connection reaches one Linear workspace. To use another workspace, connect again and pick it on Linear's approval screen.
+- Flexkit asks for read and write access, plus your email to label the connection. The agent acts as the person who connected Linear, with their Linear permissions, and what it creates or changes appears under their name. A personal connection is used only by your own chats and automations; a project connection is shared by everyone's agent in the project, so connect at project level only with an account the whole project may act as.
+- Each connection reaches the one Linear workspace you pick on Linear's approval screen.
 - Creating or changing anything in Linear follows your project's approval rules.
 - Revoke access any time with Disconnect, or from your Linear account's authorized applications.
 

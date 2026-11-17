@@ -5,14 +5,14 @@ description: Find, create and update Linear issues, projects, cycles, documents 
 
 # Working with Linear
 
-The Linear tools act in the one workspace the user approved, as that user and with their permissions. Everything you create or change appears under their name and notifies their teammates, so be deliberate. Look up the exact tool names and parameters in the tool list; do not assume a tool exists.
+The Linear tools act in the one workspace that was approved when Linear was connected, as the Linear user who connected it and with their permissions. That may be a teammate rather than the person you are talking to, when the connection is shared by the project. Everything you create or change appears under that Linear user's name and notifies their teammates, so be deliberate. Look up the exact tool names and parameters in the tool list; do not assume a tool exists.
 
 ## Look things up, never guess
 
 - Issues belong to a **team**. When the user does not name one, list the teams and ask, unless there is only one.
 - Workflow states (such as Todo, In Progress, Done), labels, projects, cycles and people are per workspace or per team. Find them with the matching list tools and use the exact names or ids they return. Do not invent a label or state; if the one the user wants does not exist, say so and ask before creating it.
 - Refer to issues by their identifier (for example `ENG-123`) and include the issue URL the tools return, so the user can open it.
-- "My issues" or "assigned to me" means the connected user.
+- "My issues" or "assigned to me" means the connected Linear user. If the connection may belong to someone else, check who it is before filtering by "me".
 
 ## Before creating an issue
 
