@@ -57,6 +57,11 @@
       "description": "Find, create and update Linear issues, projects and comments."
     },
     {
+      "name": "paypal",
+      "source": "./paypal",
+      "description": "Send PayPal invoices, issue refunds, track shipments and review disputes, subscriptions and sales."
+    },
+    {
       "name": "atlassian",
       "source": "./third_party/atlassian",
       "description": "Search, create and update Jira work items and Confluence pages."
