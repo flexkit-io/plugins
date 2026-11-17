@@ -1,0 +1,45 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "paypal",
+  "version": "1.0.0",
+  "description": "Send PayPal invoices, issue refunds, track shipments and review disputes, subscriptions and sales.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/paypal",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "paypal",
+    "payments",
+    "invoices",
+    "refunds",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "PayPal",
+      "logo": "./assets/logo.svg",
+      "category": "payments",
+      "supportedScopes": [
+        "project",
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "mcp-oauth",
+        "provider": "mcp",
+        "credentialGroup": "paypal",
+        "requiredScopes": [],
+        "mcpServers": [
+          "paypal"
+        ]
+      }
+    }
+  }
+}
