@@ -17,26 +17,6 @@
       "description": "Deliver automation updates to Microsoft Teams channels."
     },
     {
-      "name": "google-calendar",
-      "source": "./google-calendar",
-      "description": "Read calendars, events, and availability."
-    },
-    {
-      "name": "google-docs",
-      "source": "./google-docs",
-      "description": "Read, create, and edit documents with Google Docs."
-    },
-    {
-      "name": "google-sheets",
-      "source": "./google-sheets",
-      "description": "Read, create, and update spreadsheets with Google Sheets."
-    },
-    {
-      "name": "google-slides",
-      "source": "./google-slides",
-      "description": "Read, create, and edit presentations with Google Slides."
-    },
-    {
       "name": "google-search-console",
       "source": "./google-search-console",
       "description": "Query search performance, URL indexing and sitemaps with Google Search Console."
@@ -70,6 +50,11 @@
       "name": "resend",
       "source": "./resend",
       "description": "Send and track email with Resend, and manage contacts, broadcasts, templates and domains."
+    },
+    {
+      "name": "linear",
+      "source": "./linear",
+      "description": "Find, create and update Linear issues, projects and comments."
     }
   ]
 }
