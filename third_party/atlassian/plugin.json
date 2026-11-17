@@ -1,0 +1,67 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "atlassian",
+  "version": "1.0.0",
+  "description": "Connect AI agents to Atlassian products including Jira and Confluence, with reusable skills for common workflows.",
+  "author": {
+    "name": "Atlassian",
+    "url": "https://www.atlassian.com"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/third_party/atlassian",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "Apache-2.0",
+  "keywords": [
+    "atlassian",
+    "rovo",
+    "mcp",
+    "jira",
+    "confluence",
+    "jira-service-management",
+    "bitbucket",
+    "compass",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Atlassian",
+      "logo": "./assets/logo.svg",
+      "category": "productivity",
+      "supportedScopes": [
+        "project",
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "mcp-oauth",
+        "provider": "mcp",
+        "credentialGroup": "atlassian",
+        "requiredScopes": [
+          "read:me",
+          "read:account",
+          "offline_access",
+          "read:jira:agent-interface",
+          "write:jira:agent-interface",
+          "search:jira:agent-interface",
+          "read:confluence:agent-interface",
+          "write:confluence:agent-interface",
+          "search:confluence:agent-interface",
+          "search:rovo:agent-interface"
+        ],
+        "mcpServers": [
+          "atlassian"
+        ]
+      },
+      "availability": "preview",
+      "upstream": {
+        "repository": "https://github.com/atlassian/atlassian-mcp-server",
+        "path": "",
+        "sha": "352a02b05189e2a958a973867cc6eca365cb8fc3"
+      }
+    }
+  }
+}

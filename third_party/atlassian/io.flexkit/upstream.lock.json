@@ -1,0 +1,23 @@
+{
+  "repository": "https://github.com/atlassian/atlassian-mcp-server",
+  "sha": "352a02b05189e2a958a973867cc6eca365cb8fc3",
+  "path": "",
+  "files": {
+    "assets/logo.svg": "0ab515fcad8b2a4104871a672211ac7bc9bcec0236808918fb29b0f322fcf4f5",
+    "mcp.json": "81486e806112b827802ffc08030e6cce7fa0345b5e805b923d6c59ca33175c17",
+    "plugin.json": "b4698e323de0b05a6eb5c0f3d5963ecadc903298d92f1e0b7dfbdbce1539b626",
+    "skills/capture-tasks-from-meeting-notes/SKILL.md": "10603589f81d61908094f573cc6218308b95f6d7ce14498c3cf208ceee7435c1",
+    "skills/capture-tasks-from-meeting-notes/references/action-item-patterns.md": "b630fd46b06d348803de5b97b8180269c1f9b51ea3121dfa1e9e50ce0dbb6195",
+    "skills/jira-sprint-dashboard/SKILL.md": "0a812dc617d59e4771ad96b39f6472b2c542be165c7ee077b56a4fcd48d7afdf",
+    "skills/search-company-knowledge/SKILL.md": "2c734047a8710c5b5b007d107e594b0213d88769b476b9888913e4947c6f3d8e",
+    "skills/spec-to-backlog/SKILL.md": "7c2aa5b6327437bfefe77f845d0be4a3a431fb88d5f8e0ca9bf6256df5ac2a89",
+    "skills/spec-to-backlog/references/breakdown-examples.md": "57ff3c616ef0e761911cde849848497028faf570b027c9a16689a2889525eb30",
+    "skills/spec-to-backlog/references/epic-templates.md": "ca1c28239608b0dfef47426ab0420f6ddcf16370f30f6ed6796e0c391ebb5ce8",
+    "skills/spec-to-backlog/references/ticket-writing-guide.md": "fcc9369f54089ac41bd7a2813f8c19b1b6d092d6226cf4b4104d494b03400754",
+    "skills/triage-issue/SKILL.md": "8b9f857efb4a29ded4cc3c758e3d1b2f93cf78ae549801df72ef9a80182aee00",
+    "skills/triage-issue/references/bug-report-templates.md": "ece9041b1c1a827707d70113c5c29cf6b2638ddd102dac496ddbef326f559d8a",
+    "skills/triage-issue/references/search-patterns.md": "7f25799e3d2cda78c98c37b75c7e46b838025e06c6b42ca1c929a6ab797ede02",
+    "LICENSE": "fff3bdc1d0125e492d7a2cb866c01a8ab587dee0405e77440ca524205a1f8c28"
+  },
+  "transformVersion": 2
+}

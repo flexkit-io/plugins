@@ -2,5 +2,9 @@
   "stripe": {
     "upstream": "https://github.com/stripe/ai",
     "mcpHosts": ["mcp.stripe.com"]
+  },
+  "atlassian": {
+    "upstream": "https://github.com/atlassian/atlassian-mcp-server",
+    "mcpHosts": ["mcp.atlassian.com"]
   }
 }
