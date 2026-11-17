@@ -212,6 +212,46 @@
       "type": "string",
       "const": "preview"
     },
+    "setupNotice": {
+      "description": "A step the user must take on the provider's side before connecting, shown on the plugin's page until it is connected. {oauthCallbackUrl} in the message stands for the Flexkit deployment's OAuth callback URL (OAuth plugins only).",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 400
+        },
+        "link": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            }
+          },
+          "required": [
+            "label",
+            "url"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "message"
+      ],
+      "additionalProperties": false
+    },
     "upstream": {
       "type": "object",
       "properties": {

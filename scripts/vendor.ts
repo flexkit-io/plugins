@@ -91,6 +91,16 @@ const upstreams: { [name: string]: Upstream } = {
         mcpServers: ['atlassian'],
       },
       availability: 'preview',
+      // Atlassian's consent screen only says the account has no supported site when Flexkit is not allowed.
+      setupNotice: {
+        title: 'An Atlassian admin must allow Flexkit first',
+        message:
+          'Atlassian only accepts connections from apps your organization allows. Before you connect, an organization admin adds {oauthCallbackUrl} under Atlassian Administration → Connectors → Atlassian MCP server.',
+        link: {
+          label: "Read Atlassian's guide",
+          url: 'https://support.atlassian.com/security-and-access-policies/docs/understand-atlassian-mcp-server/',
+        },
+      },
       upstream: { repository, path, sha },
     }),
   },
