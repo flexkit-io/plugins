@@ -1,6 +1,6 @@
 ---
 name: klaviyo-marketing
-description: Draft Klaviyo email campaigns and templates, look up and update profiles, subscribe or unsubscribe people from email and SMS marketing, and report on campaigns, flows, lists, segments, metrics and events in a connected Klaviyo account. Use whenever the user wants to plan or draft a campaign, build one from Flexkit products or content, check who is in a list or segment, manage a customer's consent, or ask how campaigns and flows performed.
+description: Draft Klaviyo email campaigns and templates, look up and update profiles, subscribe or unsubscribe people from email and SMS marketing, and report on campaigns, flows, lists, segments, metrics and events in a connected Klaviyo account. Use whenever the user wants to plan or draft a campaign, build one from Flexkit products or content, find a list or segment and its size, look up or update a customer's profile, manage a customer's consent, or ask how campaigns and flows performed.
 ---
 
 # Working with Klaviyo
@@ -23,14 +23,14 @@ Campaigns you create are drafts. The tools cannot send or schedule a campaign: w
 
 ## Drafting a campaign
 
-1. **Audience:** find the list or segment by name with the list and segment tools, and show its name and id. If none matches, say so and ask; do not pick a similar one.
+1. **Audience:** find the list or segment by name with the list and segment tools, and show its name, id and size. If none matches, say so and ask; do not pick a similar one. These tools give a list's or segment's size, not its members: do not present other profiles as its members.
 2. **Content:** when the campaign promotes Flexkit products, collections or articles, read them from Flexkit first and use their real names, prices, images and links. Do not invent prices, discounts or stock. If the user mentions a discount, ask for the exact code and terms.
-3. **Template:** create the email template with clear HTML (a heading, short copy, product blocks with image, name, price and link, and a call to action), then assign it to the campaign's message. Images must be public URLs; upload them to Klaviyo from their URL when needed.
-4. **Before you create it,** restate the campaign name, audience, subject line, preview text and sender, and the products it features. For several campaigns, list them all and create them after the user agrees.
+3. **Confirm first:** restate the campaign name, audience, subject line, preview text and sender, and the products it features, and wait for the user to agree. For several campaigns, list them all.
+4. **Then create it:** create the campaign, then the email template with clear HTML (a heading, short copy, product blocks with image, name, price and link, and a call to action), then assign the template to the campaign's message using the message id the campaign returned. Images must be public URLs; upload them to Klaviyo from their URL when needed.
 
 ## Catalog
 
-The catalog tools read the products Klaviyo knows about (usually synced from the store). When Klaviyo's catalog and Flexkit disagree on a product's name, price or stock, point it out instead of picking one.
+The catalog tools read the products Klaviyo knows about (usually synced from the store): titles, descriptions, prices, links and images, but not stock. When Klaviyo's catalog and Flexkit disagree on a product's name, price or link, point it out instead of picking one, and take stock from Flexkit.
 
 ## Reporting
 
