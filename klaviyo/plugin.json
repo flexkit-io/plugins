@@ -1,0 +1,45 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "klaviyo",
+  "version": "1.0.0",
+  "description": "Draft Klaviyo email campaigns, manage profiles and subscriptions, and report on campaigns, flows, lists and segments.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/klaviyo",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "klaviyo",
+    "email",
+    "marketing",
+    "campaigns",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Klaviyo",
+      "logo": "./assets/logo.svg",
+      "category": "marketing",
+      "supportedScopes": [
+        "project",
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "mcp-oauth",
+        "provider": "mcp",
+        "credentialGroup": "klaviyo",
+        "requiredScopes": [],
+        "mcpServers": [
+          "klaviyo"
+        ]
+      }
+    }
+  }
+}

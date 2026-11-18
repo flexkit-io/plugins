@@ -62,6 +62,11 @@
       "description": "Send PayPal invoices, issue refunds, track shipments and review disputes, subscriptions and sales."
     },
     {
+      "name": "klaviyo",
+      "source": "./klaviyo",
+      "description": "Draft Klaviyo email campaigns, manage profiles and subscriptions, and report on campaigns, flows, lists and segments."
+    },
+    {
       "name": "atlassian",
       "source": "./third_party/atlassian",
       "description": "Search, create and update Jira work items and Confluence pages."
