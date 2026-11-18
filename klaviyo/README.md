@@ -9,6 +9,6 @@ When you connect Klaviyo:
 - The agent acts as the Klaviyo user who connected, in that Klaviyo account. A personal connection is used only by your own chats and automations; a project connection is shared by everyone's agent in the project, so connect at project level only with an account the whole project may act as.
 - Campaigns are created as drafts. The core tools cannot send or schedule a campaign; you review and send it in Klaviyo.
 - Creating or changing anything in Klaviyo, including subscribing or unsubscribing a profile, follows your project's approval rules.
-- Revoke access any time with Disconnect, or from Klaviyo's integrations settings.
+- Revoke access any time with Disconnect.
 
 The `klaviyo-marketing` skill teaches the agent to respect consent, build campaigns from Flexkit products and content, check the audience before it drafts, and report on campaign and flow performance with the right conversion metric.
