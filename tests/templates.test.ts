@@ -149,6 +149,8 @@ test('a template needs its instructions and a name equal to its directory', asyn
 test('manifests follow the schema and kind-specific sections', async () => {
   await rejects({ templates: withVoice('stock-check', { 'template.json': automation({ category: 'misc' }), 'instructions.md': 'x' }) }, /category/);
   await rejects({ templates: withVoice('stock-check', { 'template.json': automation({ extra: true }), 'instructions.md': 'x' }) }, /additional properties/);
+  await rejects({ templates: withVoice('stock-check', { 'template.json': automation({ icon: 'rocket' }), 'instructions.md': 'x' }) }, /icon/);
+  await rejects({ templates: withVoice('stock-check', { 'template.json': automation({ color: 'purple' }), 'instructions.md': 'x' }) }, /color/);
   await rejects({ templates: withVoice('stock-check', { 'template.json': automation({ skill: { loadMode: 'always' } }), 'instructions.md': 'x' }) }, /must NOT be valid/);
   await rejects({ templates: { voice: { 'template.json': { ...skill, skill: undefined }, 'instructions.md': 'x' } } }, /required property 'skill'/);
 });

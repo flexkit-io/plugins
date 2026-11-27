@@ -5,6 +5,8 @@
   "displayName": "Low-stock alert",
   "description": "Warns the team in Slack when a product's stock drops to a threshold, and can draft a reorder email to the supplier for you to approve.",
   "category": "catalog",
+  "icon": "package-minus",
+  "color": "amber",
   "version": "1.0.0",
   "howItWorks": [
     { "label": "Trigger", "text": "Checks stock levels every 30 minutes" },

@@ -5,6 +5,8 @@
   "displayName": "Failed automation responder",
   "description": "When an automation you pick fails, explains what went wrong in plain language, suggests a fix and tells the team, without repeating itself for the same error.",
   "category": "team-ops",
+  "icon": "siren",
+  "color": "rose",
   "version": "1.0.0",
   "howItWorks": [
     { "label": "Trigger", "text": "A run of the automation you pick fails" },

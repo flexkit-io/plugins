@@ -5,6 +5,8 @@
   "displayName": "Product description writer",
   "description": "Drafts a description, bullet points and SEO title and meta description for every new product, ready for you to review before anything is saved.",
   "category": "catalog",
+  "icon": "pen-line",
+  "color": "violet",
   "version": "1.0.0",
   "howItWorks": [
     { "label": "Trigger", "text": "A product is created" },

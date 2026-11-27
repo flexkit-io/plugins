@@ -5,6 +5,8 @@
   "displayName": "Order webhook intake",
   "description": "Turns order webhooks from your store or checkout into Order and Customer records, and flags high-value or risky orders for a person to check.",
   "category": "orders-customers",
+  "icon": "webhook",
+  "color": "sky",
   "version": "1.0.0",
   "howItWorks": [
     { "label": "Trigger", "text": "Your store or checkout sends an order to a webhook URL" },

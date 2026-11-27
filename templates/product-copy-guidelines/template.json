@@ -5,6 +5,8 @@
   "displayName": "Product copy guidelines",
   "description": "Your rules for product pages: structure, length, which facts to include, SEO title and meta conventions, and what never to claim. Loaded whenever the agent writes or edits product copy.",
   "category": "catalog",
+  "icon": "scroll-text",
+  "color": "teal",
   "version": "1.0.0",
   "howItWorks": [
     { "label": "Interview", "text": "Questions about your product page structure, SEO rules and must-have facts" },

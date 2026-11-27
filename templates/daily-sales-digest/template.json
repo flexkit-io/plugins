@@ -5,6 +5,8 @@
   "displayName": "Daily sales digest",
   "description": "Posts yesterday's revenue, orders, average order value and top products to Slack every morning, and calls out anything unusual against the 7-day average.",
   "category": "reporting",
+  "icon": "chart-column",
+  "color": "emerald",
   "version": "1.0.0",
   "howItWorks": [
     { "label": "Trigger", "text": "Every morning at 8:00 in your time zone" },

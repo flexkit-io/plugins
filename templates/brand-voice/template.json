@@ -5,6 +5,8 @@
   "displayName": "Brand voice",
   "description": "Captures how your brand sounds (tone, words you use and avoid, how you address customers) so every piece of copy the agent writes sounds like you.",
   "category": "marketing",
+  "icon": "megaphone",
+  "color": "orange",
   "version": "1.0.0",
   "howItWorks": [
     { "label": "Interview", "text": "A few questions about your brand, customers and tone" },
