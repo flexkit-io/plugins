@@ -1,0 +1,50 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "agentmail",
+  "version": "1.0.0",
+  "description": "Give the agent its own AgentMail inboxes to send, receive and reply to email, with drafts, threads, labels and attachments.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/agentmail",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "agentmail",
+    "email",
+    "inbox",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "AgentMail",
+      "logo": "./assets/logo.svg",
+      "category": "communication",
+      "supportedScopes": [
+        "project",
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "mcp-oauth",
+        "provider": "mcp",
+        "credentialGroup": "agentmail",
+        "requiredScopes": [
+          "openid",
+          "email",
+          "profile",
+          "user:org:read",
+          "offline_access"
+        ],
+        "mcpServers": [
+          "agentmail"
+        ]
+      }
+    }
+  }
+}
