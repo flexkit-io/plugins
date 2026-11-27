@@ -5,6 +5,8 @@
   "displayName": "Reporting definitions",
   "description": "One agreed definition of revenue, orders, AOV, customers and the other numbers you report on, so every digest, report and answer uses the same maths.",
   "category": "reporting",
+  "icon": "sigma",
+  "color": "blue",
   "version": "1.0.0",
   "howItWorks": [
     { "label": "Reads", "text": "Your order and customer schema and the status values in use" },
