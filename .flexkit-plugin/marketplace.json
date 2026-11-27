@@ -52,6 +52,11 @@
       "description": "Send and track email with Resend, and manage contacts, broadcasts, templates and domains."
     },
     {
+      "name": "agentmail",
+      "source": "./agentmail",
+      "description": "Give the agent its own AgentMail inboxes to send, receive and reply to email, with drafts, threads, labels and attachments."
+    },
+    {
       "name": "linear",
       "source": "./linear",
       "description": "Find, create and update Linear issues, projects and comments."
