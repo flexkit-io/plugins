@@ -8,10 +8,15 @@ Load the review that started this run with its rating, title and text, the produ
 
 Stop without doing anything (Finish Run with status skipped) when:
 - the review has no rating and no text,
-- its moderation status is rejected or spam, or
-- it already has a sentiment, a topic or a reply draft (another run or a person handled it).
+- its moderation status is rejected or spam,
+- this run was started by an update and the update did not change the status to published (compare the old and new values in the trigger payload): with review moderation, triage waits for the review to be published, and handles it once, or
+- it already has a reply draft (another run or a person handled it).
+
+When the project uses review moderation, a held or pending review is skipped too: moderation already told the team about it, and triage handles it if a person publishes it later.
 
 ## 2. Tag it
+
+When the review already has a sentiment and a topic (review moderation saves them), use those and only decide whether it is urgent. Otherwise:
 
 - **Sentiment**: positive, mixed or negative. Base it on the text, not only the stars: a 4-star review that complains about delivery is mixed.
 - **Topic**: the one main subject, from: product quality, sizing and fit, delivery, customer service, price and value, description accuracy, other. Name a second topic in the reply notes when it matters.
@@ -28,7 +33,7 @@ Skip this step when it is set to no reviews, or to low-rated reviews only and th
 
 ## 4. Save for approval
 
-Propose one change to the review with the sentiment, the topic and the reply draft, filling only the fields that exist. If the project has no fields for them, put the tags and the reply in the run summary instead.
+Propose one change to the review with the sentiment, the topic and the reply draft, filling only the fields that exist and leaving out tags the review already has. When there is nothing new to save (tags already there, no reply drafted), propose nothing. If the project has no fields for them, put the tags and the reply in the run summary instead.
 
 ## 5. Escalate low ratings
 

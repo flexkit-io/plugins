@@ -112,6 +112,50 @@
     {
       "name": "publishing-checklist",
       "source": "./templates/publishing-checklist"
+    },
+    {
+      "name": "search-console-quick-wins",
+      "source": "./templates/search-console-quick-wins"
+    },
+    {
+      "name": "product-page-conversion-fixer",
+      "source": "./templates/product-page-conversion-fixer"
+    },
+    {
+      "name": "weekly-marketing-scorecard",
+      "source": "./templates/weekly-marketing-scorecard"
+    },
+    {
+      "name": "newsletter-drafter",
+      "source": "./templates/newsletter-drafter"
+    },
+    {
+      "name": "stuck-order-chaser",
+      "source": "./templates/stuck-order-chaser"
+    },
+    {
+      "name": "month-end-accounting-pack",
+      "source": "./templates/month-end-accounting-pack"
+    },
+    {
+      "name": "replenishment-reminder",
+      "source": "./templates/replenishment-reminder"
+    },
+    {
+      "name": "review-moderation",
+      "source": "./templates/review-moderation"
+    },
+    {
+      "name": "review-moderation-policy",
+      "source": "./templates/review-moderation-policy"
+    },
+    {
+      "name": "weekly-review-sentiment",
+      "source": "./templates/weekly-review-sentiment"
+    },
+    {
+      "name": "review-request-sender",
+      "source": "./templates/review-request-sender"
     }
   ]
 }

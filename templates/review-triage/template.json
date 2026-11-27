@@ -7,7 +7,7 @@
   "category": "orders-customers",
   "icon": "star",
   "color": "amber",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "howItWorks": [
     { "label": "Trigger", "text": "A customer review is created" },
     { "label": "Does", "text": "Tags the review's sentiment and topic (quality, sizing, delivery, service, price)" },
@@ -23,7 +23,7 @@
     { "key": "reviewText", "description": "What the customer wrote, with the title if there is one", "entityHint": "review", "fieldHint": "body", "type": "string", "required": true },
     { "key": "reviewProduct", "description": "The product the review is about", "entityHint": "review", "fieldHint": "product", "type": "reference", "required": false },
     { "key": "reviewCustomer", "description": "The customer or reviewer name, and the order when the review links one", "entityHint": "review", "fieldHint": "customer", "type": "reference", "required": false },
-    { "key": "reviewStatus", "description": "Moderation status (pending, published, rejected), to skip spam and rejected reviews", "entityHint": "review", "fieldHint": "status", "type": "string", "required": false },
+    { "key": "reviewStatus", "description": "Moderation status (pending, published, rejected), to skip spam and rejected reviews and, with review moderation, to wait until a review is published", "entityHint": "review", "fieldHint": "status", "type": "string", "required": false },
     { "key": "sentiment", "description": "Where to save the sentiment tag", "entityHint": "review", "fieldHint": "sentiment", "type": "string", "required": false },
     { "key": "topic", "description": "Where to save the topic tag", "entityHint": "review", "fieldHint": "topic", "type": "string", "required": false },
     { "key": "replyDraft", "description": "Where to save the drafted reply (a draft or internal field, not the published reply)", "entityHint": "review", "fieldHint": "replyDraft", "type": "string", "required": false }

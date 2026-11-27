@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "name": "month-end-accounting-pack",
+  "kind": "automation",
+  "displayName": "Month-end accounting pack",
+  "description": "On the 1st of every month, prepares last month's orders, refunds, payouts and tax by country as CSV files and a one-page PDF summary, and emails your accountant the links once you approve.",
+  "category": "reporting",
+  "icon": "calculator",
+  "color": "sky",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "The 1st of every month, early morning" },
+    { "label": "Exports", "text": "Last month's orders and refunds as CSV files your accountant can open in Excel" },
+    { "label": "Summarises", "text": "Sales, refunds, tax by country and payouts on one PDF page, with anything that doesn't add up" },
+    { "label": "Asks you", "text": "To approve the email to your accountant with the links (needs Resend)" }
+  ],
+  "plugins": [
+    { "id": "resend", "required": false, "reason": "Emails the pack to your accountant once you approve it" },
+    { "id": "shopify", "required": false, "reason": "Adds Shopify Payments payouts and fees, to check them against sales" },
+    { "id": "paypal", "required": false, "reason": "Adds PayPal transactions, fees and refunds" }
+  ],
+  "data": [
+    { "key": "orderNumber", "description": "The order number your accountant will see", "entityHint": "order", "fieldHint": "number", "type": "string", "required": true },
+    { "key": "orderDate", "description": "When the order was placed or paid", "entityHint": "order", "fieldHint": "createdAt", "type": "date", "required": true },
+    { "key": "orderTotal", "description": "The order's total paid amount, including tax and shipping", "entityHint": "order", "fieldHint": "total", "type": "number", "required": true },
+    { "key": "taxAmount", "description": "Tax (VAT, sales tax) charged on the order", "entityHint": "order", "fieldHint": "taxTotal", "type": "number", "required": false },
+    { "key": "shippingAmount", "description": "Shipping charged on the order", "entityHint": "order", "fieldHint": "shippingTotal", "type": "number", "required": false },
+    { "key": "country", "description": "The country the order ships or is billed to, for tax by country", "entityHint": "order", "fieldHint": "shippingCountry", "type": "string", "required": false },
+    { "key": "currency", "description": "The order's currency, when the store sells in more than one", "entityHint": "order", "fieldHint": "currency", "type": "string", "required": false },
+    { "key": "orderStatus", "description": "The order's status, to leave out test and cancelled orders", "entityHint": "order", "fieldHint": "status", "type": "string", "required": false },
+    { "key": "refund", "description": "Refunds: amount, date and the order they belong to", "entityHint": "refund", "fieldHint": "amount", "type": "number", "required": false },
+    { "key": "paymentMethod", "description": "How the order was paid (card, PayPal, bank transfer), to match payouts", "entityHint": "order", "fieldHint": "paymentMethod", "type": "string", "required": false }
+  ],
+  "parameters": [
+    { "key": "schedule", "label": "When to run", "type": "cron", "default": "0 6 1 * *", "description": "06:00 on the 1st of every month by default" },
+    { "key": "timezone", "label": "Time zone", "type": "timezone", "default": "Europe/London", "description": "Used for the schedule and for where last month starts and ends" },
+    { "key": "accountantEmail", "label": "Accountant's email", "type": "string", "default": "", "description": "Leave empty to get the pack in the run only, without an email" },
+    { "key": "replyTo", "label": "Reply-to address", "type": "string", "default": "", "description": "Where your accountant's replies should go, e.g. your own inbox" },
+    { "key": "storeName", "label": "Store name", "type": "string", "default": "", "description": "Used in the email and on the summary" }
+  ],
+  "automation": {
+    "trigger": { "type": "schedule", "cron": "0 6 1 * *", "timezone": "Europe/London" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "always",
+    "recommendedSkills": ["reporting-definitions"]
+  },
+  "keywords": ["accounting", "bookkeeping", "vat", "sales tax", "month end", "payouts", "csv", "accountant"]
+}

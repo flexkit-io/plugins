@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "name": "stuck-order-chaser",
+  "kind": "automation",
+  "displayName": "Stuck order chaser",
+  "description": "Every morning, finds paid orders that have not shipped in time or whose tracking stopped moving, lists them in Slack and drafts a short delay email to each customer, sent only after you approve it.",
+  "category": "orders-customers",
+  "icon": "hourglass",
+  "color": "rose",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Every morning" },
+    { "label": "Finds", "text": "Paid orders not shipped after a set number of days, and shipments whose tracking has not moved" },
+    { "label": "Posts", "text": "The stuck orders to Slack, oldest first, with what is holding each one up" },
+    { "label": "Drafts", "text": "A short, honest delay email per customer, sent with Resend once you approve" },
+    { "label": "Remembers", "text": "Which orders were emailed, so no customer hears about the same delay twice" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": true, "reason": "Posts the list of stuck orders to your team's channel" },
+    { "id": "shopify", "required": false, "reason": "Reads orders, fulfillments and carrier tracking events when the store runs on Shopify" },
+    { "id": "resend", "required": false, "reason": "Sends each approved delay email to the customer" }
+  ],
+  "data": [
+    { "key": "orderNumber", "description": "The order number the customer knows", "entityHint": "order", "fieldHint": "number", "type": "string", "required": true },
+    { "key": "orderDate", "description": "When the order was placed", "entityHint": "order", "fieldHint": "createdAt", "type": "date", "required": true },
+    { "key": "paymentStatus", "description": "Whether the order is paid", "entityHint": "order", "fieldHint": "paymentStatus", "type": "string", "required": true },
+    { "key": "fulfillmentStatus", "description": "Whether the order is unshipped, partly shipped, shipped or delivered", "entityHint": "order", "fieldHint": "fulfillmentStatus", "type": "string", "required": true },
+    { "key": "shippedAt", "description": "When the order was handed to the carrier", "entityHint": "order", "fieldHint": "shippedAt", "type": "date", "required": false },
+    { "key": "trackingUrl", "description": "The carrier's tracking link, for the email", "entityHint": "order", "fieldHint": "trackingUrl", "type": "string", "required": false },
+    { "key": "customerEmail", "description": "The customer's email address", "entityHint": "customer", "fieldHint": "email", "type": "string", "required": true },
+    { "key": "customerName", "description": "The customer's first name, for the greeting", "entityHint": "customer", "fieldHint": "firstName", "type": "string", "required": false }
+  ],
+  "parameters": [
+    { "key": "schedule", "label": "When to check", "type": "cron", "default": "0 8 * * *", "description": "Every day at 8:00 by default" },
+    { "key": "timezone", "label": "Time zone", "type": "timezone", "default": "Europe/London" },
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Where the list of stuck orders is posted" },
+    { "key": "unshippedDays", "label": "Not shipped after (days)", "type": "number", "default": 3, "description": "A paid order with nothing shipped after this many days counts as stuck" },
+    { "key": "stalledDays", "label": "Tracking silent for (days)", "type": "number", "default": 4, "description": "A shipment with no tracking update for this many days, and not delivered, counts as stuck" },
+    { "key": "draftCustomerEmails", "label": "Draft delay emails", "type": "boolean", "default": true, "description": "Draft one email per stuck order (needs Resend); nothing is sent without approval" },
+    { "key": "replyTo", "label": "Where customers reply", "type": "string", "default": "", "description": "The support address for replies, e.g. help@northline.example; the email shows it" },
+    { "key": "language", "label": "Language", "type": "string", "default": "English" }
+  ],
+  "automation": {
+    "trigger": { "type": "schedule", "cron": "0 8 * * *", "timezone": "Europe/London" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "when_flagged",
+    "recommendedSkills": ["customer-communication-playbook"]
+  },
+  "keywords": ["late orders", "delayed shipping", "fulfillment", "tracking", "customer service", "shopify", "slack", "resend"]
+}

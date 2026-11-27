@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "name": "newsletter-drafter",
+  "kind": "automation",
+  "displayName": "Newsletter drafter",
+  "description": "Every week or two, picks your new arrivals, best sellers and products back in stock, writes the newsletter in your brand voice and leaves it in Klaviyo as a draft campaign, ready for you to review and send.",
+  "category": "marketing",
+  "icon": "newspaper",
+  "color": "teal",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Every week, or every two weeks, on the day you choose" },
+    { "label": "Picks", "text": "New arrivals, best sellers and products back in stock, from your own catalog and orders" },
+    { "label": "Writes", "text": "Subject line, preview text and the email, with real names, prices, images and links" },
+    { "label": "Leaves", "text": "A draft campaign in Klaviyo for the list you choose; nothing is sent" }
+  ],
+  "plugins": [
+    { "id": "klaviyo", "required": true, "reason": "Holds the draft campaign and the list it goes to; you send it from Klaviyo" }
+  ],
+  "data": [
+    { "key": "productName", "description": "The product's name", "entityHint": "product", "fieldHint": "name", "type": "string", "required": true },
+    { "key": "productPrice", "description": "The price shown in the email", "entityHint": "product", "fieldHint": "price", "type": "number", "required": true },
+    { "key": "productImage", "description": "A public image URL for the product", "entityHint": "product", "fieldHint": "image", "type": "string", "required": true },
+    { "key": "productUrl", "description": "The product's page on the store, or its handle to build the link from", "entityHint": "product", "fieldHint": "url", "type": "string", "required": true },
+    { "key": "productPublished", "description": "Whether the product is live on the store", "entityHint": "product", "fieldHint": "status", "type": "any", "required": false },
+    { "key": "productCreatedAt", "description": "When the product was added, to find new arrivals", "entityHint": "product", "fieldHint": "_createdAt", "type": "date", "required": true },
+    { "key": "stock", "description": "The quantity on hand, to leave out sold-out products and spot restocks", "entityHint": "product", "fieldHint": "stock", "type": "number", "required": false },
+    { "key": "orderLines", "description": "Order lines (product, quantity, order date), to find best sellers", "entityHint": "orderLine", "fieldHint": "quantity", "type": "number", "required": false }
+  ],
+  "parameters": [
+    { "key": "schedule", "label": "When to draft", "type": "cron", "default": "0 9 * * 2", "description": "Every Tuesday at 9:00 by default; the draft is ready for the team to send that week" },
+    { "key": "timezone", "label": "Time zone", "type": "timezone", "default": "Europe/London" },
+    { "key": "frequency", "label": "How often", "type": "select", "default": "weekly", "options": ["weekly", "every two weeks"], "description": "With every two weeks, every other run is skipped" },
+    { "key": "listName", "label": "Klaviyo list or segment", "type": "string", "default": "Newsletter", "description": "The exact name of the list or segment the campaign goes to" },
+    { "key": "productCount", "label": "Products per newsletter", "type": "number", "default": 6, "description": "How many products to feature in total" },
+    { "key": "language", "label": "Language", "type": "string", "default": "English" },
+    { "key": "offer", "label": "The offer", "type": "string", "default": "no discount", "description": "What the email may offer, e.g. \"free shipping this weekend with code WEEKEND\"; it never invents one" }
+  ],
+  "automation": {
+    "trigger": { "type": "schedule", "cron": "0 9 * * 2", "timezone": "Europe/London" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "always",
+    "recommendedSkills": ["brand-voice"]
+  },
+  "keywords": ["newsletter", "email marketing", "campaign", "klaviyo", "new arrivals", "best sellers", "back in stock"]
+}

@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "name": "review-moderation",
+  "kind": "automation",
+  "displayName": "Review moderation",
+  "description": "Checks every new review against your moderation policy, publishes the clean ones straight away and holds the rest for a person with the reason. Never hides a review for being negative, and never deletes one.",
+  "category": "orders-customers",
+  "icon": "shield-check",
+  "color": "teal",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "A customer review is created" },
+    { "label": "Checks", "text": "Spam, links, personal data, abuse, off-topic text and claims your policy does not allow" },
+    { "label": "Publishes", "text": "Clean reviews at once, whatever their star rating" },
+    { "label": "Holds", "text": "Anything uncertain for a person, with the reason, and posts it to Slack if you pick a channel" },
+    { "label": "Tags", "text": "Each review's sentiment and topic, for the weekly sentiment report" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": false, "reason": "Posts held reviews to a channel so someone decides on them quickly" }
+  ],
+  "data": [
+    { "key": "reviewText", "description": "What the customer wrote, with the title if there is one", "entityHint": "review", "fieldHint": "body", "type": "string", "required": true },
+    { "key": "rating", "description": "The star rating, usually 1 to 5 (read for tagging only, never for the decision)", "entityHint": "review", "fieldHint": "rating", "type": "number", "required": false },
+    { "key": "reviewStatus", "description": "The moderation status that decides whether the storefront shows the review", "entityHint": "review", "fieldHint": "status", "type": "string", "required": true },
+    { "key": "moderationReason", "description": "Where to save why a review was held", "entityHint": "review", "fieldHint": "moderationReason", "type": "string", "required": false },
+    { "key": "reviewProduct", "description": "The product the review is about, to spot off-topic reviews", "entityHint": "review", "fieldHint": "product", "type": "reference", "required": false },
+    { "key": "reviewer", "description": "The reviewer's name or customer, to spot repeated or employee reviews", "entityHint": "review", "fieldHint": "customer", "type": "reference", "required": false },
+    { "key": "verifiedPurchase", "description": "Whether the review is linked to an order", "entityHint": "review", "fieldHint": "verified", "type": "boolean", "required": false },
+    { "key": "sentiment", "description": "Where to save the sentiment tag", "entityHint": "review", "fieldHint": "sentiment", "type": "string", "required": false },
+    { "key": "topic", "description": "Where to save the main topic tag", "entityHint": "review", "fieldHint": "topic", "type": "string", "required": false }
+  ],
+  "parameters": [
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Optional; where held reviews are posted" },
+    { "key": "publishedValue", "label": "Status value for published", "type": "string", "default": "published", "description": "The status value that shows a review on the storefront" },
+    { "key": "heldValue", "label": "Status value for held", "type": "string", "default": "pending", "description": "The status value that keeps a review off the storefront until a person decides" },
+    { "key": "publishClean", "label": "Publish clean reviews automatically", "type": "boolean", "default": true, "description": "When off, the run only tags reviews and holds the doubtful ones; people publish everything" },
+    { "key": "holdLinks", "label": "Hold reviews with links", "type": "boolean", "default": true, "description": "Links are the most common sign of spam" }
+  ],
+  "automation": {
+    "trigger": { "type": "entity", "entityHint": "review", "events": ["create"] },
+    "mutationPolicy": "auto_approve",
+    "notifyRule": "when_flagged",
+    "recommendedSkills": ["review-moderation-policy", "brand-voice"]
+  },
+  "keywords": ["reviews", "moderation", "spam", "ugc", "personal data", "ratings", "trust", "slack"]
+}

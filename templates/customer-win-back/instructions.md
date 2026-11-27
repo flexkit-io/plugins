@@ -24,10 +24,10 @@ Write in {{language}}. When a brand voice or customer communication skill is loa
 ## 3. Send for approval
 
 - **With Resend**: propose one email per customer. Never send without approval, and never send an email twice.
-- **With Klaviyo** (and no Resend): propose adding the customers to the win-back list the team chose, and put the drafted email in the run summary for the team to build the campaign. Klaviyo cannot send it from here.
+- **With Klaviyo** (and no Resend): the email is sent by the team's Klaviyo flow, which handles consent and unsubscribes. Find each customer's Klaviyo profile by email; if there is none, or it is not subscribed to email marketing, skip the customer and count them in the summary, and never subscribe anyone. Propose updating the profile's properties: `win_back_date` (today), `win_back_products` (the one or two products the email suggests), `win_back_product_urls` (their links) and `win_back_offer` (the offer, or empty when it is "no discount"). The team's flow, triggered by that date, sends the email; the drafted text in the run summary helps the team keep the flow's email current.
 - **With neither**: put the list of customers and the drafted emails in the run summary.
 
-After an email is sent or a customer is added to the list, record the date on the customer (when the project keeps a win-back date) and in your memory.
+After an email is sent or a profile is updated, record the date on the customer (when the project keeps a win-back date) and in your memory.
 
 ## 4. Report
 

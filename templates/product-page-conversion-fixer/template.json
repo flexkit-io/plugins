@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "name": "product-page-conversion-fixer",
+  "kind": "automation",
+  "displayName": "Product page conversion fixer",
+  "description": "Every week, finds products that get plenty of views but few add-to-carts, works out from the product's own record what is holding them back, and proposes fixes for you to approve.",
+  "category": "catalog",
+  "icon": "shopping-cart",
+  "color": "violet",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Every Monday morning" },
+    { "label": "Finds", "text": "Products with many views and an add-to-cart rate well below your store's usual rate" },
+    { "label": "Diagnoses", "text": "Thin copy, few images, sizes out of stock, missing details, or a price far above similar products" },
+    { "label": "Asks you", "text": "To approve copy and detail fixes; price is only ever a suggestion" }
+  ],
+  "plugins": [
+    { "id": "google-analytics", "required": true, "reason": "Reads views and add-to-carts per product from your GA4 ecommerce data" }
+  ],
+  "data": [
+    { "key": "productName", "description": "The product's name, matched to the item name in Google Analytics", "entityHint": "product", "fieldHint": "name", "type": "string", "required": true },
+    { "key": "productId", "description": "The id or SKU your store sends to Google Analytics as item_id, when it is stored", "entityHint": "product", "fieldHint": "sku", "type": "string", "required": false },
+    { "key": "productDescription", "description": "The long description on the product page", "entityHint": "product", "fieldHint": "description", "type": "string", "required": true },
+    { "key": "images", "description": "The product's images, to count them and check alt text", "entityHint": "productImage", "type": "reference", "required": false },
+    { "key": "price", "description": "The product's price, to compare with similar products", "entityHint": "product", "fieldHint": "price", "type": "number", "required": true },
+    { "key": "category", "description": "The product's category, to find similar products", "entityHint": "product", "fieldHint": "category", "type": "reference", "required": false },
+    { "key": "variantStock", "description": "Stock per variant (size, colour), to spot popular options that are sold out", "entityHint": "variant", "fieldHint": "stock", "type": "number", "required": false },
+    { "key": "productFacts", "description": "Fields shoppers look for: dimensions, material, care, size guide, delivery and returns", "entityHint": "product", "type": "any", "required": false }
+  ],
+  "parameters": [
+    { "key": "schedule", "label": "When to run", "type": "cron", "default": "0 7 * * 1", "description": "Every Monday at 7:00 by default" },
+    { "key": "timezone", "label": "Time zone", "type": "timezone", "default": "Europe/London" },
+    { "key": "minViews", "label": "Minimum product views (28 days)", "type": "number", "default": 200, "description": "Products seen less often than this are left out; too few views say nothing" },
+    { "key": "maxProducts", "label": "Products to look at per week", "type": "number", "default": 5 },
+    { "key": "language", "label": "Language", "type": "string", "default": "English" }
+  ],
+  "automation": {
+    "trigger": { "type": "schedule", "cron": "0 7 * * 1", "timezone": "Europe/London" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "always",
+    "recommendedSkills": ["product-copy-guidelines"]
+  },
+  "keywords": ["conversion rate", "add to cart", "google analytics", "ga4", "product page", "pdp", "cro", "catalog"]
+}

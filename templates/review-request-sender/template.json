@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "name": "review-request-sender",
+  "kind": "automation",
+  "displayName": "Review request sender",
+  "description": "A few days after an order is delivered, asks the customer to review what they bought, with a direct link. Skips anyone with an open complaint, return or refund, and never asks twice for the same order.",
+  "category": "marketing",
+  "icon": "star",
+  "color": "violet",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Every morning" },
+    { "label": "Finds", "text": "Orders delivered a set number of days ago, from customers who accept marketing email" },
+    { "label": "Skips", "text": "Orders with an open complaint, return or refund, and orders already asked about" },
+    { "label": "Asks", "text": "Through a Klaviyo flow, or a short Resend email you approve, linking to the review page" }
+  ],
+  "plugins": [
+    { "id": "klaviyo", "required": false, "reason": "Sets the review request on the customer's profile so your Klaviyo flow sends it, with Klaviyo's own consent and unsubscribe handling" },
+    { "id": "resend", "required": false, "reason": "Sends each approved review request directly" }
+  ],
+  "data": [
+    { "key": "orderNumber", "description": "The order number", "entityHint": "order", "fieldHint": "number", "type": "string", "required": true },
+    { "key": "deliveredAt", "description": "When the order was delivered (or shipped, when delivery is not tracked)", "entityHint": "order", "fieldHint": "deliveredAt", "type": "date", "required": true },
+    { "key": "orderStatus", "description": "Whether the order was refunded, returned or cancelled", "entityHint": "order", "fieldHint": "status", "type": "string", "required": true },
+    { "key": "orderLines", "description": "What the order contained (product)", "entityHint": "orderLine", "fieldHint": "product", "type": "reference", "required": true },
+    { "key": "customerEmail", "description": "The customer's email address", "entityHint": "customer", "fieldHint": "email", "type": "string", "required": true },
+    { "key": "customerName", "description": "The customer's first name, for the greeting", "entityHint": "customer", "fieldHint": "firstName", "type": "string", "required": false },
+    { "key": "marketingConsent", "description": "Whether the customer agreed to receive marketing email", "entityHint": "customer", "fieldHint": "acceptsMarketing", "type": "boolean", "required": true },
+    { "key": "reviewUrl", "description": "The page where a product is reviewed, when each product has its own", "entityHint": "product", "fieldHint": "reviewUrl", "type": "string", "required": false },
+    { "key": "openIssue", "description": "A complaint, support ticket or return linked to the order or customer", "entityHint": "return", "fieldHint": "order", "type": "reference", "required": false }
+  ],
+  "parameters": [
+    { "key": "schedule", "label": "When to check", "type": "cron", "default": "0 10 * * *", "description": "Every day at 10:00 by default" },
+    { "key": "timezone", "label": "Time zone", "type": "timezone", "default": "Europe/London" },
+    { "key": "daysAfterDelivery", "label": "Days after delivery", "type": "number", "default": 7, "description": "Ask this many days after the order arrived, once the customer has had time to use it" },
+    { "key": "reviewLink", "label": "Review link", "type": "string", "default": "", "description": "The review page, e.g. https://northline.example/reviews?product={handle}; used when products have no review URL of their own" },
+    { "key": "productsPerRequest", "label": "Products per request", "type": "number", "default": 2, "description": "For larger orders, ask about at most this many products" },
+    { "key": "dailyLimit", "label": "Requests per run", "type": "number", "default": 30, "description": "The most requests in one run; the rest wait for tomorrow" },
+    { "key": "replyTo", "label": "Where customers reply", "type": "string", "default": "", "description": "The address for replies when sending with Resend, e.g. hello@northline.example" },
+    { "key": "language", "label": "Language", "type": "string", "default": "English" }
+  ],
+  "automation": {
+    "trigger": { "type": "schedule", "cron": "0 10 * * *", "timezone": "Europe/London" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "when_flagged",
+    "recommendedSkills": ["brand-voice"]
+  },
+  "keywords": ["reviews", "review request", "ratings", "social proof", "post-purchase", "klaviyo", "resend"]
+}

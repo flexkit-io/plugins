@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "name": "replenishment-reminder",
+  "kind": "automation",
+  "displayName": "Replenishment reminder",
+  "description": "Learns how often customers rebuy each consumable product, such as coffee, candles or skincare, and reminds them just before they run out, with Klaviyo or a Resend email you approve.",
+  "category": "marketing",
+  "icon": "repeat",
+  "color": "amber",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Every morning" },
+    { "label": "Learns", "text": "Each consumable product's typical time between repeat orders, from your order history" },
+    { "label": "Finds", "text": "Customers about to run out, who accept marketing email and have not reordered" },
+    { "label": "Reminds", "text": "Through a Klaviyo flow, or a short Resend email you approve" },
+    { "label": "Remembers", "text": "Who was reminded for which order, so nobody is reminded twice" }
+  ],
+  "plugins": [
+    { "id": "klaviyo", "required": false, "reason": "Sets the reminder date on the customer's profile so your Klaviyo flow sends it, with Klaviyo's own consent and unsubscribe handling" },
+    { "id": "resend", "required": false, "reason": "Sends each approved reminder email directly" }
+  ],
+  "data": [
+    { "key": "customerEmail", "description": "The customer's email address", "entityHint": "customer", "fieldHint": "email", "type": "string", "required": true },
+    { "key": "customerName", "description": "The customer's first name, for the greeting", "entityHint": "customer", "fieldHint": "firstName", "type": "string", "required": false },
+    { "key": "marketingConsent", "description": "Whether the customer agreed to receive marketing email", "entityHint": "customer", "fieldHint": "acceptsMarketing", "type": "boolean", "required": true },
+    { "key": "orderDate", "description": "When each order was placed", "entityHint": "order", "fieldHint": "createdAt", "type": "date", "required": true },
+    { "key": "orderCustomer", "description": "The customer who placed the order", "entityHint": "order", "fieldHint": "customer", "type": "reference", "required": true },
+    { "key": "orderLines", "description": "What each order contained (product and quantity)", "entityHint": "orderLine", "fieldHint": "product", "type": "reference", "required": true },
+    { "key": "consumable", "description": "Marks the products people use up and rebuy; without it, setup asks which products count", "entityHint": "product", "fieldHint": "consumable", "type": "boolean", "required": false },
+    { "key": "usageDays", "description": "How many days one unit usually lasts, when the store knows it (overrides the learned interval)", "entityHint": "product", "fieldHint": "usageDays", "type": "number", "required": false },
+    { "key": "productUrl", "description": "The product's page on the store, for the reorder link", "entityHint": "product", "fieldHint": "url", "type": "string", "required": true }
+  ],
+  "parameters": [
+    { "key": "schedule", "label": "When to check", "type": "cron", "default": "0 9 * * *", "description": "Every day at 9:00 by default" },
+    { "key": "timezone", "label": "Time zone", "type": "timezone", "default": "Europe/London" },
+    { "key": "leadDays", "label": "Remind this many days early", "type": "number", "default": 5, "description": "The reminder goes out this many days before the customer is expected to run out" },
+    { "key": "minRepeatOrders", "label": "Repeat orders needed to learn", "type": "number", "default": 10, "description": "A product needs at least this many repeat purchases before its interval is trusted" },
+    { "key": "dailyLimit", "label": "Reminders per run", "type": "number", "default": 20, "description": "The most reminders in one run; the rest wait for tomorrow" },
+    { "key": "replyTo", "label": "Where customers reply", "type": "string", "default": "", "description": "The address for replies when sending with Resend, e.g. hello@northline.example" },
+    { "key": "language", "label": "Language", "type": "string", "default": "English" }
+  ],
+  "automation": {
+    "trigger": { "type": "schedule", "cron": "0 9 * * *", "timezone": "Europe/London" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "when_flagged",
+    "recommendedSkills": ["brand-voice"]
+  },
+  "keywords": ["replenishment", "reorder", "repeat purchase", "subscriptions", "retention", "consumables", "klaviyo", "resend"]
+}

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "name": "search-console-quick-wins",
+  "kind": "automation",
+  "displayName": "Search Console quick wins",
+  "description": "Every week, finds the pages Google already shows often but few people click, rewrites their search titles and descriptions for you to approve, and a month later reports whether clicks went up.",
+  "category": "marketing",
+  "icon": "search-check",
+  "color": "blue",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Every Monday morning" },
+    { "label": "Finds", "text": "Pages with many impressions, a low click rate and a position of about 4 to 15 in Google" },
+    { "label": "Rewrites", "text": "Their SEO title and meta description around the searches people actually make" },
+    { "label": "Asks you", "text": "To approve each rewrite before it is saved" },
+    { "label": "Follows up", "text": "Four weeks later, compares clicks before and after each change" }
+  ],
+  "plugins": [
+    { "id": "google-search-console", "required": true, "reason": "Reads impressions, clicks, click rate and position per page and search query" }
+  ],
+  "data": [
+    { "key": "pageSlug", "description": "The URL slug or path of the page, to match Search Console's page URLs to records", "entityHint": "product", "fieldHint": "slug", "type": "string", "required": true },
+    { "key": "pageName", "description": "The product's or page's name", "entityHint": "product", "fieldHint": "name", "type": "string", "required": true },
+    { "key": "seoTitle", "description": "The page title used by search engines", "entityHint": "product", "fieldHint": "seoTitle", "type": "string", "required": true },
+    { "key": "seoDescription", "description": "The meta description used by search engines", "entityHint": "product", "fieldHint": "seoDescription", "type": "string", "required": true },
+    { "key": "pageFacts", "description": "Fields that describe the product or page (category, material, use), so rewrites stay accurate", "entityHint": "product", "type": "any", "required": false }
+  ],
+  "parameters": [
+    { "key": "schedule", "label": "When to run", "type": "cron", "default": "0 7 * * 1", "description": "Every Monday at 7:00 by default" },
+    { "key": "timezone", "label": "Time zone", "type": "timezone", "default": "Europe/London" },
+    { "key": "minImpressions", "label": "Minimum impressions (28 days)", "type": "number", "default": 300, "description": "Pages seen less often than this are left out" },
+    { "key": "maxPages", "label": "Pages to rewrite per week", "type": "number", "default": 5, "description": "Small batches make the follow-up easier to read" },
+    { "key": "language", "label": "Language", "type": "string", "default": "English" },
+    { "key": "brandSuffix", "label": "Title suffix", "type": "string", "default": "", "description": "Added to the end of titles when it fits, e.g. \" | Northline Goods\"; leave empty for none" }
+  ],
+  "automation": {
+    "trigger": { "type": "schedule", "cron": "0 7 * * 1", "timezone": "Europe/London" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "always",
+    "recommendedSkills": ["brand-voice", "product-copy-guidelines"]
+  },
+  "keywords": ["seo", "search console", "click-through rate", "ctr", "meta description", "title tag", "google", "organic traffic"]
+}

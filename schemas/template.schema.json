@@ -18,7 +18,7 @@
     "icon": {
       "description": "The avatar's Lucide icon (lucide.dev/icons). Studio draws only these; add one there before adding it here.",
       "type": "string",
-      "enum": ["bell", "book-open", "calendar-clock", "chart-column", "clipboard-check", "database", "eye-off", "file-text", "globe", "inbox", "languages", "list-checks", "mail", "megaphone", "message-square", "package-minus", "pen-line", "receipt", "refresh-cw", "scroll-text", "search-check", "send", "shield-check", "shopping-cart", "sigma", "siren", "sparkles", "star", "tag", "truck", "users", "webhook", "zap"]
+      "enum": ["bell", "book-open", "calculator", "calendar-clock", "chart-column", "clipboard-check", "database", "eye-off", "file-text", "globe", "hourglass", "inbox", "languages", "list-checks", "mail", "megaphone", "message-square", "newspaper", "package-minus", "pen-line", "receipt", "refresh-cw", "repeat", "scale", "scroll-text", "search-check", "send", "shield-check", "shopping-cart", "sigma", "siren", "smile", "sparkles", "star", "tag", "truck", "users", "webhook", "zap"]
     },
     "color": {
       "description": "The avatar's color from Studio's palette. Give templates that sit together different colors.",
