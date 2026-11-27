@@ -46,6 +46,7 @@
           "tickets:read",
           "tickets:write",
           "tags:read",
+          "tags:write",
           "macros:read",
           "custom_fields:read",
           "satisfaction_survey:read",
