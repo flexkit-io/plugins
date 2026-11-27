@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "name": "catalog-completeness-check",
+  "kind": "automation",
+  "displayName": "Catalog completeness check",
+  "description": "Every morning, finds products that are missing images, prices, weights, categories or translations and posts a short to-do list to Slack, newest problems first.",
+  "category": "catalog",
+  "icon": "list-checks",
+  "color": "teal",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Every day at a time you choose" },
+    { "label": "Checks", "text": "Every active product for missing images, price, weight, category, description and translations" },
+    { "label": "Posts", "text": "A to-do list to Slack, grouped by what is missing, with what is new since yesterday" },
+    { "label": "Never", "text": "Changes a product; it only reports" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": true, "reason": "Posts the daily to-do list to your team's channel" }
+  ],
+  "data": [
+    { "key": "productName", "description": "The product's name, to identify it in the list", "entityHint": "product", "fieldHint": "name", "type": "string", "required": true },
+    { "key": "sku", "description": "The SKU, so the team finds the product quickly", "entityHint": "product", "fieldHint": "sku", "type": "string", "required": false },
+    { "key": "productStatus", "description": "Whether the product is live, draft or archived, so archived products are ignored", "entityHint": "product", "fieldHint": "status", "type": "string", "required": false },
+    { "key": "images", "description": "The product's images or main image", "entityHint": "product", "fieldHint": "images", "type": "any", "required": false },
+    { "key": "price", "description": "The selling price", "entityHint": "product", "fieldHint": "price", "type": "number", "required": false },
+    { "key": "weight", "description": "The shipping weight", "entityHint": "product", "fieldHint": "weight", "type": "number", "required": false },
+    { "key": "category", "description": "The product's category or collection", "entityHint": "product", "fieldHint": "category", "type": "reference", "required": false },
+    { "key": "description", "description": "The long description shown on the product page", "entityHint": "product", "fieldHint": "description", "type": "string", "required": false },
+    { "key": "translations", "description": "Translated fields or translation records, when the store sells in several languages", "entityHint": "product", "fieldHint": "translations", "type": "any", "required": false }
+  ],
+  "parameters": [
+    { "key": "schedule", "label": "When to check", "type": "cron", "default": "0 7 * * *", "description": "Every day at 7:00 by default" },
+    { "key": "timezone", "label": "Time zone", "type": "timezone", "default": "Europe/London" },
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Where the to-do list is posted" },
+    { "key": "checks", "label": "What counts as complete", "type": "string", "default": "at least one image, a price above 0, a weight, a category, a description of at least 30 words, every translation", "description": "The checks to run, in plain words; leave out the ones your store does not need" },
+    { "key": "includeDrafts", "label": "Check draft products too", "type": "boolean", "default": false, "description": "When off, only live products are checked" },
+    { "key": "maxItems", "label": "Products to list", "type": "number", "default": 20, "description": "The list shows at most this many products; the rest are counted" }
+  ],
+  "automation": {
+    "trigger": { "type": "schedule", "cron": "0 7 * * *", "timezone": "Europe/London" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "when_flagged",
+    "recommendedSkills": ["data-entry-conventions", "publishing-checklist"]
+  },
+  "keywords": ["catalog", "data quality", "missing images", "product data", "completeness", "to-do", "merchandising", "slack"]
+}

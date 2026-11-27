@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "name": "inbound-form-intake",
+  "kind": "automation",
+  "displayName": "Inbound form intake",
+  "description": "Turns contact, quote and lead form submissions into records, matches them to existing contacts, assigns an owner by your rules and lets them know, with spam left out.",
+  "category": "orders-customers",
+  "icon": "inbox",
+  "color": "violet",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Your website form sends a submission to a webhook URL" },
+    { "label": "Does", "text": "Creates the inquiry and finds or creates the contact, matched by email" },
+    { "label": "Routes", "text": "Assigns an owner from your rules: quote requests to sales, support questions to support" },
+    { "label": "Notifies", "text": "The owner in Slack, if you pick a channel" },
+    { "label": "Asks you", "text": "To approve each set of record changes" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": false, "reason": "Tells the assigned owner about a new inquiry in a channel" }
+  ],
+  "data": [
+    { "key": "inquiryMessage", "description": "The submitted message", "entityHint": "inquiry", "fieldHint": "message", "type": "string", "required": true },
+    { "key": "inquiryType", "description": "What kind of request it is (quote, support, partnership, other)", "entityHint": "inquiry", "fieldHint": "type", "type": "string", "required": false },
+    { "key": "inquiryContact", "description": "The link from the inquiry to the contact who sent it", "entityHint": "inquiry", "fieldHint": "contact", "type": "reference", "required": true },
+    { "key": "inquiryOwner", "description": "The team member responsible for following up", "entityHint": "inquiry", "fieldHint": "owner", "type": "reference", "required": false },
+    { "key": "inquirySource", "description": "Which form or page it came from", "entityHint": "inquiry", "fieldHint": "source", "type": "string", "required": false },
+    { "key": "contactEmail", "description": "The contact's email, used to find an existing contact", "entityHint": "contact", "fieldHint": "email", "type": "string", "required": true },
+    { "key": "contactName", "description": "The contact's name", "entityHint": "contact", "fieldHint": "name", "type": "string", "required": false },
+    { "key": "contactCompany", "description": "The contact's company, for B2B leads", "entityHint": "contact", "fieldHint": "company", "type": "string", "required": false },
+    { "key": "teamMember", "description": "Team members who can own inquiries, with their name and Slack handle if kept", "entityHint": "teamMember", "fieldHint": "name", "type": "string", "required": false }
+  ],
+  "parameters": [
+    { "key": "routingRules", "label": "Who gets what", "type": "string", "default": "Quote requests and wholesale questions go to sales. Order and product questions go to support. Everything else goes to the default owner.", "description": "Plain-language rules; name team members or teams as they appear in the project" },
+    { "key": "defaultOwner", "label": "Default owner", "type": "string", "default": "", "description": "Who gets inquiries no rule matches; leave empty to leave them unassigned" },
+    { "key": "filterSpam", "label": "Leave out spam", "type": "boolean", "default": true, "description": "Obvious spam is not saved; it is counted in the run summary" },
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Optional; where owners are told about new inquiries" }
+  ],
+  "automation": {
+    "trigger": { "type": "webhook" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "always",
+    "recommendedSkills": []
+  },
+  "keywords": ["forms", "leads", "contact form", "quote request", "inquiries", "webhook", "routing", "crm", "sales"]
+}

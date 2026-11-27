@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "name": "translation-sync",
+  "kind": "automation",
+  "displayName": "Translation sync",
+  "description": "When a product's copy changes, translates the changed fields into every language you sell in and marks them for review, so no language falls behind.",
+  "category": "catalog",
+  "icon": "languages",
+  "color": "sky",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "A product is updated" },
+    { "label": "Does", "text": "Translates only the source-language fields that changed, into each of your languages" },
+    { "label": "Marks", "text": "Each new translation as needing review" },
+    { "label": "Asks you", "text": "To approve the translations before they are saved" }
+  ],
+  "plugins": [],
+  "data": [
+    { "key": "productName", "description": "The product's name in the source language", "entityHint": "product", "fieldHint": "name", "type": "string", "required": true },
+    { "key": "sourceFields", "description": "The source-language fields to keep translated: name, description, bullet points, SEO title and description", "entityHint": "product", "fieldHint": "description", "type": "string", "required": true },
+    { "key": "translations", "description": "Where translations live: fields per language, a translation entity, or localized fields", "entityHint": "productTranslation", "type": "any", "required": true },
+    { "key": "reviewStatus", "description": "A per-translation field that marks a translation as needing review", "entityHint": "productTranslation", "fieldHint": "status", "type": "string", "required": false }
+  ],
+  "parameters": [
+    { "key": "sourceLanguage", "label": "Source language", "type": "string", "default": "English", "description": "The language the team writes product copy in" },
+    { "key": "targetLanguages", "label": "Translate into", "type": "string", "default": "German, French", "description": "Every language the store sells in, separated by commas" },
+    { "key": "fields", "label": "Fields to translate", "type": "string", "default": "name, description, bullet points, SEO title, SEO description", "description": "The source fields kept in sync" },
+    { "key": "reviewValue", "label": "Needs-review value", "type": "string", "default": "needs review", "description": "What the review field is set to on each new translation" }
+  ],
+  "automation": {
+    "trigger": { "type": "entity", "entityHint": "product", "events": ["update"] },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "when_flagged",
+    "recommendedSkills": ["translation-localization-rules", "brand-voice"]
+  },
+  "keywords": ["translation", "localization", "languages", "multilingual", "i18n", "product copy", "catalog"]
+}

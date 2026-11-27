@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "name": "seasonal-campaign-prep",
+  "kind": "automation",
+  "displayName": "Seasonal campaign prep",
+  "description": "A few weeks before Black Friday, Christmas or any date you pick, chooses the products to feature and drafts the landing-page copy, banner text and a campaign email, ready for your team to review.",
+  "category": "marketing",
+  "icon": "calendar-clock",
+  "color": "violet",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Once a year, a set number of weeks before the occasion" },
+    { "label": "Picks", "text": "The products to feature, from sales, stock and last year's campaign" },
+    { "label": "Drafts", "text": "Landing-page copy, banner text and a campaign email" },
+    { "label": "Optional", "text": "Creates the email as a draft campaign in Klaviyo" },
+    { "label": "Asks you", "text": "Before anything is saved or created in Klaviyo" }
+  ],
+  "plugins": [
+    { "id": "klaviyo", "required": false, "reason": "Creates the campaign email as a Klaviyo draft for your team to finish and send" }
+  ],
+  "data": [
+    { "key": "productName", "description": "The product's name", "entityHint": "product", "fieldHint": "name", "type": "string", "required": true },
+    { "key": "productStock", "description": "The quantity on hand, so the campaign features what can actually ship", "entityHint": "product", "fieldHint": "stock", "type": "number", "required": false },
+    { "key": "productPrice", "description": "The product's current price", "entityHint": "product", "fieldHint": "price", "type": "number", "required": false },
+    { "key": "productCategory", "description": "The product's category or collection", "entityHint": "product", "fieldHint": "category", "type": "reference", "required": false },
+    { "key": "orderLines", "description": "Order line items (product, quantity, date), to find best sellers and last year's occasion sales", "entityHint": "orderLine", "fieldHint": "quantity", "type": "number", "required": false },
+    { "key": "campaignPage", "description": "Where to save the drafted landing-page copy (a page, collection or campaign record)", "entityHint": "page", "fieldHint": "body", "type": "string", "required": false }
+  ],
+  "parameters": [
+    { "key": "occasion", "label": "Occasion", "type": "string", "default": "Black Friday", "description": "What the campaign is for" },
+    { "key": "occasionDate", "label": "Occasion date (month-day)", "type": "string", "default": "11-27", "description": "The usual date, e.g. 11-27; the run works out this year's date for moving occasions" },
+    { "key": "leadWeeks", "label": "Weeks ahead", "type": "number", "default": 4, "description": "How many weeks before the occasion the drafts are prepared" },
+    { "key": "schedule", "label": "When to run", "type": "cron", "default": "0 9 30 10 *", "description": "Once a year, the lead time before the occasion (set up from the two fields above)" },
+    { "key": "timezone", "label": "Time zone", "type": "timezone", "default": "Europe/London" },
+    { "key": "productCount", "label": "Products to feature", "type": "number", "default": 6 },
+    { "key": "offer", "label": "The offer", "type": "string", "default": "no discount", "description": "What the campaign promises, e.g. \"20% off outerwear\" or \"free gift wrapping\"; the drafts never invent one" },
+    { "key": "language", "label": "Language", "type": "string", "default": "English" }
+  ],
+  "automation": {
+    "trigger": { "type": "schedule", "cron": "0 9 30 10 *", "timezone": "Europe/London" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "always",
+    "recommendedSkills": ["brand-voice"]
+  },
+  "keywords": ["black friday", "christmas", "seasonal", "campaign", "promotion", "landing page", "email", "klaviyo"]
+}

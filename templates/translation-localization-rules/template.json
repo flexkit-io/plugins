@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "name": "translation-localization-rules",
+  "kind": "skill",
+  "displayName": "Translation and localization rules",
+  "description": "Your glossary, the terms that stay untranslated and what changes per market (spelling, units, formality), so every translation the agent writes is consistent across your locales.",
+  "category": "marketing",
+  "icon": "globe",
+  "color": "violet",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Reads", "text": "Your locales and existing translations to find the terms you already use" },
+    { "label": "Interview", "text": "The glossary, names that stay in the original, and what each market expects" },
+    { "label": "Result", "text": "A skill the agent loads whenever it translates or localizes content" }
+  ],
+  "plugins": [],
+  "data": [
+    { "key": "localizedText", "description": "Translated fields (per-locale names and descriptions), to learn the terms already in use", "entityHint": "product", "fieldHint": "description", "type": "string", "required": false }
+  ],
+  "parameters": [],
+  "skill": { "loadMode": "on_demand" },
+  "keywords": ["translation", "localization", "i18n", "glossary", "locales", "languages", "multilingual"]
+}

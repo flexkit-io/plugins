@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "name": "schema-change-notes",
+  "kind": "automation",
+  "displayName": "Schema change notes",
+  "description": "After every successful schema deployment, writes plain-language release notes of what changed for the team, and points out skills and knowledge documents that mention fields that are gone.",
+  "category": "team-ops",
+  "icon": "file-text",
+  "color": "teal",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "A schema deployment succeeds" },
+    { "label": "Compares", "text": "The new schema with the one it saw after the previous deployment" },
+    { "label": "Writes", "text": "Release notes: what is new, what changed, what was removed and what that means for the team" },
+    { "label": "Checks", "text": "Skills and knowledge documents that still mention removed or renamed fields" },
+    { "label": "Posts", "text": "The notes to Slack, if you pick a channel" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": false, "reason": "Posts the release notes to a channel" }
+  ],
+  "data": [],
+  "parameters": [
+    { "key": "audience", "label": "Written for", "type": "select", "default": "team", "options": ["team", "developers"], "description": "team explains changes in terms of the work; developers also gives entity and field names and types" },
+    { "key": "checkKnowledge", "label": "Check skills and documents", "type": "boolean", "default": true, "description": "Look for skills and knowledge documents that mention removed or renamed fields" },
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Optional; without it the notes stay in the run notification" }
+  ],
+  "automation": {
+    "trigger": { "type": "job", "job": "schema_deploy", "outcome": "succeeded" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "always",
+    "recommendedSkills": []
+  },
+  "keywords": ["schema", "release notes", "changelog", "deployments", "data model", "documentation", "slack"]
+}

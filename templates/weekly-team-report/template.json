@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "name": "weekly-team-report",
+  "kind": "automation",
+  "displayName": "Weekly team report",
+  "description": "Every Monday, posts to Slack what the team created, changed and published last week, compared with the week before, with the work that is still waiting.",
+  "category": "team-ops",
+  "icon": "users",
+  "color": "blue",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Every Monday at 9:00 in your time zone" },
+    { "label": "Counts", "text": "Records created, changed and published last week, per type, against the week before" },
+    { "label": "Credits", "text": "Who did the work, when your records keep an author or owner" },
+    { "label": "Lists", "text": "Drafts and records still waiting, oldest first" },
+    { "label": "Posts", "text": "A short report to your Slack channel" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": true, "reason": "Posts the weekly report to your team's channel" }
+  ],
+  "data": [
+    { "key": "trackedRecords", "description": "The record types the team works on (products, articles, pages, orders…), each with its _createdAt and _updatedAt timestamps", "entityHint": "product", "fieldHint": "_updatedAt", "type": "any", "required": true },
+    { "key": "recordAuthor", "description": "Who created or owns a record (author, owner, assignee), when the schema keeps one", "entityHint": "article", "fieldHint": "author", "type": "reference", "required": false },
+    { "key": "publishStatus", "description": "A status or published flag, to tell published records from drafts", "entityHint": "article", "fieldHint": "status", "type": "string", "required": false },
+    { "key": "publishedAt", "description": "When a record was published, when the schema keeps it", "entityHint": "article", "fieldHint": "publishedAt", "type": "date", "required": false }
+  ],
+  "parameters": [
+    { "key": "schedule", "label": "When to post", "type": "cron", "default": "0 9 * * 1", "description": "Every Monday at 9:00 by default" },
+    { "key": "timezone", "label": "Time zone", "type": "timezone", "default": "Europe/London", "description": "Used for the schedule and for where the week starts and ends" },
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Where the report is posted" },
+    { "key": "highlightCount", "label": "Highlights to list", "type": "number", "default": 5, "description": "The most notable new or published records to name" },
+    { "key": "staleDraftDays", "label": "Waiting for more than (days)", "type": "number", "default": 14, "description": "Drafts older than this are listed as waiting" }
+  ],
+  "automation": {
+    "trigger": { "type": "schedule", "cron": "0 9 * * 1", "timezone": "Europe/London" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "always",
+    "recommendedSkills": ["reporting-definitions"]
+  },
+  "keywords": ["weekly report", "team", "activity", "summary", "publishing", "content", "slack", "monday"]
+}

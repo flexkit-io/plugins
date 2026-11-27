@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "name": "review-triage",
+  "kind": "automation",
+  "displayName": "Review triage",
+  "description": "Reads every new product review, tags its sentiment and topic, drafts a reply for you to approve, and alerts the team in Slack about 1 and 2 star reviews.",
+  "category": "orders-customers",
+  "icon": "star",
+  "color": "amber",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "A customer review is created" },
+    { "label": "Does", "text": "Tags the review's sentiment and topic (quality, sizing, delivery, service, price)" },
+    { "label": "Drafts", "text": "A reply in your brand voice, for reviews that deserve one" },
+    { "label": "Escalates", "text": "1 and 2 star reviews to your Slack channel with the order behind them" },
+    { "label": "Asks you", "text": "To approve the tags and the reply before they are saved" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": false, "reason": "Alerts the team about low-rated reviews" }
+  ],
+  "data": [
+    { "key": "rating", "description": "The star rating, usually 1 to 5", "entityHint": "review", "fieldHint": "rating", "type": "number", "required": true },
+    { "key": "reviewText", "description": "What the customer wrote, with the title if there is one", "entityHint": "review", "fieldHint": "body", "type": "string", "required": true },
+    { "key": "reviewProduct", "description": "The product the review is about", "entityHint": "review", "fieldHint": "product", "type": "reference", "required": false },
+    { "key": "reviewCustomer", "description": "The customer or reviewer name, and the order when the review links one", "entityHint": "review", "fieldHint": "customer", "type": "reference", "required": false },
+    { "key": "reviewStatus", "description": "Moderation status (pending, published, rejected), to skip spam and rejected reviews", "entityHint": "review", "fieldHint": "status", "type": "string", "required": false },
+    { "key": "sentiment", "description": "Where to save the sentiment tag", "entityHint": "review", "fieldHint": "sentiment", "type": "string", "required": false },
+    { "key": "topic", "description": "Where to save the topic tag", "entityHint": "review", "fieldHint": "topic", "type": "string", "required": false },
+    { "key": "replyDraft", "description": "Where to save the drafted reply (a draft or internal field, not the published reply)", "entityHint": "review", "fieldHint": "replyDraft", "type": "string", "required": false }
+  ],
+  "parameters": [
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Optional; where low-rated reviews are escalated" },
+    { "key": "escalateAtOrBelow", "label": "Escalate ratings at or below", "type": "number", "default": 2, "description": "Reviews with this many stars or fewer are escalated" },
+    { "key": "replyTo", "label": "Draft replies for", "type": "select", "default": "all reviews with text", "options": ["all reviews with text", "low-rated reviews only", "no reviews"], "description": "Which reviews get a drafted reply" },
+    { "key": "language", "label": "Reply language", "type": "string", "default": "the review's language", "description": "Write replies in this language" }
+  ],
+  "automation": {
+    "trigger": { "type": "entity", "entityHint": "review", "events": ["create"] },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "when_flagged",
+    "recommendedSkills": ["brand-voice", "customer-communication-playbook"]
+  },
+  "keywords": ["reviews", "ratings", "sentiment", "customer feedback", "reply", "escalation", "support", "slack"]
+}

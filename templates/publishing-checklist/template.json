@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "name": "publishing-checklist",
+  "kind": "skill",
+  "displayName": "Publishing checklist",
+  "description": "What must be true before a product, page or article goes live: required fields, images, copy, SEO, translations and who signs off, so the agent can check readiness the way your team does.",
+  "category": "team-ops",
+  "icon": "clipboard-check",
+  "color": "emerald",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Reads", "text": "Your published and draft records to see what live content usually has" },
+    { "label": "Interview", "text": "What each kind of content needs before it goes live, and who approves it" },
+    { "label": "Result", "text": "A skill the agent loads whenever it checks whether something is ready to publish" }
+  ],
+  "plugins": [],
+  "data": [
+    { "key": "publishStatus", "description": "The field that says whether a record is live, such as status or published", "entityHint": "product", "fieldHint": "status", "type": "string", "required": false },
+    { "key": "images", "description": "Images or media attached to a record", "entityHint": "product", "fieldHint": "images", "type": "reference", "required": false }
+  ],
+  "parameters": [],
+  "skill": { "loadMode": "on_demand" },
+  "keywords": ["publishing", "checklist", "go live", "launch", "quality", "content", "readiness"]
+}

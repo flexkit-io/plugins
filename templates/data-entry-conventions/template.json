@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "name": "data-entry-conventions",
+  "kind": "skill",
+  "displayName": "Data entry conventions",
+  "description": "Your rules for names, SKUs, units, required fields and variants, so every record the agent creates or edits matches the ones your team already keeps.",
+  "category": "data-quality",
+  "icon": "tag",
+  "color": "teal",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Reads", "text": "Recent products and other records to find the patterns you already follow" },
+    { "label": "Interview", "text": "Confirms naming, SKU format, units and the fields every record needs" },
+    { "label": "Result", "text": "A short skill the agent always follows when it creates or changes records" }
+  ],
+  "plugins": [],
+  "data": [
+    { "key": "productName", "description": "Product names, to learn how they are built", "entityHint": "product", "fieldHint": "name", "type": "string", "required": false },
+    { "key": "sku", "description": "SKUs, to learn their format", "entityHint": "product", "fieldHint": "sku", "type": "string", "required": false },
+    { "key": "variants", "description": "Variants or options (size, colour), to learn how they are named and coded", "entityHint": "variant", "type": "any", "required": false }
+  ],
+  "parameters": [],
+  "skill": { "loadMode": "always" },
+  "keywords": ["data entry", "naming", "sku", "units", "variants", "conventions", "data quality", "catalog"]
+}

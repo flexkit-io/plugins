@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "name": "out-of-stock-auto-hide",
+  "kind": "automation",
+  "displayName": "Out-of-stock auto-hide",
+  "description": "When a product sells out, hides it from the store or marks it as on backorder, and puts it back as soon as stock returns. Only products it hid itself are restored.",
+  "category": "catalog",
+  "icon": "eye-off",
+  "color": "orange",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "A product's stock changes" },
+    { "label": "Sold out", "text": "Hides the product, or marks it as on backorder, when its stock reaches 0" },
+    { "label": "Back in stock", "text": "Restores the products it hid, as soon as stock is above 0 again" },
+    { "label": "Runs on its own", "text": "No approval step; it changes one field and nothing else" },
+    { "label": "Optional", "text": "Posts each change to a Slack channel" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": false, "reason": "Posts what was hidden and restored to a channel" }
+  ],
+  "data": [
+    { "key": "productName", "description": "The product or variant's name", "entityHint": "product", "fieldHint": "name", "type": "string", "required": true },
+    { "key": "stock", "description": "The quantity on hand", "entityHint": "product", "fieldHint": "stock", "type": "number", "required": true },
+    { "key": "availability", "description": "The field that controls whether customers can see or buy the product: a published flag, a status, or an availability value such as in stock / backorder", "entityHint": "product", "fieldHint": "status", "type": "any", "required": true },
+    { "key": "sku", "description": "The SKU, for the Slack message", "entityHint": "product", "fieldHint": "sku", "type": "string", "required": false },
+    { "key": "allowBackorder", "description": "A per-product flag for products that may keep selling at 0 stock", "entityHint": "product", "fieldHint": "allowBackorder", "type": "boolean", "required": false }
+  ],
+  "parameters": [
+    { "key": "action", "label": "When a product sells out", "type": "select", "default": "hide", "options": ["hide", "mark as backorder"], "description": "Hide it from the store, or keep it visible as on backorder" },
+    { "key": "hiddenValue", "label": "Value that hides the product", "type": "string", "default": "unpublished", "description": "What the availability field is set to when a product sells out, e.g. unpublished, draft, false or backorder" },
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Optional; where hidden and restored products are posted" }
+  ],
+  "automation": {
+    "trigger": { "type": "entity", "entityHint": "product", "events": ["update"] },
+    "mutationPolicy": "auto_approve",
+    "notifyRule": "failures",
+    "recommendedSkills": []
+  },
+  "keywords": ["out of stock", "sold out", "inventory", "backorder", "unpublish", "availability", "catalog"]
+}
