@@ -67,6 +67,11 @@
       "description": "Draft Klaviyo email campaigns, manage profiles and subscriptions, and report on campaigns, flows, lists and segments."
     },
     {
+      "name": "helpscout",
+      "source": "./helpscout",
+      "description": "Search Help Scout conversations and customers, summarize support threads, and report on volume, response times and happiness."
+    },
+    {
       "name": "atlassian",
       "source": "./third_party/atlassian",
       "description": "Search, create and update Jira work items and Confluence pages."
