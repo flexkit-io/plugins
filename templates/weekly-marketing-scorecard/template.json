@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "name": "weekly-marketing-scorecard",
+  "kind": "automation",
+  "displayName": "Weekly marketing scorecard",
+  "description": "Every Monday, puts last week's sales, traffic, search and email results in one Slack post: what changed, the likely reason, and three things to do this week.",
+  "category": "reporting",
+  "icon": "chart-column",
+  "color": "orange",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Every Monday morning" },
+    { "label": "Collects", "text": "Last week's orders, plus Google Analytics, Search Console and Klaviyo when they are connected" },
+    { "label": "Compares", "text": "Each number with the week before and the 4-week average, and finds the likely reason for big moves" },
+    { "label": "Posts", "text": "One scorecard to Slack, ending with three concrete things to do this week" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": true, "reason": "Posts the scorecard to your team's channel" },
+    { "id": "google-analytics", "required": false, "reason": "Adds sessions, traffic by channel and conversion rate" },
+    { "id": "google-search-console", "required": false, "reason": "Adds search clicks, impressions and the queries that moved" },
+    { "id": "klaviyo", "required": false, "reason": "Adds email campaign and flow results: opens, clicks and revenue" }
+  ],
+  "data": [
+    { "key": "orderTotal", "description": "The order's total paid amount", "entityHint": "order", "fieldHint": "total", "type": "number", "required": true },
+    { "key": "orderDate", "description": "When the order was placed", "entityHint": "order", "fieldHint": "createdAt", "type": "date", "required": true },
+    { "key": "orderStatus", "description": "The order's status, to leave out cancelled, test and fully refunded orders", "entityHint": "order", "fieldHint": "status", "type": "string", "required": false },
+    { "key": "customer", "description": "The order's customer, to count new and returning customers", "entityHint": "order", "fieldHint": "customer", "type": "reference", "required": false },
+    { "key": "discountCode", "description": "Discount codes used on the order, to see which promotions drove sales", "entityHint": "order", "fieldHint": "discountCode", "type": "string", "required": false },
+    { "key": "lineItems", "description": "Order line items with product and quantity, for top products", "entityHint": "orderLine", "fieldHint": "quantity", "type": "reference", "required": false }
+  ],
+  "parameters": [
+    { "key": "schedule", "label": "When to post", "type": "cron", "default": "0 8 * * 1", "description": "Every Monday at 8:00 by default" },
+    { "key": "timezone", "label": "Time zone", "type": "timezone", "default": "Europe/London", "description": "Used for the schedule and for what counts as last week (Monday to Sunday)" },
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Where the scorecard is posted" },
+    { "key": "changePercent", "label": "Call out changes above (%)", "type": "number", "default": 15, "description": "A number that moves more than this against the 4-week average is called out" }
+  ],
+  "automation": {
+    "trigger": { "type": "schedule", "cron": "0 8 * * 1", "timezone": "Europe/London" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "always",
+    "recommendedSkills": ["reporting-definitions"]
+  },
+  "keywords": ["marketing report", "kpi", "weekly report", "google analytics", "search console", "klaviyo", "scorecard", "slack"]
+}

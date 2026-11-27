@@ -4,7 +4,7 @@
 
 Neither plugin is required, because stores send marketing email in different places:
 - **Resend** sends each approved email on its own. Choose it when the team wants personal, one-to-one emails. Its domain must be verified in Resend.
-- **Klaviyo** is for stores that already run their marketing there. Its tools cannot send email, so the run adds the customers to a list and the team sends a campaign from Klaviyo. The personalised drafts then serve as a starting point, not as the emails that go out.
+- **Klaviyo** is for stores that already run their marketing there; it checks consent and adds the unsubscribe link itself. Its tools cannot send email or add profiles to a list, so the run sets the win-back details on each approved customer's profile: `win_back_date`, `win_back_products`, `win_back_product_urls` and `win_back_offer`. The team builds one flow in Klaviyo, triggered by the date property `win_back_date` (on the day), whose email uses those properties. Klaviyo's tools cannot create flows, so walk the user through it and tell them the first emails only go out once the flow is live. The personalised drafts in the run summary then serve as a starting point for the flow's email, not as the emails that go out.
 - **Neither**: the run still finds the customers and drafts the emails, so the team can try it before connecting anything. Say that nothing will be sent.
 
 Ask which the team uses. Offer Resend when they have neither and want the emails sent.
@@ -17,7 +17,7 @@ Ask which the team uses. Offer Resend when they have neither and want the emails
 
 ## Parameters
 
-Ask for the inactivity window, the cooldown, the weekly limit, the offer and the language in one question. Suggest a weekly limit the team can actually review: 25 approvals a week is a lot for a small team. With Klaviyo, also ask which list to add customers to.
+Ask for the inactivity window, the cooldown, the weekly limit, the offer and the language in one question. Suggest a weekly limit the team can actually review: 25 approvals a week is a lot for a small team. With Klaviyo, check that the flow exists or walk the user through building it.
 
 ## Mutation policy
 

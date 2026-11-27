@@ -101,7 +101,7 @@ test('the published template catalog conforms', async () => {
     plugins: Array<{ name: string }>;
   };
 
-  assert.equal(await validateTemplates(repository, new Set(index.plugins.map((plugin) => plugin.name))), 28);
+  assert.equal(await validateTemplates(repository, new Set(index.plugins.map((plugin) => plugin.name))), 39);
 });
 
 test('a valid catalog passes, Finder metadata is ignored, and a missing index means no templates', async () => {

@@ -7,17 +7,17 @@
   "category": "marketing",
   "icon": "mail",
   "color": "rose",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "howItWorks": [
     { "label": "Trigger", "text": "Every Monday morning" },
     { "label": "Finds", "text": "Customers whose last order was a set number of days ago and who accept marketing email" },
     { "label": "Drafts", "text": "A short personal email for each, based on what they bought before" },
-    { "label": "Sends", "text": "With Resend, or adds them to a Klaviyo list, only after you approve" },
+    { "label": "Sends", "text": "With Resend, or through your Klaviyo flow, only after you approve" },
     { "label": "Remembers", "text": "Who was emailed, so nobody hears from you twice within the cooldown" }
   ],
   "plugins": [
     { "id": "resend", "required": false, "reason": "Sends each approved email individually" },
-    { "id": "klaviyo", "required": false, "reason": "Adds the customers to a win-back list for a campaign you send from Klaviyo" }
+    { "id": "klaviyo", "required": false, "reason": "Sets the win-back date on the customer's profile so your Klaviyo flow sends it, with Klaviyo's own consent and unsubscribe handling" }
   ],
   "data": [
     { "key": "customerEmail", "description": "The customer's email address", "entityHint": "customer", "fieldHint": "email", "type": "string", "required": true },

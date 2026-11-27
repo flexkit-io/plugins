@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "name": "review-moderation-policy",
+  "kind": "skill",
+  "displayName": "Review moderation policy",
+  "description": "Your rules for which reviews go live, which wait for a person and which are rejected, so moderation is consistent, fair and never hides honest criticism.",
+  "category": "orders-customers",
+  "icon": "scale",
+  "color": "violet",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Reads", "text": "Recent reviews, including any you held or rejected, to learn how you moderate today" },
+    { "label": "Interview", "text": "What you allow, hold and reject, and how you treat links, incentives and competitors" },
+    { "label": "Result", "text": "A policy the agent follows whenever it moderates or answers a question about a review" }
+  ],
+  "plugins": [],
+  "data": [
+    { "key": "reviews", "description": "Existing reviews with their text, rating and moderation status", "entityHint": "review", "fieldHint": "status", "type": "string", "required": false }
+  ],
+  "parameters": [],
+  "skill": { "loadMode": "on_demand" },
+  "keywords": ["reviews", "moderation", "policy", "spam", "ugc", "guidelines", "trust"]
+}

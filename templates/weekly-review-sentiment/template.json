@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "name": "weekly-review-sentiment",
+  "kind": "automation",
+  "displayName": "Weekly review sentiment report",
+  "description": "Every Monday, sums up last week's reviews in Slack: rating and sentiment against the previous four weeks, what customers praised and criticised most with a quote each, products that slipped, and anything new.",
+  "category": "reporting",
+  "icon": "smile",
+  "color": "emerald",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Every Monday morning in your time zone" },
+    { "label": "Compares", "text": "Last week's average rating and sentiment with the previous four weeks" },
+    { "label": "Finds", "text": "The most praised and criticised topics, products whose reviews got worse, and new complaints" },
+    { "label": "Posts", "text": "A short report to your Slack channel" },
+    { "label": "Optional", "text": "Proposes a Linear issue for a new complaint, for you to approve" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": true, "reason": "Posts the weekly report to your team's channel" },
+    { "id": "linear", "required": false, "reason": "Turns a new recurring complaint into an issue once you approve it" }
+  ],
+  "data": [
+    { "key": "rating", "description": "The star rating, usually 1 to 5", "entityHint": "review", "fieldHint": "rating", "type": "number", "required": true },
+    { "key": "reviewText", "description": "What the customer wrote, for topics and quotes", "entityHint": "review", "fieldHint": "body", "type": "string", "required": true },
+    { "key": "reviewDate", "description": "When the review was written or received", "entityHint": "review", "fieldHint": "createdAt", "type": "date", "required": true },
+    { "key": "reviewProduct", "description": "The product the review is about", "entityHint": "review", "fieldHint": "product", "type": "reference", "required": false },
+    { "key": "reviewStatus", "description": "The moderation status, to leave out spam and rejected reviews", "entityHint": "review", "fieldHint": "status", "type": "string", "required": false },
+    { "key": "sentiment", "description": "The sentiment tag saved by review moderation or review triage", "entityHint": "review", "fieldHint": "sentiment", "type": "string", "required": false },
+    { "key": "topic", "description": "The topic tag saved by review moderation or review triage", "entityHint": "review", "fieldHint": "topic", "type": "string", "required": false }
+  ],
+  "parameters": [
+    { "key": "schedule", "label": "When to post", "type": "cron", "default": "0 9 * * 1", "description": "Mondays at 9:00 by default" },
+    { "key": "timezone", "label": "Time zone", "type": "timezone", "default": "Europe/London", "description": "Used for the schedule and for where the week starts and ends" },
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Where the report is posted" },
+    { "key": "minimumReviews", "label": "Fewest reviews for comparisons", "type": "number", "default": 5, "description": "With fewer reviews in the week, the report lists them instead of comparing percentages" },
+    { "key": "proposeIssues", "label": "Propose Linear issues for new complaints", "type": "boolean", "default": false, "description": "Needs Linear; every issue waits for approval" }
+  ],
+  "automation": {
+    "trigger": { "type": "schedule", "cron": "0 9 * * 1", "timezone": "Europe/London" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "always",
+    "recommendedSkills": []
+  },
+  "keywords": ["reviews", "sentiment", "customer feedback", "ratings", "weekly report", "voice of customer", "slack", "linear"]
+}

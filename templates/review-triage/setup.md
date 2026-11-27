@@ -9,7 +9,9 @@
 
 ## Trigger
 
-Entity trigger on the review entity, event create. If the review app creates reviews in a pending state and publishes them later, keep create: triage should happen before a review goes public, not after.
+Check whether Review moderation is installed (`listAutomations`), or is being set up in this chat.
+- **Without review moderation**: entity trigger on the review entity, event create. If the review app creates reviews in a pending state and publishes them later, keep create: triage should happen before a review goes public, not after.
+- **With review moderation**: entity trigger on the review entity, event **update**. Moderation publishes or holds each new review and saves its sentiment and topic; triage then runs on that update, acts only when the status has just changed to published, reuses the saved tags, and drafts the reply and escalation. Held reviews are moderation's job (it posts them to Slack); triage picks them up if a person publishes them later. An update from another automation does start triage: chains between different automations are allowed.
 
 ## Parameters
 
