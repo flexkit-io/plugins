@@ -1,0 +1,63 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "gorgias",
+  "version": "1.0.0",
+  "description": "Answer and triage Gorgias tickets, look up customers and their store orders, and report on support volume, response times and satisfaction.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/gorgias",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "gorgias",
+    "customer support",
+    "helpdesk",
+    "shopify",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Gorgias",
+      "logo": "./assets/logo.svg",
+      "category": "support",
+      "supportedScopes": [
+        "project",
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "mcp-oauth",
+        "provider": "mcp",
+        "credentialGroup": "gorgias",
+        "requiredScopes": [
+          "openid",
+          "email",
+          "offline",
+          "account:read",
+          "users:read",
+          "customers:read",
+          "customers:write",
+          "tickets:read",
+          "tickets:write",
+          "tags:read",
+          "macros:read",
+          "custom_fields:read",
+          "satisfaction_survey:read",
+          "statistics:read",
+          "help_center:read",
+          "ecommerce:read",
+          "integrations:read"
+        ],
+        "mcpServers": [
+          "gorgias"
+        ]
+      }
+    }
+  }
+}
