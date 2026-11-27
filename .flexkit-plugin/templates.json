@@ -1,0 +1,37 @@
+{
+  "name": "flexkit",
+  "templates": [
+    {
+      "name": "product-description-writer",
+      "source": "./templates/product-description-writer"
+    },
+    {
+      "name": "low-stock-alert",
+      "source": "./templates/low-stock-alert"
+    },
+    {
+      "name": "daily-sales-digest",
+      "source": "./templates/daily-sales-digest"
+    },
+    {
+      "name": "order-webhook-intake",
+      "source": "./templates/order-webhook-intake"
+    },
+    {
+      "name": "failed-job-responder",
+      "source": "./templates/failed-job-responder"
+    },
+    {
+      "name": "brand-voice",
+      "source": "./templates/brand-voice"
+    },
+    {
+      "name": "product-copy-guidelines",
+      "source": "./templates/product-copy-guidelines"
+    },
+    {
+      "name": "reporting-definitions",
+      "source": "./templates/reporting-definitions"
+    }
+  ]
+}

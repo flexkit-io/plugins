@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "name": "low-stock-alert",
+  "kind": "automation",
+  "displayName": "Low-stock alert",
+  "description": "Warns the team in Slack when a product's stock drops to a threshold, and can draft a reorder email to the supplier for you to approve.",
+  "category": "catalog",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Checks stock levels every 30 minutes" },
+    { "label": "Does", "text": "Posts the products that just ran low to Slack, with recent sales and days of cover" },
+    { "label": "Optional", "text": "Drafts a purchase order email to each supplier with Resend" },
+    { "label": "Asks you", "text": "Before any email is sent" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": true, "reason": "Posts the low-stock alert to your team's channel" },
+    { "id": "resend", "required": false, "reason": "Emails a reorder request to the supplier once you approve it" }
+  ],
+  "data": [
+    { "key": "productName", "description": "The product or variant's name", "entityHint": "product", "fieldHint": "name", "type": "string", "required": true },
+    { "key": "sku", "description": "The SKU, so the team and supplier know exactly which item", "entityHint": "product", "fieldHint": "sku", "type": "string", "required": false },
+    { "key": "stock", "description": "The quantity on hand", "entityHint": "product", "fieldHint": "stock", "type": "number", "required": true },
+    { "key": "reorderPoint", "description": "A per-product threshold, when the store keeps one (overrides the default threshold)", "entityHint": "product", "fieldHint": "reorderPoint", "type": "number", "required": false },
+    { "key": "supplier", "description": "The supplier the product is bought from, with a contact email", "entityHint": "supplier", "fieldHint": "email", "type": "reference", "required": false },
+    { "key": "orderLines", "description": "Order line items (product and quantity), to work out recent sales", "entityHint": "orderLine", "fieldHint": "quantity", "type": "number", "required": false }
+  ],
+  "parameters": [
+    { "key": "threshold", "label": "Low-stock threshold", "type": "number", "default": 5, "description": "Alert when stock is at or below this, unless the product has its own reorder point" },
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Where the alert is posted" },
+    { "key": "coverDays", "label": "Reorder for this many days", "type": "number", "default": 30, "description": "The suggested reorder quantity covers this many days of recent sales" },
+    { "key": "draftSupplierEmail", "label": "Draft supplier emails", "type": "boolean", "default": false, "description": "Draft a reorder email per supplier (needs Resend); nothing is sent without approval" }
+  ],
+  "automation": {
+    "trigger": { "type": "poll", "intervalMinutes": 30 },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "when_flagged",
+    "recommendedSkills": []
+  },
+  "keywords": ["inventory", "stock", "reorder", "purchase order", "supplier", "out of stock", "slack"]
+}
