@@ -358,8 +358,6 @@ export async function validateCatalog(root: string): Promise<number> {
     }
   }
 
-  await validateTemplates(root, seen);
-
   return seen.size;
 }
 
@@ -369,6 +367,11 @@ const templateFiles = new Map([
   ['setup.md', 20_000],
   ['example.md', 20_000],
 ]);
+
+/** macOS Finder writes .DS_Store files into folders it opens; they are not part of a template. */
+function isFinderMetadata(path: string): boolean {
+  return path === '.DS_Store' || path.endsWith('/.DS_Store');
+}
 
 interface TemplateManifest {
   name: string;
@@ -407,7 +410,7 @@ function checkParameters(name: string, parameters: TemplateManifest['parameters'
 
 /**
  * Validates the template catalog: `.flexkit-plugin/templates.json` and every `templates/<name>/` it lists.
- * The index is a separate file from marketplace.json so backends that predate templates never read it; a
+ * `validateCatalog` does not call it; pass it the plugin names from marketplace.json. The index is a separate file from marketplace.json so backends that predate templates never read it; a
  * repository without one has no templates. Returns the number of templates.
  */
 export async function validateTemplates(root: string, pluginIds: ReadonlySet<string>): Promise<number> {
@@ -458,7 +461,7 @@ export async function validateTemplates(root: string, pluginIds: ReadonlySet<str
       throw new Error(`template ${item.name}: ${item.source} must be a directory, not a symlink`);
     }
 
-    const files = await walk(templateRoot);
+    const files = (await walk(templateRoot)).filter((file) => !isFinderMetadata(file));
     const texts = new Map<string, string>();
 
     for (const file of files) {
@@ -513,8 +516,8 @@ export async function validateTemplates(root: string, pluginIds: ReadonlySet<str
     if (typed.kind === 'automation') {
       const keys = new Set(typed.parameters.map((parameter) => parameter.key));
 
-      for (const [, placeholder] of (texts.get('instructions.md') as string).matchAll(/\{\{\s*([^}\s]+)\s*\}\}/g)) {
-        if (!keys.has(placeholder)) {
+      for (const [, placeholder] of (texts.get('instructions.md') as string).matchAll(/\{\{([^}]*)\}\}/g)) {
+        if (!keys.has(placeholder.trim())) {
           throw new Error(`template ${item.name}: instructions.md uses {{${placeholder}}}, which is not a parameter`);
         }
       }
@@ -538,7 +541,7 @@ export async function validateTemplates(root: string, pluginIds: ReadonlySet<str
 
     throw error;
   });
-  const unlisted = directories.filter((entry) => !manifests.has(entry));
+  const unlisted = directories.filter((entry) => !manifests.has(entry) && !isFinderMetadata(entry));
 
   if (unlisted.length) {
     throw new Error(`templates/ has entries that are not in .flexkit-plugin/templates.json: ${unlisted.join(', ')}`);

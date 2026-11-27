@@ -104,10 +104,12 @@ test('the published template catalog conforms', async () => {
   assert.equal(await validateTemplates(repository, new Set(index.plugins.map((plugin) => plugin.name))), 8);
 });
 
-test('a valid catalog passes and a missing index means no templates', async () => {
+test('a valid catalog passes, Finder metadata is ignored, and a missing index means no templates', async () => {
   const root = await catalog({});
 
   try {
+    await writeFile(join(root, 'templates/.DS_Store'), '');
+    await writeFile(join(root, 'templates/voice/.DS_Store'), '');
     assert.equal(await validateTemplates(root, plugins), 2);
     await rm(join(root, '.flexkit-plugin/templates.json'));
     await rm(join(root, 'templates'), { recursive: true });
@@ -179,6 +181,14 @@ test('plugins, recommended skills, parameters and placeholders are cross-checked
   await rejects(
     { templates: withVoice('stock-check', { 'template.json': automation(), 'instructions.md': 'Post to {{slackChannel}}.' }) },
     /uses \{\{slackChannel\}\}, which is not a parameter/
+  );
+  await rejects(
+    { templates: withVoice('stock-check', { 'template.json': automation(), 'instructions.md': 'Alert below {{low threshold}}.' }) },
+    /uses \{\{low threshold\}\}, which is not a parameter/
+  );
+  await rejects(
+    { templates: withVoice('stock-check', { 'template.json': automation({ parameters: [{ key: 'note', label: 'Note', type: 'string', default: 'x'.repeat(501) }] }), 'instructions.md': 'x' }) },
+    /must NOT have more than 500 characters/
   );
 });
 

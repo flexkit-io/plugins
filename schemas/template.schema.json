@@ -72,7 +72,7 @@
           "key": { "$ref": "#/$defs/key" },
           "label": { "type": "string", "minLength": 1, "maxLength": 80 },
           "type": { "type": "string", "enum": ["string", "number", "boolean", "cron", "timezone", "channel", "select"] },
-          "default": { "type": ["string", "number", "boolean"] },
+          "default": { "type": ["string", "number", "boolean"], "maxLength": 500 },
           "description": { "type": "string", "maxLength": 300 },
           "options": {
             "type": "array",

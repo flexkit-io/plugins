@@ -3,11 +3,11 @@
   "name": "failed-job-responder",
   "kind": "automation",
   "displayName": "Failed automation responder",
-  "description": "When any automation run fails, explains what went wrong in plain language, suggests a fix and tells the team, without repeating itself for the same error.",
+  "description": "When an automation you pick fails, explains what went wrong in plain language, suggests a fix and tells the team, without repeating itself for the same error.",
   "category": "team-ops",
   "version": "1.0.0",
   "howItWorks": [
-    { "label": "Trigger", "text": "Any automation run in the project fails" },
+    { "label": "Trigger", "text": "A run of the automation you pick fails" },
     { "label": "Does", "text": "Reads the failed run and works out the likely cause" },
     { "label": "Suggests", "text": "A concrete fix: reconnect a plugin, update a field name, adjust the instructions" },
     { "label": "Notifies", "text": "The automation's owner, and a Slack channel if you pick one" }
@@ -18,11 +18,10 @@
   "data": [],
   "parameters": [
     { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Optional; without it the explanation goes to the run notification only" },
-    { "key": "repeatWindowHours", "label": "Quiet period for repeat failures (hours)", "type": "number", "default": 6, "description": "The same automation failing for the same reason within this window is summarised, not re-posted" },
-    { "key": "ignoredAutomations", "label": "Automations to ignore", "type": "string", "default": "", "description": "Comma-separated automation names that should not be reported" }
+    { "key": "repeatWindowHours", "label": "Quiet period for repeat failures (hours)", "type": "number", "default": 6, "description": "A failure with the same cause within this window is counted, not re-posted" }
   ],
   "automation": {
-    "trigger": { "type": "job", "job": "automation_run", "outcome": "failed", "automationId": null },
+    "trigger": { "type": "job", "job": "automation_run", "outcome": "failed" },
     "mutationPolicy": "require_approval",
     "notifyRule": "when_flagged",
     "recommendedSkills": []
