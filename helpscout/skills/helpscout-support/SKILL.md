@@ -7,12 +7,12 @@ description: Search Help Scout conversations and customers, summarize support th
 
 The Help Scout tools act as the Help Scout user who connected, and only see the inboxes that user can see. Look up the exact tool names and parameters in the tool list; do not assume a tool exists.
 
-The connector is read-only for most accounts: you can find, read and summarize, but you cannot reply, add notes, change tags, status or assignee, or edit Docs articles. When the user wants one of those, do the preparation (the draft reply, the note, the list of conversations to close) and tell them to apply it in Help Scout. If the tool list does include a write tool, never send a reply or change a conversation without showing the user exactly what will happen and getting their agreement first.
+The connector is read-only for most accounts: you can find, read and summarize, but you cannot reply, add notes, change tags, status or assignee, or edit Docs articles. When the user wants one of those, do the preparation (the draft reply, the note, the list of conversations to close) and tell them to apply it in Help Scout. If the tool list does include a write tool, state exactly what it will do (the conversation, the customer and the full reply or change) before you call it; the call follows the project's approval rules.
 
 ## Finding the right conversation
 
 - Search by what the user gives you: the customer's email, the conversation number shown in Help Scout (`#1234`, which is not the conversation id), the subject, a tag, or a date range. Narrow to an inbox when the user names one.
-- Conversations have a status (active, pending, closed, spam) and only some searches include closed ones. When nothing turns up, say which inboxes and statuses you searched, and that the connected user may not have access to the inbox it is in.
+- Conversations have a status (active, pending, closed, spam), and searches often cover only active and pending ones by default. When the conversation may be older or resolved, search again with closed included before you conclude it does not exist. When nothing turns up, say which inboxes and statuses you searched, and that the connected user may not have access to the inbox it is in.
 - When several conversations match, list them briefly (number, subject, customer, status, last update) and ask which one rather than guessing.
 - Read the threads before summarizing. Customer messages, agent replies and internal notes are different thread types; say which is which, and never present an internal note as something the customer was told.
 - Attachments show only their file names; you cannot open them. Say so when an attachment matters.
@@ -29,7 +29,7 @@ Support questions are usually about orders, products or accounts that live in Fl
 
 - Draft in the voice of the team's earlier replies in the same conversation or inbox. Check the inbox's saved replies first and reuse the matching one, adapted to this customer.
 - Base the draft on facts from the thread, from Flexkit records and from Docs articles. Do not promise refunds, replacements, discounts or delivery dates that nobody has agreed to; leave a clear placeholder for the agent to fill in instead.
-- Link Docs articles by their public URL when they answer the question.
+- Link Docs articles by their public URL when they answer the question. Docs tools work only when a Docs API key was added to the connection; if they are missing or fail, say that Docs needs a Docs API key added on Help Scout's side and draft without them. Never ask for the key in chat.
 - Present the draft as text for the user to paste into Help Scout, and say which conversation it is for.
 
 ## Customer data
@@ -38,4 +38,4 @@ Conversations and customer profiles hold personal data (emails, phone numbers, a
 
 ## Reporting
 
-Reports need a Plus or Pro plan. Ask for or state the date range and the inboxes or tags you report on. Use Help Scout's own reports for volume, first response and resolution times, replies per conversation, busiest times and happiness ratings, rather than counting conversations by hand. For "what are customers contacting us about", sample recent conversations, group them into themes with counts and an example each, and link the themes to Flexkit products or orders when they concern specific ones. Summarize; do not paste long lists of conversations.
+Reports need a Plus or Pro plan. Without report tools, estimate from a conversation search over the date range and say the numbers are approximate counts, not Help Scout's report figures. Ask for or state the date range and the inboxes or tags you report on. Use Help Scout's own reports for volume, first response and resolution times, replies per conversation, busiest times and happiness ratings, rather than counting conversations by hand. For "what are customers contacting us about", sample recent conversations, group them into themes with counts and an example each, and link the themes to Flexkit products or orders when they concern specific ones. Summarize; do not paste long lists of conversations.
