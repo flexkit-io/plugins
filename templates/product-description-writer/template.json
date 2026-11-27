@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "name": "product-description-writer",
+  "kind": "automation",
+  "displayName": "Product description writer",
+  "description": "Drafts a description, bullet points and SEO title and meta description for every new product, ready for you to review before anything is saved.",
+  "category": "catalog",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "A product is created" },
+    { "label": "Does", "text": "Writes a description, bullet points and SEO meta from the product's own details" },
+    { "label": "Asks you", "text": "To approve the copy before it is saved to the product" }
+  ],
+  "plugins": [],
+  "data": [
+    { "key": "productName", "description": "The product's name or title", "entityHint": "product", "fieldHint": "name", "type": "string", "required": true },
+    { "key": "productDescription", "description": "The long description shown on the product page", "entityHint": "product", "fieldHint": "description", "type": "string", "required": true },
+    { "key": "productFacts", "description": "Fields that describe the product: material, dimensions, colour, care, attributes, variants", "entityHint": "product", "type": "any", "required": false },
+    { "key": "productCategory", "description": "The product's category or collection, for context", "entityHint": "product", "fieldHint": "category", "type": "reference", "required": false },
+    { "key": "bulletPoints", "description": "Short key-feature bullets", "entityHint": "product", "fieldHint": "bulletPoints", "type": "string", "required": false },
+    { "key": "seoTitle", "description": "The page title used by search engines", "entityHint": "product", "fieldHint": "seoTitle", "type": "string", "required": false },
+    { "key": "seoDescription", "description": "The meta description used by search engines", "entityHint": "product", "fieldHint": "seoDescription", "type": "string", "required": false }
+  ],
+  "parameters": [
+    { "key": "language", "label": "Language", "type": "string", "default": "English", "description": "The language to write the copy in" },
+    { "key": "descriptionLength", "label": "Description length", "type": "select", "default": "medium", "options": ["short", "medium", "long"], "description": "short is about 50 words, medium about 120, long about 250" },
+    { "key": "bulletCount", "label": "Number of bullet points", "type": "number", "default": 5, "description": "How many key-feature bullets to write (0 to skip bullets)" },
+    { "key": "overwriteExisting", "label": "Rewrite existing copy", "type": "boolean", "default": false, "description": "When off, fields that already have text are left alone" }
+  ],
+  "automation": {
+    "trigger": { "type": "entity", "entityHint": "product", "events": ["create"] },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "when_flagged",
+    "recommendedSkills": ["brand-voice", "product-copy-guidelines"]
+  },
+  "keywords": ["product copy", "description", "seo", "meta description", "bullet points", "catalog", "pdp", "copywriting"]
+}

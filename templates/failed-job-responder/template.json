@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "name": "failed-job-responder",
+  "kind": "automation",
+  "displayName": "Failed automation responder",
+  "description": "When an automation you pick fails, explains what went wrong in plain language, suggests a fix and tells the team, without repeating itself for the same error.",
+  "category": "team-ops",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "A run of the automation you pick fails" },
+    { "label": "Does", "text": "Reads the failed run and works out the likely cause" },
+    { "label": "Suggests", "text": "A concrete fix: reconnect a plugin, update a field name, adjust the instructions" },
+    { "label": "Notifies", "text": "The automation's owner, and a Slack channel if you pick one" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": false, "reason": "Posts the failure and suggested fix to a channel" }
+  ],
+  "data": [],
+  "parameters": [
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Optional; without it the explanation goes to the run notification only" },
+    { "key": "repeatWindowHours", "label": "Quiet period for repeat failures (hours)", "type": "number", "default": 6, "description": "A failure with the same cause within this window is counted, not re-posted" }
+  ],
+  "automation": {
+    "trigger": { "type": "job", "job": "automation_run", "outcome": "failed" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "when_flagged",
+    "recommendedSkills": []
+  },
+  "keywords": ["failures", "errors", "monitoring", "alerts", "automations", "on-call", "slack"]
+}

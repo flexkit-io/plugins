@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "name": "reporting-definitions",
+  "kind": "skill",
+  "displayName": "Reporting definitions",
+  "description": "One agreed definition of revenue, orders, AOV, customers and the other numbers you report on, so every digest, report and answer uses the same maths.",
+  "category": "reporting",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Reads", "text": "Your order and customer schema and the status values in use" },
+    { "label": "Interview", "text": "What counts as revenue, which orders to exclude, your week and time zone" },
+    { "label": "Result", "text": "A skill the agent loads whenever it reports on sales or customers" }
+  ],
+  "plugins": [],
+  "data": [
+    { "key": "orders", "description": "Orders with total, status, placed date and currency", "entityHint": "order", "fieldHint": "total", "type": "number", "required": false },
+    { "key": "customers", "description": "Customers, to define new and returning customers", "entityHint": "customer", "fieldHint": "email", "type": "string", "required": false }
+  ],
+  "parameters": [],
+  "skill": { "loadMode": "on_demand" },
+  "keywords": ["metrics", "kpi", "revenue", "aov", "reporting", "definitions", "analytics"]
+}

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "name": "daily-sales-digest",
+  "kind": "automation",
+  "displayName": "Daily sales digest",
+  "description": "Posts yesterday's revenue, orders, average order value and top products to Slack every morning, and calls out anything unusual against the 7-day average.",
+  "category": "reporting",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Every morning at 8:00 in your time zone" },
+    { "label": "Does", "text": "Totals yesterday's revenue, orders, AOV and top products" },
+    { "label": "Compares", "text": "Each number with the previous 7-day average and explains big swings" },
+    { "label": "Posts", "text": "A short digest to your Slack channel" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": true, "reason": "Posts the digest to your team's channel" }
+  ],
+  "data": [
+    { "key": "orderTotal", "description": "The order's total paid amount", "entityHint": "order", "fieldHint": "total", "type": "number", "required": true },
+    { "key": "orderDate", "description": "When the order was placed", "entityHint": "order", "fieldHint": "createdAt", "type": "date", "required": true },
+    { "key": "orderStatus", "description": "The order's status, to leave out cancelled, test and fully refunded orders", "entityHint": "order", "fieldHint": "status", "type": "string", "required": false },
+    { "key": "refundedAmount", "description": "Amount refunded on the order", "entityHint": "order", "fieldHint": "refundedAmount", "type": "number", "required": false },
+    { "key": "lineItems", "description": "Order line items with product and quantity, for top products", "entityHint": "orderLine", "fieldHint": "quantity", "type": "reference", "required": false },
+    { "key": "currency", "description": "The order's currency, when the store sells in more than one", "entityHint": "order", "fieldHint": "currency", "type": "string", "required": false }
+  ],
+  "parameters": [
+    { "key": "schedule", "label": "When to post", "type": "cron", "default": "0 8 * * *", "description": "Every day at 8:00 by default" },
+    { "key": "timezone", "label": "Time zone", "type": "timezone", "default": "Europe/London", "description": "Used for the schedule and for what counts as \"yesterday\"" },
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Where the digest is posted" },
+    { "key": "topProductCount", "label": "Top products to list", "type": "number", "default": 5 },
+    { "key": "anomalyPercent", "label": "Call out changes above (%)", "type": "number", "default": 25, "description": "A metric that differs from its 7-day average by more than this is called out" }
+  ],
+  "automation": {
+    "trigger": { "type": "schedule", "cron": "0 8 * * *", "timezone": "Europe/London" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "always",
+    "recommendedSkills": ["reporting-definitions"]
+  },
+  "keywords": ["sales", "revenue", "aov", "orders", "kpi", "daily report", "digest", "slack"]
+}

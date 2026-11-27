@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://flexkit.io/schemas/templates.schema.json",
+  "title": "Flexkit template catalog index (.flexkit-plugin/templates.json)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "templates"],
+  "properties": {
+    "name": { "type": "string", "const": "flexkit" },
+    "templates": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "source"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 64 },
+          "source": { "type": "string", "pattern": "^\\./templates/[a-z0-9]+(?:-[a-z0-9]+)*$" }
+        }
+      }
+    }
+  }
+}

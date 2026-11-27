@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "name": "order-webhook-intake",
+  "kind": "automation",
+  "displayName": "Order webhook intake",
+  "description": "Turns order webhooks from your store or checkout into Order and Customer records, and flags high-value or risky orders for a person to check.",
+  "category": "orders-customers",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Your store or checkout sends an order to a webhook URL" },
+    { "label": "Does", "text": "Creates or updates the order and its customer, matched by order number and email" },
+    { "label": "Flags", "text": "High-value orders and orders with fraud warning signs" },
+    { "label": "Asks you", "text": "To approve each set of record changes" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": false, "reason": "Posts flagged orders to a channel so someone checks them quickly" }
+  ],
+  "data": [
+    { "key": "orderNumber", "description": "The order's number or id in the source system, used to avoid duplicates", "entityHint": "order", "fieldHint": "orderNumber", "type": "string", "required": true },
+    { "key": "orderTotal", "description": "The order's total", "entityHint": "order", "fieldHint": "total", "type": "number", "required": true },
+    { "key": "orderStatus", "description": "The order's payment or fulfilment status", "entityHint": "order", "fieldHint": "status", "type": "string", "required": false },
+    { "key": "orderLines", "description": "The order's line items (product, SKU, quantity, price)", "entityHint": "orderLine", "type": "any", "required": false },
+    { "key": "orderCustomer", "description": "The link from the order to its customer", "entityHint": "order", "fieldHint": "customer", "type": "reference", "required": true },
+    { "key": "customerEmail", "description": "The customer's email, used to find an existing customer", "entityHint": "customer", "fieldHint": "email", "type": "string", "required": true },
+    { "key": "customerName", "description": "The customer's name", "entityHint": "customer", "fieldHint": "name", "type": "string", "required": false },
+    { "key": "addresses", "description": "Billing and shipping addresses", "entityHint": "order", "fieldHint": "shippingAddress", "type": "any", "required": false },
+    { "key": "reviewFlag", "description": "A field to mark an order for review, with a reason", "entityHint": "order", "fieldHint": "reviewReason", "type": "string", "required": false }
+  ],
+  "parameters": [
+    { "key": "highValueThreshold", "label": "High-value order amount", "type": "number", "default": 500, "description": "Flag orders whose total is at or above this, in the store's currency" },
+    { "key": "channel", "label": "Slack channel for flagged orders", "type": "channel", "description": "Optional; leave empty to only flag the order record" },
+    { "key": "updateExistingCustomers", "label": "Update existing customers", "type": "boolean", "default": true, "description": "Fill in missing customer details (name, phone, address) from new orders" }
+  ],
+  "automation": {
+    "trigger": { "type": "webhook" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "when_flagged",
+    "recommendedSkills": []
+  },
+  "keywords": ["orders", "customers", "webhook", "fraud", "high value", "intake", "sync", "checkout"]
+}
