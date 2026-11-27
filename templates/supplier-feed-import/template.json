@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "name": "supplier-feed-import",
+  "kind": "automation",
+  "displayName": "Supplier feed import",
+  "description": "Takes a supplier's price and stock feed sent to a webhook, matches each row to your products, proposes the price and stock updates for approval and reports what changed.",
+  "category": "catalog",
+  "icon": "truck",
+  "color": "blue",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "The supplier's system, or your integration, posts the feed to a webhook" },
+    { "label": "Matches", "text": "Each row to a product by SKU or the supplier's item code" },
+    { "label": "Updates", "text": "Stock and cost, and optionally the selling price, only where they changed" },
+    { "label": "Asks you", "text": "To approve the updates, with unusual changes called out" },
+    { "label": "Reports", "text": "What changed, what was skipped and which rows did not match" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": false, "reason": "Posts the import report to a channel" }
+  ],
+  "data": [
+    { "key": "sku", "description": "The product's SKU, to match feed rows", "entityHint": "product", "fieldHint": "sku", "type": "string", "required": true },
+    { "key": "stock", "description": "The quantity on hand, updated from the feed", "entityHint": "product", "fieldHint": "stock", "type": "number", "required": false },
+    { "key": "cost", "description": "What the product costs the store, updated from the supplier's price", "entityHint": "product", "fieldHint": "cost", "type": "number", "required": false },
+    { "key": "price", "description": "The selling price, updated only when price updates are on", "entityHint": "product", "fieldHint": "price", "type": "number", "required": false },
+    { "key": "supplierSku", "description": "The supplier's own item code, when it differs from the store's SKU", "entityHint": "product", "fieldHint": "supplierSku", "type": "string", "required": false },
+    { "key": "supplier", "description": "The supplier the product is bought from, so rows only update that supplier's products", "entityHint": "supplier", "fieldHint": "name", "type": "reference", "required": false }
+  ],
+  "parameters": [
+    { "key": "supplierName", "label": "Supplier", "type": "string", "default": "", "description": "The supplier this feed comes from; leave empty when one feed covers every product" },
+    { "key": "matchBy", "label": "Match rows by", "type": "select", "default": "SKU", "options": ["SKU", "supplier item code"], "description": "Which field of the feed identifies the product" },
+    { "key": "updatePrices", "label": "Update selling prices", "type": "boolean", "default": false, "description": "When off, only stock and cost are updated; the selling price stays as you set it" },
+    { "key": "maxChangePercent", "label": "Call out cost or price changes above (%)", "type": "number", "default": 15, "description": "Changes bigger than this are listed first in the approval and the report" },
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Optional; where the import report is posted" }
+  ],
+  "automation": {
+    "trigger": { "type": "webhook" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "always",
+    "recommendedSkills": ["data-entry-conventions"]
+  },
+  "keywords": ["supplier", "feed", "import", "stock", "cost price", "inventory", "csv", "wholesale", "webhook"]
+}

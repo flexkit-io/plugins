@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "name": "customer-communication-playbook",
+  "kind": "skill",
+  "displayName": "Customer communication playbook",
+  "description": "How you answer refunds, late deliveries, complaints and reviews, what you may offer, and when a person has to take over, so every reply the agent drafts follows your policy.",
+  "category": "orders-customers",
+  "icon": "message-square",
+  "color": "sky",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Reads", "text": "Your returns and delivery policies and a few replies your team has sent" },
+    { "label": "Interview", "text": "What you offer for each kind of problem and when to hand over to a person" },
+    { "label": "Result", "text": "A skill the agent loads whenever it drafts a reply to a customer" }
+  ],
+  "plugins": [],
+  "data": [
+    { "key": "policyPages", "description": "Pages that state the returns, refund and delivery policies", "entityHint": "page", "fieldHint": "body", "type": "string", "required": false },
+    { "key": "pastReplies", "description": "Replies the team has sent, such as answers to reviews or support messages", "entityHint": "review", "fieldHint": "reply", "type": "string", "required": false }
+  ],
+  "parameters": [],
+  "skill": { "loadMode": "on_demand" },
+  "keywords": ["customer service", "support", "refunds", "returns", "complaints", "reviews", "escalation", "replies"]
+}

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "name": "pricing-discount-policy",
+  "kind": "skill",
+  "displayName": "Pricing and discount policy",
+  "description": "Your margin floors, price rounding, discount limits and who approves exceptions, so the agent can tell a normal price change from one that needs a manager.",
+  "category": "catalog",
+  "icon": "receipt",
+  "color": "amber",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Reads", "text": "Your prices, costs and current discounts to find the margins you work with" },
+    { "label": "Interview", "text": "Margin floors, rounding, the largest allowed discount and who signs off exceptions" },
+    { "label": "Result", "text": "A skill the agent loads whenever it checks, sets or discounts a price" }
+  ],
+  "plugins": [],
+  "data": [
+    { "key": "price", "description": "The selling price", "entityHint": "product", "fieldHint": "price", "type": "number", "required": false },
+    { "key": "cost", "description": "The unit cost, to work out margins", "entityHint": "product", "fieldHint": "cost", "type": "number", "required": false },
+    { "key": "compareAtPrice", "description": "The original price shown next to a sale price", "entityHint": "product", "fieldHint": "compareAtPrice", "type": "number", "required": false }
+  ],
+  "parameters": [],
+  "skill": { "loadMode": "on_demand" },
+  "keywords": ["pricing", "discounts", "margin", "price policy", "approvals", "sale", "promotions"]
+}

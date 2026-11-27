@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "name": "price-change-guard",
+  "kind": "automation",
+  "displayName": "Price change guard",
+  "description": "Catches risky price changes as they happen (a big jump or drop, or a price below cost) and proposes reverting them, so a manager approves or keeps each one.",
+  "category": "catalog",
+  "icon": "shield-check",
+  "color": "rose",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "A product's price changes" },
+    { "label": "Checks", "text": "Changes above the percentage you set, and prices below cost or under your minimum margin" },
+    { "label": "Proposes", "text": "Reverting the price, so a manager approves the revert or keeps the new price" },
+    { "label": "Optional", "text": "Posts each risky change to a Slack channel" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": false, "reason": "Alerts a channel when a risky price change is waiting for review" }
+  ],
+  "data": [
+    { "key": "productName", "description": "The product or variant's name", "entityHint": "product", "fieldHint": "name", "type": "string", "required": true },
+    { "key": "price", "description": "The selling price", "entityHint": "product", "fieldHint": "price", "type": "number", "required": true },
+    { "key": "cost", "description": "What the product costs the store, to catch prices below cost", "entityHint": "product", "fieldHint": "cost", "type": "number", "required": false },
+    { "key": "compareAtPrice", "description": "The original price shown crossed out during a sale, to tell a planned discount from a mistake", "entityHint": "product", "fieldHint": "compareAtPrice", "type": "number", "required": false },
+    { "key": "sku", "description": "The SKU, for the alert", "entityHint": "product", "fieldHint": "sku", "type": "string", "required": false }
+  ],
+  "parameters": [
+    { "key": "maxChangePercent", "label": "Flag changes above (%)", "type": "number", "default": 30, "description": "A price that rises or falls by more than this in one change is flagged" },
+    { "key": "minMarginPercent", "label": "Minimum margin (%)", "type": "number", "default": 0, "description": "Flag prices that leave less than this margin over cost; 0 flags only prices below cost" },
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Optional; where risky changes are posted for the manager" }
+  ],
+  "automation": {
+    "trigger": { "type": "entity", "entityHint": "product", "events": ["update"] },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "when_flagged",
+    "recommendedSkills": ["pricing-discount-policy"]
+  },
+  "keywords": ["pricing", "price change", "margin", "below cost", "pricing errors", "approval", "catalog", "safety net"]
+}

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "name": "publish-announcer",
+  "kind": "automation",
+  "displayName": "Publish announcer",
+  "description": "When a new product or article goes live, posts a short summary and link to Slack and drafts social posts for it, so the whole team knows what launched and has copy ready to share.",
+  "category": "marketing",
+  "icon": "send",
+  "color": "sky",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "A product or article is created or changed" },
+    { "label": "Checks", "text": "That it has just gone live, not that it was saved as a draft or edited again" },
+    { "label": "Posts", "text": "A short summary and its link to your Slack channel" },
+    { "label": "Drafts", "text": "Social posts for the networks you pick, in the same message" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": true, "reason": "Posts the announcement to your team's channel" }
+  ],
+  "data": [
+    { "key": "title", "description": "The product name or article headline", "entityHint": "product", "fieldHint": "name", "type": "string", "required": true },
+    { "key": "summarySource", "description": "The description or article body to summarise", "entityHint": "product", "fieldHint": "description", "type": "string", "required": true },
+    { "key": "published", "description": "Whether the record is live (a status, a published flag or a published date)", "entityHint": "product", "fieldHint": "status", "type": "any", "required": true },
+    { "key": "pageUrl", "description": "The public URL, or the slug to build it from", "entityHint": "product", "fieldHint": "slug", "type": "string", "required": false },
+    { "key": "price", "description": "The product's price, for the Slack summary only", "entityHint": "product", "fieldHint": "price", "type": "number", "required": false }
+  ],
+  "parameters": [
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Where launches are announced" },
+    { "key": "siteUrl", "label": "Storefront URL", "type": "string", "default": "https://example.com", "description": "Used to build links from slugs" },
+    { "key": "networks", "label": "Social posts for", "type": "select", "default": "Instagram and LinkedIn", "options": ["Instagram and LinkedIn", "Instagram only", "LinkedIn only", "X and LinkedIn", "no social posts"] },
+    { "key": "language", "label": "Language", "type": "string", "default": "English" }
+  ],
+  "automation": {
+    "trigger": { "type": "entity", "entityHint": "product", "events": ["create", "update"] },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "never",
+    "recommendedSkills": ["brand-voice"]
+  },
+  "keywords": ["launch", "announcement", "new product", "blog", "social media", "instagram", "linkedin", "slack"]
+}

@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "name": "customer-win-back",
+  "kind": "automation",
+  "displayName": "Customer win-back",
+  "description": "Every week, finds customers who have not ordered in a while and drafts a personal email to bring them back, based on what they bought. Nothing is sent until you approve it.",
+  "category": "marketing",
+  "icon": "mail",
+  "color": "rose",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Every Monday morning" },
+    { "label": "Finds", "text": "Customers whose last order was a set number of days ago and who accept marketing email" },
+    { "label": "Drafts", "text": "A short personal email for each, based on what they bought before" },
+    { "label": "Sends", "text": "With Resend, or adds them to a Klaviyo list, only after you approve" },
+    { "label": "Remembers", "text": "Who was emailed, so nobody hears from you twice within the cooldown" }
+  ],
+  "plugins": [
+    { "id": "resend", "required": false, "reason": "Sends each approved email individually" },
+    { "id": "klaviyo", "required": false, "reason": "Adds the customers to a win-back list for a campaign you send from Klaviyo" }
+  ],
+  "data": [
+    { "key": "customerEmail", "description": "The customer's email address", "entityHint": "customer", "fieldHint": "email", "type": "string", "required": true },
+    { "key": "customerName", "description": "The customer's first name, for the greeting", "entityHint": "customer", "fieldHint": "firstName", "type": "string", "required": false },
+    { "key": "marketingConsent", "description": "Whether the customer agreed to receive marketing email", "entityHint": "customer", "fieldHint": "acceptsMarketing", "type": "boolean", "required": true },
+    { "key": "orderDate", "description": "When each order was placed", "entityHint": "order", "fieldHint": "createdAt", "type": "date", "required": true },
+    { "key": "orderCustomer", "description": "The customer who placed the order", "entityHint": "order", "fieldHint": "customer", "type": "reference", "required": true },
+    { "key": "orderLines", "description": "What they bought (product and quantity), to make the email personal", "entityHint": "orderLine", "fieldHint": "product", "type": "reference", "required": false },
+    { "key": "lastWinBackAt", "description": "When the customer was last sent a win-back email, if the project keeps it", "entityHint": "customer", "fieldHint": "lastWinBackAt", "type": "date", "required": false }
+  ],
+  "parameters": [
+    { "key": "schedule", "label": "When to run", "type": "cron", "default": "0 9 * * 1", "description": "Every Monday at 9:00 by default" },
+    { "key": "timezone", "label": "Time zone", "type": "timezone", "default": "Europe/London" },
+    { "key": "inactiveDays", "label": "Days since last order", "type": "number", "default": 90, "description": "Customers whose last order is at least this old" },
+    { "key": "maxInactiveDays", "label": "Ignore after (days)", "type": "number", "default": 365, "description": "Customers gone longer than this are left alone" },
+    { "key": "cooldownDays", "label": "Cooldown (days)", "type": "number", "default": 180, "description": "Never email the same customer again within this many days" },
+    { "key": "weeklyLimit", "label": "Emails per run", "type": "number", "default": 25, "description": "The most customers drafted in one run; the rest wait for next week" },
+    { "key": "offer", "label": "The offer", "type": "string", "default": "no discount", "description": "What the email may offer, e.g. \"free shipping on the next order\"; it never invents one" },
+    { "key": "language", "label": "Language", "type": "string", "default": "English" }
+  ],
+  "automation": {
+    "trigger": { "type": "schedule", "cron": "0 9 * * 1", "timezone": "Europe/London" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "when_flagged",
+    "recommendedSkills": ["brand-voice", "customer-communication-playbook"]
+  },
+  "keywords": ["win-back", "retention", "lapsed customers", "re-engagement", "email", "crm", "resend", "klaviyo"]
+}

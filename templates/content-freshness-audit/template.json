@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "name": "content-freshness-audit",
+  "kind": "automation",
+  "displayName": "Content freshness audit",
+  "description": "Once a month, finds pages and articles that have not been touched in months or that mention past dates, old prices or links to things that are gone, and proposes the edits for you to review.",
+  "category": "data-quality",
+  "icon": "refresh-cw",
+  "color": "emerald",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "On the 1st of every month at 9:00" },
+    { "label": "Finds", "text": "Content not updated in 6 months, past dates and seasons, prices that no longer match, links to missing records" },
+    { "label": "Suggests", "text": "A concrete edit for each problem, written in the content's own style" },
+    { "label": "Asks you", "text": "To approve each edit before it is saved" },
+    { "label": "Posts", "text": "A short to-do list to Slack, if you pick a channel" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": false, "reason": "Posts the monthly list of stale content to a channel" }
+  ],
+  "data": [
+    { "key": "contentTitle", "description": "The page or article's title", "entityHint": "article", "fieldHint": "title", "type": "string", "required": true },
+    { "key": "contentBody", "description": "The main text of the page or article", "entityHint": "article", "fieldHint": "body", "type": "string", "required": true },
+    { "key": "lastUpdated", "description": "When the content was last changed; every record has _updatedAt, a hand-kept \"reviewed on\" date is better when the schema has one", "entityHint": "article", "fieldHint": "_updatedAt", "type": "date", "required": true },
+    { "key": "contentStatus", "description": "Whether the content is published, so drafts and archived pages are left out", "entityHint": "article", "fieldHint": "status", "type": "string", "required": false },
+    { "key": "contentSlug", "description": "The page's slug or URL, used in the report and to find links between pages", "entityHint": "article", "fieldHint": "slug", "type": "string", "required": false },
+    { "key": "productPrice", "description": "Product prices, to catch prices quoted in content that have since changed", "entityHint": "product", "fieldHint": "price", "type": "number", "required": false },
+    { "key": "productSlug", "description": "Product slugs or names, to catch links and mentions of products that no longer exist or are unpublished", "entityHint": "product", "fieldHint": "slug", "type": "string", "required": false }
+  ],
+  "parameters": [
+    { "key": "schedule", "label": "When to run", "type": "cron", "default": "0 9 1 * *", "description": "On the 1st of every month at 9:00 by default" },
+    { "key": "timezone", "label": "Time zone", "type": "timezone", "default": "Europe/London" },
+    { "key": "staleMonths", "label": "Stale after (months)", "type": "number", "default": 6, "description": "Content not updated for this many months is reviewed" },
+    { "key": "maxItems", "label": "Most items per run", "type": "number", "default": 20, "description": "The rest wait for next month, oldest first" },
+    { "key": "proposeEdits", "label": "Propose edits", "type": "boolean", "default": true, "description": "When off, the audit only lists problems and changes nothing" },
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Optional; without it the list stays in the run notification" }
+  ],
+  "automation": {
+    "trigger": { "type": "schedule", "cron": "0 9 1 * *", "timezone": "Europe/London" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "always",
+    "recommendedSkills": ["publishing-checklist"]
+  },
+  "keywords": ["content", "freshness", "audit", "stale pages", "seo", "articles", "blog", "broken links", "maintenance"]
+}

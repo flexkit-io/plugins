@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "name": "seo-metadata-filler",
+  "kind": "automation",
+  "displayName": "SEO metadata filler",
+  "description": "Whenever a product is created or changed, fills in a missing SEO title, meta description, URL slug and image alt text, so no page goes live without them.",
+  "category": "marketing",
+  "icon": "search-check",
+  "color": "emerald",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "A product is created or updated" },
+    { "label": "Checks", "text": "Which SEO fields are empty: title, meta description, slug, image alt text" },
+    { "label": "Writes", "text": "Only the missing ones, from the product's own details" },
+    { "label": "Asks you", "text": "To approve the changes before they are saved" }
+  ],
+  "plugins": [],
+  "data": [
+    { "key": "productName", "description": "The product's name or title", "entityHint": "product", "fieldHint": "name", "type": "string", "required": true },
+    { "key": "productDescription", "description": "The product's description, the main source for the meta description", "entityHint": "product", "fieldHint": "description", "type": "string", "required": false },
+    { "key": "productFacts", "description": "Fields that describe the product: category, material, colour, brand", "entityHint": "product", "type": "any", "required": false },
+    { "key": "seoTitle", "description": "The page title used by search engines", "entityHint": "product", "fieldHint": "seoTitle", "type": "string", "required": true },
+    { "key": "seoDescription", "description": "The meta description used by search engines", "entityHint": "product", "fieldHint": "seoDescription", "type": "string", "required": true },
+    { "key": "slug", "description": "The URL slug of the product page", "entityHint": "product", "fieldHint": "slug", "type": "string", "required": false },
+    { "key": "imageAlt", "description": "Alt text of the product's images", "entityHint": "productImage", "fieldHint": "alt", "type": "string", "required": false },
+    { "key": "published", "description": "Whether the product is live on the storefront, so a live slug is never changed", "entityHint": "product", "fieldHint": "status", "type": "any", "required": false }
+  ],
+  "parameters": [
+    { "key": "language", "label": "Language", "type": "string", "default": "English", "description": "The language of the metadata" },
+    { "key": "brandSuffix", "label": "Title suffix", "type": "string", "default": "", "description": "Added to the end of SEO titles when it fits, e.g. \" | Northline Goods\"; leave empty for none" },
+    { "key": "fillAltText", "label": "Fill image alt text", "type": "boolean", "default": true }
+  ],
+  "automation": {
+    "trigger": { "type": "entity", "entityHint": "product", "events": ["create", "update"] },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "when_flagged",
+    "recommendedSkills": ["brand-voice", "product-copy-guidelines"]
+  },
+  "keywords": ["seo", "meta description", "meta title", "slug", "alt text", "accessibility", "search", "catalog"]
+}

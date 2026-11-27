@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "name": "data-quality-watchdog",
+  "kind": "automation",
+  "displayName": "Data quality watchdog",
+  "description": "Every night, looks for duplicate customers and products, links to records that no longer exist and malformed emails or SKUs, and proposes merges and fixes for you to approve.",
+  "category": "data-quality",
+  "icon": "database",
+  "color": "amber",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Trigger", "text": "Every day at 6:00 in your time zone" },
+    { "label": "Finds", "text": "Duplicate customers and products, broken references, malformed emails, SKUs and phone numbers" },
+    { "label": "Proposes", "text": "A merge or a fix for each problem, in one review" },
+    { "label": "Asks you", "text": "Before anything is merged or changed; rejected fixes are not proposed again" },
+    { "label": "Posts", "text": "A short summary to Slack, if you pick a channel" }
+  ],
+  "plugins": [
+    { "id": "slack", "required": false, "reason": "Posts what was found and what waits for review to a channel" }
+  ],
+  "data": [
+    { "key": "customerEmail", "description": "Customer emails, to find duplicate customers and malformed addresses", "entityHint": "customer", "fieldHint": "email", "type": "string", "required": false },
+    { "key": "customerName", "description": "Customer names and phones, to confirm a duplicate", "entityHint": "customer", "fieldHint": "name", "type": "string", "required": false },
+    { "key": "productSku", "description": "Product or variant SKUs, to find duplicates and malformed SKUs", "entityHint": "product", "fieldHint": "sku", "type": "string", "required": false },
+    { "key": "productName", "description": "Product names, to confirm a duplicate", "entityHint": "product", "fieldHint": "name", "type": "string", "required": false },
+    { "key": "references", "description": "Links between records (order to customer, line to product, product to category) to check for broken references", "entityHint": "order", "fieldHint": "customer", "type": "reference", "required": false },
+    { "key": "archiveFlag", "description": "A field that hides a record without deleting it, used for the duplicate left after a merge", "entityHint": "customer", "fieldHint": "archived", "type": "boolean", "required": false }
+  ],
+  "parameters": [
+    { "key": "schedule", "label": "When to run", "type": "cron", "default": "0 6 * * *", "description": "Every day at 6:00 by default" },
+    { "key": "timezone", "label": "Time zone", "type": "timezone", "default": "Europe/London" },
+    { "key": "skuPattern", "label": "SKU format", "type": "string", "default": "", "description": "Your SKU format, e.g. \"two to four letters, a dash, then letters and digits\"; leave empty to only check for spaces and duplicates" },
+    { "key": "maxFixes", "label": "Most fixes per run", "type": "number", "default": 25, "description": "The rest wait for the next run, most serious first" },
+    { "key": "channel", "label": "Slack channel", "type": "channel", "description": "Optional; without it the summary stays in the run notification" }
+  ],
+  "automation": {
+    "trigger": { "type": "schedule", "cron": "0 6 * * *", "timezone": "Europe/London" },
+    "mutationPolicy": "require_approval",
+    "notifyRule": "when_flagged",
+    "recommendedSkills": ["data-entry-conventions"]
+  },
+  "keywords": ["data quality", "duplicates", "merge", "cleanup", "validation", "broken references", "emails", "sku", "hygiene"]
+}

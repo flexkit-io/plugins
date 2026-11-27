@@ -32,6 +32,86 @@
     {
       "name": "reporting-definitions",
       "source": "./templates/reporting-definitions"
+    },
+    {
+      "name": "catalog-completeness-check",
+      "source": "./templates/catalog-completeness-check"
+    },
+    {
+      "name": "out-of-stock-auto-hide",
+      "source": "./templates/out-of-stock-auto-hide"
+    },
+    {
+      "name": "price-change-guard",
+      "source": "./templates/price-change-guard"
+    },
+    {
+      "name": "translation-sync",
+      "source": "./templates/translation-sync"
+    },
+    {
+      "name": "review-triage",
+      "source": "./templates/review-triage"
+    },
+    {
+      "name": "seasonal-campaign-prep",
+      "source": "./templates/seasonal-campaign-prep"
+    },
+    {
+      "name": "supplier-feed-import",
+      "source": "./templates/supplier-feed-import"
+    },
+    {
+      "name": "customer-win-back",
+      "source": "./templates/customer-win-back"
+    },
+    {
+      "name": "content-freshness-audit",
+      "source": "./templates/content-freshness-audit"
+    },
+    {
+      "name": "seo-metadata-filler",
+      "source": "./templates/seo-metadata-filler"
+    },
+    {
+      "name": "publish-announcer",
+      "source": "./templates/publish-announcer"
+    },
+    {
+      "name": "inbound-form-intake",
+      "source": "./templates/inbound-form-intake"
+    },
+    {
+      "name": "weekly-team-report",
+      "source": "./templates/weekly-team-report"
+    },
+    {
+      "name": "data-quality-watchdog",
+      "source": "./templates/data-quality-watchdog"
+    },
+    {
+      "name": "schema-change-notes",
+      "source": "./templates/schema-change-notes"
+    },
+    {
+      "name": "data-entry-conventions",
+      "source": "./templates/data-entry-conventions"
+    },
+    {
+      "name": "pricing-discount-policy",
+      "source": "./templates/pricing-discount-policy"
+    },
+    {
+      "name": "customer-communication-playbook",
+      "source": "./templates/customer-communication-playbook"
+    },
+    {
+      "name": "translation-localization-rules",
+      "source": "./templates/translation-localization-rules"
+    },
+    {
+      "name": "publishing-checklist",
+      "source": "./templates/publishing-checklist"
     }
   ]
 }
