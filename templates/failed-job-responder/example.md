@@ -1,3 +1,5 @@
+**Watching:** Low-stock alert
+
 **Run notification and Slack, #flexkit-alerts**
 
 > **Low-stock alert failed at 09:30: Slack connection expired (Connection).**
@@ -10,6 +12,6 @@
 
 ---
 
-**10:00, 10:30, 11:00: same failure, no new message**
+**10:00, 10:30, 11:00: same failure, run skipped, no new message**
 
 Memory updated: *Low-stock alert, Connection (Slack), reported 09:31, failed 3 more times since.*

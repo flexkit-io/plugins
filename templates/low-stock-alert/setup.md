@@ -10,7 +10,7 @@
 
 ## Trigger
 
-Poll every 30 minutes with a query that returns the low products (stock at or below the threshold, or below the reorder point), with the fields in step 2. Use the query result as the condition, so a run starts only when that list changes. Stores with slow-moving stock can poll every few hours; mention it if the user's catalogue is small.
+Poll every 30 minutes with a query that selects only the ids of the low products (stock at or below the threshold, or at or below the reorder point), or only their count. A run starts when the query result changes, so the result must change only when the set of low products changes: do not select stock levels, names or sales, or every sale of an already-low product would start a run. The run fetches the step-2 context itself. Stores with slow-moving stock can poll every few hours; mention it if the user's catalogue is small.
 
 ## Parameters
 

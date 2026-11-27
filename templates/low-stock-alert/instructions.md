@@ -7,7 +7,7 @@ Every run, find the products that have just reached low stock and tell the team 
 - A product is low when its stock is at or below its own reorder point, or, when it has none, at or below {{threshold}}.
 - Ignore products that are archived, discontinued, drafts or not tracked for inventory.
 - Count a product as **newly low** only if it was above its threshold the last time this automation reported, or has never been reported. Use the previous run's result (or your automation memory) to remember which products you already alerted on. When a product goes back above its threshold, forget it, so the next dip alerts again.
-- If no product is newly low, end the run without posting anything.
+- If no product is newly low, end the run as skipped (Finish Run with status skipped) so nothing is posted. A run that merely ends is still delivered to the channel.
 
 ## 2. Add context to each product
 
