@@ -72,6 +72,11 @@
       "description": "Search Help Scout conversations and customers, summarize support threads, and report on volume, response times and happiness."
     },
     {
+      "name": "gorgias",
+      "source": "./gorgias",
+      "description": "Answer and triage Gorgias tickets, look up customers and their store orders, and report on support volume, response times and satisfaction."
+    },
+    {
       "name": "atlassian",
       "source": "./third_party/atlassian",
       "description": "Search, create and update Jira work items and Confluence pages."
