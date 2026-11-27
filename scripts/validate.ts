@@ -196,6 +196,13 @@ export function validateSkill(text: string, directory: string): void {
   }
 }
 
+/** Fails when a catalog file looks like it contains a private key or a Slack token. */
+export function checkNoCredential(text: string, file: string): void {
+  if (/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|xox[baprs]-[A-Za-z0-9-]{15,}/.test(text)) {
+    throw new Error(`Possible credential in ${file}`);
+  }
+}
+
 async function json(path: string): Promise<unknown> {
   return JSON.parse(await readFile(path, 'utf8')) as unknown;
 }
@@ -272,9 +279,7 @@ export async function validateCatalog(root: string): Promise<number> {
     for (const file of files) {
       const text = await readFile(containedPath(packageRoot, file), 'utf8');
 
-      if (/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|xox[baprs]-[A-Za-z0-9-]{15,}/.test(text)) {
-        throw new Error(`Possible credential in ${file}`);
-      }
+      checkNoCredential(text, file);
 
       if (file.endsWith('.svg') && /<script|<foreignObject|\bon\w+\s*=|(?:href|src)\s*=\s*["'](?:https?:|data:|javascript:)/i.test(text)) {
         throw new Error(`Unsafe SVG: ${file}`);
@@ -353,9 +358,199 @@ export async function validateCatalog(root: string): Promise<number> {
     }
   }
 
+  await validateTemplates(root, seen);
+
   return seen.size;
 }
 
+const templateFiles = new Map([
+  ['template.json', 100_000],
+  ['instructions.md', 50_000],
+  ['setup.md', 20_000],
+  ['example.md', 20_000],
+]);
+
+interface TemplateManifest {
+  name: string;
+  kind: 'automation' | 'skill';
+  plugins: Array<{ id: string }>;
+  parameters: Array<{ key: string; type: string; default?: unknown; options?: string[] }>;
+  automation?: { recommendedSkills: string[] };
+}
+
+function checkParameters(name: string, parameters: TemplateManifest['parameters']): void {
+  const keys = new Set<string>();
+
+  for (const parameter of parameters) {
+    if (keys.has(parameter.key)) {
+      throw new Error(`template ${name}: duplicate parameter "${parameter.key}"`);
+    }
+
+    keys.add(parameter.key);
+
+    // The schema already requires a default (except for "channel") and options for "select".
+    if (parameter.default === undefined) {
+      continue;
+    }
+
+    const expected = parameter.type === 'number' ? 'number' : parameter.type === 'boolean' ? 'boolean' : 'string';
+
+    if (typeof parameter.default !== expected) {
+      throw new Error(`template ${name}: parameter "${parameter.key}" default must be a ${expected}`);
+    }
+
+    if (parameter.type === 'select' && !parameter.options?.includes(parameter.default as string)) {
+      throw new Error(`template ${name}: parameter "${parameter.key}" default is not one of its options`);
+    }
+  }
+}
+
+/**
+ * Validates the template catalog: `.flexkit-plugin/templates.json` and every `templates/<name>/` it lists.
+ * The index is a separate file from marketplace.json so backends that predate templates never read it; a
+ * repository without one has no templates. Returns the number of templates.
+ */
+export async function validateTemplates(root: string, pluginIds: ReadonlySet<string>): Promise<number> {
+  const indexPath = resolve(root, '.flexkit-plugin/templates.json');
+  const raw = await readIfPresent(indexPath);
+
+  if (!raw) {
+    return 0;
+  }
+
+  const ajv = new Ajv2020({ allErrors: true, strict: false, validateFormats: false });
+  const validateIndex = ajv.compile(await json(resolve(root, 'schemas/templates.schema.json')) as object);
+  const validateManifest = ajv.compile(await json(resolve(root, 'schemas/template.schema.json')) as object);
+  let index: unknown;
+
+  try {
+    index = JSON.parse(raw.toString('utf8'));
+  } catch {
+    throw new Error('.flexkit-plugin/templates.json is not valid JSON');
+  }
+
+  if (!validateIndex(index)) {
+    throw new Error(`Invalid template index: ${ajv.errorsText(validateIndex.errors)}`);
+  }
+
+  const items = (index as { templates: Array<{ name: string; source: string }> }).templates;
+  const manifests = new Map<string, TemplateManifest>();
+
+  for (const item of items) {
+    if (manifests.has(item.name)) {
+      throw new Error(`Duplicate template in index: ${item.name}`);
+    }
+
+    if (item.source !== `./templates/${item.name}`) {
+      throw new Error(`template ${item.name}: source must be ./templates/${item.name}`);
+    }
+
+    const templateRoot = containedPath(root, item.source);
+    const stat = await lstat(templateRoot).catch((error: unknown) => {
+      if (isEnoent(error)) {
+        throw new Error(`template ${item.name}: ${item.source} does not exist`);
+      }
+
+      throw error;
+    });
+
+    if (stat.isSymbolicLink() || !stat.isDirectory()) {
+      throw new Error(`template ${item.name}: ${item.source} must be a directory, not a symlink`);
+    }
+
+    const files = await walk(templateRoot);
+    const texts = new Map<string, string>();
+
+    for (const file of files) {
+      const limit = templateFiles.get(file);
+
+      if (limit === undefined) {
+        throw new Error(`template ${item.name}: unexpected file ${file} (allowed: ${[...templateFiles.keys()].join(', ')})`);
+      }
+
+      const text = await readFile(resolve(templateRoot, file), 'utf8');
+
+      if (text.length > limit) {
+        throw new Error(`template ${item.name}: ${file} is longer than ${String(limit)} characters`);
+      }
+
+      checkNoCredential(text, `templates/${item.name}/${file}`);
+      texts.set(file, text);
+    }
+
+    for (const required of ['template.json', 'instructions.md']) {
+      if (!texts.get(required)?.trim()) {
+        throw new Error(`template ${item.name}: ${required} is required`);
+      }
+    }
+
+    let manifest: unknown;
+
+    try {
+      manifest = JSON.parse(texts.get('template.json') as string);
+    } catch {
+      throw new Error(`template ${item.name}: template.json is not valid JSON`);
+    }
+
+    if (!validateManifest(manifest)) {
+      throw new Error(`template ${item.name}: ${ajv.errorsText(validateManifest.errors)}`);
+    }
+
+    const typed = manifest as TemplateManifest;
+
+    if (typed.name !== item.name) {
+      throw new Error(`template ${item.name}: name "${typed.name}" must equal its directory name`);
+    }
+
+    for (const plugin of typed.plugins) {
+      if (!pluginIds.has(plugin.id)) {
+        throw new Error(`template ${item.name}: plugin "${plugin.id}" is not in marketplace.json`);
+      }
+    }
+
+    checkParameters(item.name, typed.parameters);
+
+    if (typed.kind === 'automation') {
+      const keys = new Set(typed.parameters.map((parameter) => parameter.key));
+
+      for (const [, placeholder] of (texts.get('instructions.md') as string).matchAll(/\{\{\s*([^}\s]+)\s*\}\}/g)) {
+        if (!keys.has(placeholder)) {
+          throw new Error(`template ${item.name}: instructions.md uses {{${placeholder}}}, which is not a parameter`);
+        }
+      }
+    }
+
+    manifests.set(item.name, typed);
+  }
+
+  for (const [name, manifest] of manifests) {
+    for (const skill of manifest.automation?.recommendedSkills ?? []) {
+      if (manifests.get(skill)?.kind !== 'skill') {
+        throw new Error(`template ${name}: recommended skill "${skill}" is not a skill template in the index`);
+      }
+    }
+  }
+
+  const directories = await readdir(resolve(root, 'templates')).catch((error: unknown) => {
+    if (isEnoent(error)) {
+      return [];
+    }
+
+    throw error;
+  });
+  const unlisted = directories.filter((entry) => !manifests.has(entry));
+
+  if (unlisted.length) {
+    throw new Error(`templates/ has entries that are not in .flexkit-plugin/templates.json: ${unlisted.join(', ')}`);
+  }
+
+  return manifests.size;
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  process.stdout.write(`Validated ${String(await validateCatalog(resolve(import.meta.dirname, '..')))} plugins.\n`);
+  const root = resolve(import.meta.dirname, '..');
+  const plugins = await validateCatalog(root);
+  const index = await json(resolve(root, '.flexkit-plugin/marketplace.json')) as { plugins: Array<{ name: string }> };
+  const templates = await validateTemplates(root, new Set(index.plugins.map((plugin) => plugin.name)));
+  process.stdout.write(`Validated ${String(plugins)} plugins and ${String(templates)} templates.\n`);
 }

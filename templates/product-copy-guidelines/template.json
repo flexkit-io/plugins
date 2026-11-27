@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "name": "product-copy-guidelines",
+  "kind": "skill",
+  "displayName": "Product copy guidelines",
+  "description": "Your rules for product pages: structure, length, which facts to include, SEO title and meta conventions, and what never to claim. Loaded whenever the agent writes or edits product copy.",
+  "category": "catalog",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Interview", "text": "Questions about your product page structure, SEO rules and must-have facts" },
+    { "label": "Reads", "text": "Your 10 most recent product descriptions and the product schema" },
+    { "label": "Result", "text": "A skill the agent loads whenever it writes or edits product copy" }
+  ],
+  "plugins": [],
+  "data": [
+    { "key": "sampleCopy", "description": "Existing product descriptions to learn the current structure from", "entityHint": "product", "fieldHint": "description", "type": "string", "required": false },
+    { "key": "seoFields", "description": "The product's SEO title and meta description fields, if any", "entityHint": "product", "fieldHint": "seoTitle", "type": "string", "required": false }
+  ],
+  "parameters": [],
+  "skill": { "loadMode": "on_demand" },
+  "keywords": ["product copy", "pdp", "seo", "descriptions", "catalog", "style guide"]
+}

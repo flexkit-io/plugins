@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "name": "brand-voice",
+  "kind": "skill",
+  "displayName": "Brand voice",
+  "description": "Captures how your brand sounds (tone, words you use and avoid, how you address customers) so every piece of copy the agent writes sounds like you.",
+  "category": "marketing",
+  "version": "1.0.0",
+  "howItWorks": [
+    { "label": "Interview", "text": "A few questions about your brand, customers and tone" },
+    { "label": "Reads", "text": "Recent product descriptions and pages to learn how you already write" },
+    { "label": "Result", "text": "A brand voice skill the agent always follows when it writes for you" }
+  ],
+  "plugins": [],
+  "data": [
+    { "key": "sampleCopy", "description": "Existing customer-facing copy to learn from, such as product descriptions", "entityHint": "product", "fieldHint": "description", "type": "string", "required": false }
+  ],
+  "parameters": [],
+  "skill": { "loadMode": "always" },
+  "keywords": ["brand", "tone of voice", "copywriting", "style", "writing"]
+}
