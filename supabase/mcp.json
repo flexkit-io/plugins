@@ -3,7 +3,7 @@
   "mcpServers": {
     "supabase": {
       "type": "streamable-http",
-      "url": "https://mcp.supabase.com/mcp"
+      "url": "https://mcp.supabase.com/mcp?features=database,debugging,development,docs,functions,branching,storage"
     }
   }
 }

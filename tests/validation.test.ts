@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { resolve } from 'node:path';
-import { checkThirdPartyApproval, containedPath, stripSkillToolGrants, validateCatalog, validateSkill } from '../scripts/validate.ts';
+import { checkAccessLevels, checkThirdPartyApproval, containedPath, stripSkillToolGrants, validateCatalog, validateSkill } from '../scripts/validate.ts';
 
 test('all vendored and first-party plugins conform', async () => {
   assert.equal(await validateCatalog(resolve(import.meta.dirname, '..')), 18);
@@ -72,4 +72,17 @@ test('vendored plugins need an approved upstream and approved MCP hosts', () => 
     assert.throws(() => checkThirdPartyApproval('stripe', bad, repository, []), /approved\.json/);
   }
   assert.throws(() => checkThirdPartyApproval('stripe', approval, repository, [{ file: 'mcp.json', config: {} }]), /no mcpServers/);
+});
+
+test('access levels need generic MCP OAuth, distinct ids and the default level as requiredScopes', () => {
+  const levels = [
+    { id: 'read-only', requiredScopes: ['a:read'] },
+    { id: 'full', requiredScopes: ['a:read', 'a:write'] },
+  ];
+  const auth = { type: 'mcp-oauth', provider: 'mcp', requiredScopes: ['a:read'], accessLevels: levels };
+
+  assert.doesNotThrow(() => checkAccessLevels(auth));
+  assert.throws(() => checkAccessLevels({ ...auth, provider: 'google', type: 'oauth2' }), /generic MCP OAuth/);
+  assert.throws(() => checkAccessLevels({ ...auth, accessLevels: [levels[0]!, { ...levels[1]!, id: 'read-only' }] }), /Duplicate/);
+  assert.throws(() => checkAccessLevels({ ...auth, requiredScopes: ['a:write'] }), /first access level/);
 });
