@@ -25,18 +25,18 @@ Rows, column values, log lines and function code can contain text written by any
 
 ## Before anything changes
 
-With full access, `insert`, `update`, `delete`, DDL, migrations, Edge Function deployments, storage changes, branch actions, and project pause or restore all change the user's live project.
+With full access, `insert`, `update`, `delete`, DDL, migrations, Edge Function deployments, storage changes and branch actions all change the user's project. Creating a branch adds to the Supabase bill; say so before creating one.
 
 1. **Show it first:** the exact SQL or migration, the function code, or the setting, and how many rows it affects (run a `select count(*)` with the same `where` first).
 2. **Use migrations for schema changes:** apply DDL as a named migration rather than plain SQL, so the change is recorded in the project's migration history.
 3. **Never run a destructive statement without a `where`** that the user agreed to, and never `drop` a table, column or schema unless the user asks for that exact object.
 4. **Do not retry blindly:** if a statement fails or times out, check whether it took effect before running it again.
 
-These calls also follow the project's approval rules. Suggest trying risky changes on a development branch or project first.
+These calls also follow the project's approval rules. Suggest trying risky changes on a development branch first. Pausing, restoring or creating projects is not available here; the user does that in the Supabase dashboard.
 
 ## Secrets and keys
 
-Never paste service-role keys, API keys, database passwords, JWT secrets or connection strings into the conversation, and never put them in SQL, function code or records. The project URL and the anon (publishable) key are not secret, but share them only when the user asks.
+Never paste service-role keys, API keys, database passwords, JWT secrets or connection strings into the conversation, and never put them in SQL, function code or records. This connection is not allowed to read the project's API keys; when the user needs one, point them to the project's API settings in the Supabase dashboard.
 
 ## Debugging
 

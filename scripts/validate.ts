@@ -5,6 +5,38 @@ import { fileURLToPath } from 'node:url';
 import { Ajv2020 } from 'ajv/dist/2020.js';
 import { parseDocument } from 'yaml';
 
+interface AccessLevelAuth {
+  type: string;
+  provider?: string;
+  requiredScopes?: string[];
+  accessLevels?: Array<{ id: string; requiredScopes: string[] }>;
+}
+
+/**
+ * Rules the platform also enforces, which the JSON schema cannot express:
+ * access levels only for the generic MCP OAuth provider, distinct ids, and
+ * requiredScopes equal to the first (default) level's scopes.
+ */
+export function checkAccessLevels(auth: AccessLevelAuth): void {
+  const levels = auth.accessLevels;
+
+  if (!levels) {
+    return;
+  }
+
+  if (auth.type !== 'mcp-oauth' || auth.provider !== 'mcp') {
+    throw new Error('Access levels need generic MCP OAuth (type mcp-oauth, provider mcp)');
+  }
+
+  if (new Set(levels.map((level) => level.id)).size !== levels.length) {
+    throw new Error('Duplicate access level id');
+  }
+
+  if (JSON.stringify(levels[0]?.requiredScopes) !== JSON.stringify(auth.requiredScopes)) {
+    throw new Error("requiredScopes must be the first access level's scopes");
+  }
+}
+
 export function containedPath(root: string, path: string): string {
   const full = resolve(root, path);
   const rel = relative(root, full);
@@ -273,6 +305,8 @@ export async function validateCatalog(root: string): Promise<number> {
     if (typed.name !== item.name || !validateExtension(ext)) {
       throw new Error(`Invalid Flexkit extension or name: ${ajv.errorsText(validateExtension.errors)}`);
     }
+
+    checkAccessLevels((ext as { auth: AccessLevelAuth }).auth);
 
     const files = await walk(packageRoot);
 

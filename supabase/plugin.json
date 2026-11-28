@@ -21,7 +21,7 @@
       "schemaVersion": 1,
       "displayName": "Supabase",
       "logo": "./assets/logo.svg",
-      "category": "productivity",
+      "category": "database",
       "supportedScopes": [
         "project",
         "personal"
@@ -60,7 +60,7 @@
           {
             "id": "full",
             "label": "Full access",
-            "description": "Also lets the agent write data, apply migrations, deploy Edge Functions and change storage. Changes follow your project's approval rules.",
+            "description": "Also lets the agent write data, apply migrations, create branches, deploy Edge Functions and change storage. Changes follow your project's approval rules.",
             "requiredScopes": [
               "organizations:read",
               "projects:read",
@@ -68,7 +68,6 @@
               "analytics:read",
               "edge_functions:read",
               "storage:read",
-              "projects:write",
               "database:write",
               "edge_functions:write",
               "storage:write"
