@@ -64,6 +64,46 @@
                 "type": "string"
               }
             },
+            "accessLevels": {
+              "type": "array",
+              "description": "Levels of access the user chooses between in Studio before signing in, such as Read-only and Full access. The first is the default; each level's scopes replace requiredScopes for that sign-in. Only for the generic MCP OAuth provider (type mcp-oauth, provider mcp).",
+              "minItems": 2,
+              "maxItems": 4,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]{0,31}$"
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 40
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "requiredScopes": {
+                    "type": "array",
+                    "maxItems": 50,
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "required": [
+                  "id",
+                  "label",
+                  "description",
+                  "requiredScopes"
+                ],
+                "additionalProperties": false
+              }
+            },
             "mcpServers": {
               "type": "array",
               "items": {
