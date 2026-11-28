@@ -1,0 +1,84 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "supabase",
+  "version": "1.0.0",
+  "description": "Query and explore a Supabase project: tables, SQL, logs and advisors, with read-only or full access.",
+  "author": {
+    "name": "Flexkit"
+  },
+  "homepage": "https://github.com/flexkit-io/plugins/tree/main/supabase",
+  "repository": "https://github.com/flexkit-io/plugins",
+  "license": "MIT",
+  "keywords": [
+    "supabase",
+    "postgres",
+    "database",
+    "sql",
+    "flexkit"
+  ],
+  "extensions": {
+    "io.flexkit": {
+      "schemaVersion": 1,
+      "displayName": "Supabase",
+      "logo": "./assets/logo.svg",
+      "category": "productivity",
+      "supportedScopes": [
+        "project",
+        "personal"
+      ],
+      "requiredInputs": [],
+      "capabilities": {
+        "agentTools": true,
+        "automationDelivery": false
+      },
+      "auth": {
+        "type": "mcp-oauth",
+        "provider": "mcp",
+        "credentialGroup": "supabase",
+        "requiredScopes": [
+          "organizations:read",
+          "projects:read",
+          "database:read",
+          "analytics:read",
+          "edge_functions:read",
+          "storage:read"
+        ],
+        "accessLevels": [
+          {
+            "id": "read-only",
+            "label": "Read-only",
+            "description": "Read tables, run read-only SQL and check logs and advisors. The agent can't change data or the schema.",
+            "requiredScopes": [
+              "organizations:read",
+              "projects:read",
+              "database:read",
+              "analytics:read",
+              "edge_functions:read",
+              "storage:read"
+            ]
+          },
+          {
+            "id": "full",
+            "label": "Full access",
+            "description": "Also lets the agent write data, apply migrations, deploy Edge Functions and change storage. Changes follow your project's approval rules.",
+            "requiredScopes": [
+              "organizations:read",
+              "projects:read",
+              "database:read",
+              "analytics:read",
+              "edge_functions:read",
+              "storage:read",
+              "projects:write",
+              "database:write",
+              "edge_functions:write",
+              "storage:write"
+            ]
+          }
+        ],
+        "mcpServers": [
+          "supabase"
+        ]
+      }
+    }
+  }
+}

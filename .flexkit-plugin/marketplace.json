@@ -57,6 +57,11 @@
       "description": "Give the agent its own AgentMail inboxes to send, receive and reply to email, with drafts, threads, labels and attachments."
     },
     {
+      "name": "supabase",
+      "source": "./supabase",
+      "description": "Query and explore a Supabase project: tables, SQL, logs and advisors, with read-only or full access."
+    },
+    {
       "name": "linear",
       "source": "./linear",
       "description": "Find, create and update Linear issues, projects and comments."
